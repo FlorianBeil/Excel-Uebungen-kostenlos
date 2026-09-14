@@ -1805,10 +1805,13 @@
 
     function close() {
       overlay.removeEventListener("click", close);
+      document.removeEventListener("keydown", close);
       overlay.remove();
       if (activePopupOverlay === overlay) activePopupOverlay = null;
     }
     overlay.addEventListener("click", close);
+    // Tastatur: jeder Tastendruck schließt das Popup (sonst verdeckt es die Tabelle für Tastaturnutzer)
+    document.addEventListener("keydown", close);
     setTimeout(close, 3200);
   }
 
@@ -1851,10 +1854,13 @@
 
     function close() {
       overlay.removeEventListener("click", close);
+      document.removeEventListener("keydown", close);
       overlay.remove();
       if (activePopupOverlay === overlay) activePopupOverlay = null;
     }
     overlay.addEventListener("click", close);
+    // Tastatur: jeder Tastendruck schließt das Popup (sonst verdeckt es die Tabelle für Tastaturnutzer)
+    document.addEventListener("keydown", close);
   }
 
   // Anonyme Nutzungs-Ereignisse (assets/tracking.js → Supabase-Tabelle public.events).

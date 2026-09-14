@@ -52,6 +52,27 @@
   outline-color: #fff;
 }
 
+/* Tabellenblatt: sichtbarer Fokus, wenn es per Tab erreicht wird */
+.frei-seite .sheet-wrap:focus-visible {
+  outline: 3px solid var(--excel-green);
+  outline-offset: 2px;
+}
+
+/* --error-red (#D92D20) erreicht auf dem hellroten Feedback nur 4,42:1 – dunkleres Rot: 6,4:1 */
+.frei-seite .exercise-feedback.is-error {
+  color: #B42318;
+}
+
+/* Nur für Screenreader */
+.frei-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
 /* ---------- Start ---------- */
 
 .frei-start {

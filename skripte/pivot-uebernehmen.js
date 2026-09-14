@@ -54,6 +54,10 @@ ersetze(
     "  /* ---------- Eingebettet in die kostenlose Übungsseite (skripte/pivot-uebernehmen.js) ---------- */",
     "  html, body { background: transparent !important; overflow: hidden; }",
     "  main { max-width: none; padding: 0 0 4px; }",
+    "  /* Barrierefreiheit: sichtbarer Tastaturfokus, Fehlerrot mit ausreichendem Kontrast (6:1 statt 4,15:1) */",
+    "  a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible, #sheet-canvas:focus-visible { outline: 3px solid var(--excel-green); outline-offset: 2px; }",
+    "  #feedback.incorrect { color: #B42318; border-color: #B42318; }",
+    "  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }",
     "</style>",
   ].join("\n")
 );
@@ -64,7 +68,43 @@ ausschneiden(
   "Kopfzeile + Übersicht",
   '<header class="site-header">',
   '  <section class="card excel-window">',
-  "<main>\n  <div id=\"exercise-workspace\">\n"
+  "<main>\n  <h1 class=\"sr-only\">Pivot-Tabelle erstellen</h1>\n  <div id=\"exercise-workspace\">\n"
+);
+
+/* ---------------- Barrierefreiheit ---------------- */
+
+// Kontrollkästchen per Tab erreichbar (im Kurs mit tabindex=-1 ausgeschlossen) –
+// damit ist die Aufgabe komplett per Tastatur lösbar (Tab + Leertaste).
+ersetze("Kontrollkästchen fokussierbar", '<input type="checkbox" class="field-check" tabindex="-1" aria-label="', '<input type="checkbox" class="field-check" aria-label="');
+// Scrollbarer Tabellenbereich muss per Tastatur erreichbar sein (axe: scrollable-region-focusable)
+ersetze("Tabellenbereich fokussierbar", '<div class="sheet-wrap" id="sheet-canvas"></div>', '<div class="sheet-wrap" id="sheet-canvas" tabindex="0" role="region" aria-label="Pivot-Tabelle"></div>');
+// Feldliste liegt innerhalb von <main> – als benannte Region statt verschachteltem <aside>
+ersetze("Feldliste als Region", '<aside class="pivot-fields-panel">', '<div class="pivot-fields-panel" role="region" aria-label="PivotTable-Felder">');
+ersetze("Feldliste als Region (Ende)", "</aside>", "</div>");
+// Überschriften-Reihenfolge h1 → h2 (war h4); Aussehen bleibt, Größe/Gewicht setzt die Klasse
+ersetze(
+  "Feldliste-Überschrift",
+  '<h4 class="pivot-fields-panel__title">PivotTable-Felder</h4>',
+  '<h2 class="pivot-fields-panel__title">PivotTable-Felder</h2>'
+);
+
+// Erfolgs-/Fehler-Popup per Tastatur schließbar (wie in assets/geteilt/engine.js) – beide Popups
+function ersetzeAlle(beschreibung, suche, ersatz, anzahl) {
+  const treffer = s.split(suche).length - 1;
+  if (treffer !== anzahl) throw new Error("Anker für „" + beschreibung + "“ " + treffer + "× gefunden (erwartet " + anzahl + "×)");
+  s = s.split(suche).join(ersatz);
+}
+ersetzeAlle(
+  "Popup schließen per Taste",
+  '    overlay.addEventListener("click", close);\n',
+  '    overlay.addEventListener("click", close);\n    document.addEventListener("keydown", close);\n',
+  2
+);
+ersetzeAlle(
+  "Popup Tasten-Listener entfernen",
+  '      overlay.removeEventListener("click", close);\n',
+  '      overlay.removeEventListener("click", close);\n      document.removeEventListener("keydown", close);\n',
+  2
 );
 
 /* ---------------- Tracking → Meldungen an die Übungsseite ---------------- */

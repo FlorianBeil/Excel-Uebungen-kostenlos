@@ -205,6 +205,11 @@
       feedbackLeeren(eintrag);
     });
 
+    sheet.node.setAttribute("role", "group");
+    sheet.node.setAttribute(
+      "aria-label",
+      "Tabelle zu Aufgabe " + eintrag.nr + ". Zellen mit den Pfeiltasten wählen, zum Bearbeiten tippen oder Enter drücken."
+    );
     eintrag.karte.appendChild(sheet.node);
     eintrag.karte.appendChild(h("div", { class: "exercise-actions" }, [pruefen, zuruecksetzen, eintrag.loesungBtn]));
   }
@@ -312,11 +317,10 @@
 
     const letzte = eintrag.nr === daten.aufgaben.length;
     const ziel = letzte ? abschlussEl : document.getElementById("aufgabe-" + (eintrag.nr + 1));
-    const link = h("a", {
-      class: "frei-weiter",
-      href: letzte ? "#abschluss" : "#aufgabe-" + (eintrag.nr + 1),
-      text: letzte ? "Zu deinem Ergebnis ↓" : "Weiter zu Aufgabe " + (eintrag.nr + 1) + " ↓",
-    });
+    const link = h("a", { class: "frei-weiter", href: letzte ? "#abschluss" : "#aufgabe-" + (eintrag.nr + 1) }, [
+      document.createTextNode(letzte ? "Zu deinem Ergebnis " : "Weiter zu Aufgabe " + (eintrag.nr + 1) + " "),
+      h("span", { "aria-hidden": "true", text: "↓" }),
+    ]);
     link.addEventListener("click", (ev) => {
       ev.preventDefault();
       springeZu(ziel);
@@ -358,7 +362,9 @@
     eintraege.forEach((e) => {
       const s = L.aufgabeStatus(stand, e.a.id);
       e.status.hidden = !(s.geloest || s.loesungAngezeigt);
-      e.status.textContent = s.geloest ? "✓ Gelöst" : "Lösung angesehen";
+      e.status.textContent = "";
+      if (s.geloest) e.status.appendChild(h("span", { "aria-hidden": "true", text: "✓ " }));
+      e.status.appendChild(document.createTextNode(s.geloest ? "Gelöst" : "Lösung angesehen"));
       e.status.classList.toggle("is-loesung", !s.geloest);
       e.loesungBtn.hidden = !L.loesungErlaubt(stand, e.a.id) || s.loesungAngezeigt;
       e.loesungBox.hidden = !s.loesungAngezeigt;

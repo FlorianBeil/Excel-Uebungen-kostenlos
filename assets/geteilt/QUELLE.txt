@@ -1,0 +1,6 @@
+Kopie aus github.com/FlorianBeil/Excel-Aufgaben (Branch main)
+Commit: a42d371
+Geholt: 2026-09-14 22:25
+
+Nicht von Hand aendern - wird beim naechsten Update ueberschrieben.
+Aenderungen an diesen Dateien immer im Portal-Repo machen.

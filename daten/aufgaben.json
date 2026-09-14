@@ -1,0 +1,11 @@
+{
+  "konfiguration": {
+    "webinarUrl": "PLATZHALTER-WEBINAR-URL",
+    "kursUrl": "PLATZHALTER-KURS-URL",
+    "impressumUrl": "PLATZHALTER-IMPRESSUM-URL",
+    "datenschutzUrl": "PLATZHALTER-DATENSCHUTZ-URL",
+    "seitenUrl": "PLATZHALTER-SEITEN-URL",
+    "angebotNachAufgabe": 4
+  },
+  "aufgaben": []
+}

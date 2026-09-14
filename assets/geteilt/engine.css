@@ -1,0 +1,1032 @@
+/* Excel.Flo – gemeinsames Design-System für Übersicht & Übungen */
+
+:root {
+  --excel-green: #107C41;
+  --excel-green-dark: #0B5C30;
+  --excel-green-tint: #E9F6EE;
+  --grid-gray: #D7DCE1;
+  --header-gray: #F2F4F6;
+  --error-red: #D92D20;
+  --success-green: #15803D;
+
+  --text-primary: #1F2A24;
+  --text-muted: #5B6B63;
+  --border-color: #E1E5E2;
+  --surface: #FFFFFF;
+  --page-bg: #F7F9F8;
+
+  --font-heading: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-excel: "Aptos Narrow", Aptos, Calibri, "Segoe UI", Arial, sans-serif;
+  --font-excel-ui: "Segoe UI", "Segoe UI Variable", system-ui, -apple-system, Arial, sans-serif;
+
+  --radius: 10px;
+  --shadow-card: 0 1px 2px rgba(16, 124, 65, 0.06), 0 4px 14px rgba(16, 124, 65, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--page-bg);
+  background-image: url("img/bg-green.webp");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  margin: 0;
+  color: var(--text-primary);
+}
+
+/* ---------- Kopfbereich ---------- */
+
+.site-header {
+  background: linear-gradient(135deg, var(--excel-green) 0%, var(--excel-green-dark) 100%);
+  color: #fff;
+  padding: 1.1rem 1.5rem;
+}
+
+.site-header__inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  color: #fff;
+}
+
+.brand__icon {
+  width: 26px;
+  height: 32px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.brand__icon img,
+.brand__icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.brand__wordmark {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+}
+
+.brand__wordmark .dot {
+  opacity: 0.75;
+}
+
+.site-header__back {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: #fff;
+  opacity: 0.9;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  transition: background 0.15s ease;
+}
+
+.site-header__back:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+/* ---------- Layout ---------- */
+
+main {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2.25rem 1.5rem 4rem;
+}
+
+.page-intro {
+  margin-bottom: 2rem;
+}
+
+.page-intro h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.page-intro p {
+  color: var(--text-muted);
+  max-width: 620px;
+}
+
+/* ---------- Übersichts-Karten ---------- */
+
+.exercise-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.1rem;
+}
+
+.exercise-card {
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.exercise-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--excel-green);
+  box-shadow: 0 6px 20px rgba(16, 124, 65, 0.14);
+}
+
+.exercise-card__badges {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.badge--category {
+  background: var(--excel-green-tint);
+  color: var(--excel-green-dark);
+}
+
+.exercise-card h3 {
+  font-size: 1.05rem;
+}
+
+.exercise-card p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  flex-grow: 1;
+}
+
+.exercise-card__cta {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--excel-green);
+}
+
+.exercise-grid__empty {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.badge--done {
+  background: #E9F6EE;
+  color: var(--success-green);
+}
+
+.badge--level {
+  background: var(--header-gray);
+  color: var(--text-muted);
+}
+
+.exercise-card.is-done {
+  border-color: #BFE8CE;
+}
+
+/* ---------- Level-Tabs & Stufen-Banner ---------- */
+
+.level-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.level-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.level-tab {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--border-color);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+}
+
+.level-tab:hover {
+  border-color: var(--excel-green);
+  color: var(--excel-green-dark);
+}
+
+.level-tab.is-active {
+  background: var(--excel-green);
+  border-color: var(--excel-green);
+  color: #fff;
+}
+
+.level-tab__count {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.level-reset__btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--border-color);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+}
+
+.level-reset__btn:hover {
+  border-color: var(--error-red);
+  color: var(--error-red);
+  background: #FDF2F1;
+}
+
+.stage-banner {
+  display: none;
+  margin-bottom: 1.25rem;
+}
+
+.stage-banner.is-visible {
+  display: block;
+}
+
+.stage-banner p {
+  margin: 0;
+  background: var(--excel-green-tint);
+  border: 1px solid #CFEBDB;
+  border-radius: var(--radius);
+  padding: 0.85rem 1.1rem;
+  color: var(--excel-green-dark);
+  font-weight: 600;
+}
+
+/* ---------- Übungs-Seite ---------- */
+
+.exercise-header {
+  margin-bottom: 1.75rem;
+}
+
+.exercise-header__badges {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.exercise-header h1 {
+  font-size: 1.6rem;
+  margin-bottom: 0.6rem;
+}
+
+.exercise-task {
+  background: var(--excel-green-tint);
+  border: 1px solid #CFEBDB;
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+.exercise-task__intro {
+  margin: 0 0 0.5rem;
+  color: var(--text-primary);
+}
+
+.exercise-task__steps {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--text-primary);
+}
+
+.exercise-task__steps li {
+  margin-bottom: 0.3rem;
+}
+
+.exercise-task__steps li:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Tabellen-Grid ---------- */
+
+.sheet-wrap {
+  position: relative;
+  border: 1px solid #D4D4D4;
+  border-radius: 10px;
+  background: var(--surface);
+  margin-bottom: 1.5rem;
+}
+
+/* overflow clippt die Tabelle an den abgerundeten unteren Ecken */
+.sheet-scroll {
+  overflow-x: auto;
+  border-radius: 0 0 9px 9px;
+}
+
+/* Funktions-QuickInfo wie in Excel: weiß, feiner grauer Rahmen, aktuelles Argument fett */
+.formula-hint {
+  display: none;
+  position: absolute;
+  z-index: 10;
+  background: #FFFFFF;
+  color: #262626;
+  border: 1px solid #C8C8C8;
+  font-family: var(--font-excel-ui);
+  font-size: 12px;
+  padding: 3px 7px;
+  border-radius: 2px;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+}
+
+.formula-hint.is-visible {
+  display: block;
+}
+
+.formula-hint .tok-func {
+  color: #0F6CBD;
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+.formula-hint .is-active {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* Spaltenbreiten setzt engine.js: Datenspalten nach Inhalt, leere Spalten füllen die volle Breite */
+table.sheet {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  font-family: var(--font-excel);
+  font-size: 15px; /* = CELL_FONT_SIZE in engine.js */
+  color: #1F1F1F;
+}
+
+table.sheet th,
+table.sheet td {
+  border: 1px solid #E1E1E1;
+  padding: 4px 8px;
+  height: 28px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* Spalten- und Zeilenköpfe wie in Excel 365: hellgrau, Segoe UI, aktive Kopfzelle mit grüner Kante */
+table.sheet thead th,
+table.sheet .row-head {
+  background: #F5F5F5;
+  border-color: #D4D4D4;
+  color: #444;
+  font-family: var(--font-excel-ui);
+  font-size: 13px;
+  font-weight: 400;
+  text-align: center;
+  transition: background 0.1s ease, color 0.1s ease;
+}
+
+table.sheet thead th {
+  position: sticky;
+  top: 0;
+}
+
+table.sheet .row-head {
+  width: 34px;
+  min-width: 34px;
+  padding: 3px 4px;
+}
+
+table.sheet thead th.is-active {
+  background: #E1E1E1;
+  color: #0E6B37;
+  box-shadow: inset 0 -2px 0 var(--excel-green);
+}
+
+table.sheet .row-head.is-active {
+  background: #E1E1E1;
+  color: #0E6B37;
+  box-shadow: inset -2px 0 0 var(--excel-green);
+}
+
+/* Das kleine graue Dreieck in der linken oberen Ecke ("Alles auswählen") */
+table.sheet thead th.row-head::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  border-style: solid;
+  border-width: 0 0 8px 8px;
+  border-color: transparent transparent #BDBDBD transparent;
+}
+
+td.cell--header {
+  font-weight: 700;
+}
+
+table.sheet td.cell--num {
+  text-align: right;
+}
+
+td.cell--empty {
+  background: var(--surface);
+}
+
+td[data-ref] {
+  cursor: cell;
+  position: relative;
+}
+
+td.is-selected {
+  outline: 2px solid var(--excel-green);
+  outline-offset: -2px;
+  z-index: 2;
+}
+
+td.is-range-selected {
+  background: rgba(16, 124, 65, 0.12);
+  outline: 1px solid rgba(16, 124, 65, 0.35);
+  outline-offset: -1px;
+  z-index: 1;
+}
+
+td.is-fill-preview {
+  outline: 2px dashed var(--excel-green);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+td.cell--input {
+  background: #FFFBEA;
+}
+
+.cell-editable {
+  min-height: 1.2em;
+  white-space: pre;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: #1F1F1F;
+}
+
+/* Beim Tippen läuft eine lange Formel wie in Excel über die Nachbarzellen hinaus, statt die Spalte zu verbreitern */
+.cell-editable[contenteditable="true"] {
+  caret-color: var(--excel-green-dark);
+  cursor: text;
+  position: relative;
+  z-index: 3;
+  width: max-content;
+  min-width: 100%;
+  padding-right: 4px;
+  background: #FFFBEA;
+}
+
+.is-copied {
+  position: relative;
+}
+
+.is-copied::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border: 2px dashed var(--excel-green-dark);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.tok-func {
+  color: var(--excel-green-dark);
+  font-weight: 700;
+}
+
+.tok-number {
+  color: #b06000;
+}
+
+.fill-handle {
+  display: none;
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  width: 7px;
+  height: 7px;
+  background: var(--excel-green);
+  border: 1px solid #fff;
+  cursor: crosshair;
+  z-index: 3;
+}
+
+td.cell--input.is-selected .fill-handle {
+  display: block;
+}
+
+td.cell--input.is-correct {
+  background: #F1FBF5;
+}
+
+td.cell--input.is-correct .cell-editable {
+  color: var(--success-green);
+}
+
+td.cell--input.is-wrong {
+  background: #FEF2F2;
+}
+
+td.cell--input.is-wrong .cell-editable {
+  color: var(--error-red);
+}
+
+/* ---------- Namenfeld & Bearbeitungsleiste (Excel 365) ---------- */
+
+.sheet-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: #FFFFFF;
+  border-bottom: 1px solid #E1E1E1;
+  border-radius: 9px 9px 0 0;
+  font-family: var(--font-excel-ui);
+  font-size: 13px;
+  color: #262626;
+}
+
+.sheet-toolbar__namebox,
+.sheet-toolbar__functions,
+.sheet-toolbar__formula {
+  display: flex;
+  align-items: center;
+  height: 26px;
+  border: 1px solid #D1D1D1;
+  border-radius: 4px;
+  background: #FFFFFF;
+}
+
+.sheet-toolbar__namebox {
+  flex: 0 0 auto;
+  justify-content: space-between;
+  gap: 6px;
+  width: 104px;
+  padding: 0 6px 0 8px;
+}
+
+.sheet-toolbar__nameref {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sheet-toolbar__namebox svg,
+.sheet-toolbar__fx svg {
+  flex: 0 0 auto;
+  color: #616161;
+}
+
+.sheet-toolbar__grip {
+  display: flex;
+  align-items: center;
+  color: #8A8A8A;
+}
+
+.sheet-toolbar__functions {
+  flex: 0 0 auto;
+  gap: 2px;
+  padding: 0 3px;
+}
+
+/* ✕ und ✓ sind wie in Excel ausgegraut, solange keine Eingabe läuft */
+.sheet-toolbar__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  color: #B8B8B8;
+  cursor: default;
+}
+
+.sheet-toolbar.is-editing .sheet-toolbar__icon {
+  color: #424242;
+  cursor: pointer;
+}
+
+.sheet-toolbar.is-editing .sheet-toolbar__icon:hover {
+  background: #EBEBEB;
+}
+
+.sheet-toolbar__fx {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 20px;
+  padding: 0 4px 0 5px;
+  color: #424242;
+}
+
+.sheet-toolbar__fx i {
+  font-family: "Cambria Math", Cambria, "Times New Roman", serif;
+  font-size: 15px;
+  letter-spacing: -0.5px;
+}
+
+.sheet-toolbar__formula {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0 8px;
+  overflow: hidden;
+}
+
+.sheet-toolbar__content {
+  width: 100%;
+  font-family: var(--font-excel);
+  font-size: 14px;
+  color: #1F1F1F;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.sheet-toolbar__content::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 520px) {
+  .sheet-toolbar__namebox {
+    width: 70px;
+  }
+
+  .sheet-toolbar__grip {
+    display: none;
+  }
+}
+
+/* ---------- Aktionsleiste & Feedback ---------- */
+
+.exercise-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  border: 1.5px solid transparent;
+  padding: 0.6rem 1.1rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn--primary {
+  background: var(--excel-green);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: var(--excel-green-dark);
+}
+
+.btn--secondary {
+  background: #fff;
+  border-color: var(--grid-gray);
+  color: var(--text-primary);
+}
+
+.btn--secondary:hover {
+  border-color: var(--excel-green);
+  color: var(--excel-green-dark);
+}
+
+.exercise-feedback {
+  border-radius: var(--radius);
+  padding: 0.8rem 1.1rem;
+  font-size: 0.92rem;
+  margin-bottom: 1.5rem;
+  display: none;
+}
+
+.exercise-feedback.is-success {
+  display: block;
+  background: #F1FBF5;
+  border: 1px solid #BFE8CE;
+  color: var(--success-green);
+}
+
+.exercise-feedback.is-error {
+  display: block;
+  background: #FEF2F2;
+  border: 1px solid #F6C6C6;
+  color: var(--error-red);
+}
+
+.exercise-feedback p {
+  margin: 0;
+}
+
+.exercise-feedback p + p {
+  margin-top: 0.6rem;
+}
+
+.exercise-feedback.is-success .exercise-feedback__explanation {
+  color: var(--text-primary);
+}
+
+.exercise-feedback__next a {
+  margin-top: 0.2rem;
+}
+
+.exercise-hints {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.exercise-hints summary {
+  cursor: pointer;
+  padding: 0.85rem 1.1rem;
+  font-weight: 600;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  color: var(--excel-green-dark);
+}
+
+.exercise-hints ol {
+  margin: 0;
+  padding: 0 1.1rem 1rem 2rem;
+  color: var(--text-primary);
+}
+
+.exercise-hints li {
+  margin-bottom: 0.4rem;
+}
+
+.exercise-solution {
+  margin-top: 0.75rem;
+  font-family: var(--font-mono);
+  background: var(--header-gray);
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  display: none;
+}
+
+.exercise-solution.is-visible {
+  display: block;
+}
+
+.exercise-hints__explanation {
+  margin: 0.85rem 1.1rem 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.site-footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  padding: 2rem 1.5rem;
+}
+
+/* ---------- Erfolgs-Popup (beim richtigen Lösen einer Übung) ---------- */
+
+.success-popup-overlay {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 30, 22, 0.4);
+  border-radius: var(--radius);
+  z-index: 9999;
+  cursor: pointer;
+  animation: success-fade-in 0.2s ease-out;
+}
+
+.success-popup {
+  position: relative;
+  background: var(--surface);
+  border-radius: 18px;
+  padding: 2.1rem 2.5rem 2rem;
+  text-align: center;
+  max-width: 320px;
+  box-shadow: 0 24px 60px rgba(11, 92, 48, 0.28);
+  cursor: default;
+  animation: success-pop-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.success-popup__check-circle {
+  stroke: var(--excel-green);
+  stroke-width: 3;
+  stroke-dasharray: 152;
+  stroke-dashoffset: 152;
+  animation: success-draw-circle 0.5s ease-out forwards;
+}
+
+.success-popup__check-mark {
+  stroke: var(--excel-green);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: success-draw-check 0.35s 0.45s ease-out forwards;
+}
+
+.success-popup__title {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0.9rem 0 0.3rem;
+  color: var(--text-primary);
+}
+
+.success-popup__subtitle {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.success-popup__confetti {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: success-confetti 0.9s ease-out forwards;
+}
+
+@keyframes success-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes success-pop-in {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes success-draw-circle {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes success-draw-check {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes success-confetti {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .success-popup-overlay,
+  .success-popup,
+  .success-popup__check-circle,
+  .success-popup__check-mark,
+  .success-popup__confetti,
+  .error-popup-overlay,
+  .error-popup,
+  .error-popup__icon-circle,
+  .error-popup__icon-cross {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ---------- Fehler-Popup (beim falschen Lösen einer Übung) — gleiche
+   Mechanik/Animation wie das Erfolgs-Popup oben (dieselben Keyframes
+   wiederverwendet), nur in Rot mit einem Kreuz statt Häkchen und ohne
+   Konfetti; schließt sich per Klick statt automatisch, da der Text hier
+   tatsächlich gelesen werden soll. ---------- */
+
+.error-popup-overlay {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(40, 15, 15, 0.4);
+  border-radius: var(--radius);
+  z-index: 9999;
+  cursor: pointer;
+  animation: success-fade-in 0.2s ease-out;
+}
+
+.error-popup {
+  position: relative;
+  background: var(--surface);
+  border-radius: 18px;
+  padding: 2.1rem 2.5rem 2rem;
+  text-align: center;
+  max-width: 360px;
+  box-shadow: 0 24px 60px rgba(146, 32, 32, 0.24);
+  cursor: default;
+  animation: success-pop-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.error-popup__icon-circle {
+  stroke: var(--error-red);
+  stroke-width: 3;
+  stroke-dasharray: 152;
+  stroke-dashoffset: 152;
+  animation: success-draw-circle 0.5s ease-out forwards;
+}
+
+.error-popup__icon-cross {
+  stroke: var(--error-red);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 52;
+  stroke-dashoffset: 52;
+  animation: success-draw-check 0.35s 0.45s ease-out forwards;
+}
+
+.error-popup__title {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0.9rem 0 0.3rem;
+  color: var(--text-primary);
+}
+
+.error-popup__subtitle {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}

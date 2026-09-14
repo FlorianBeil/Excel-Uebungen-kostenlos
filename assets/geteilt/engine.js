@@ -1930,6 +1930,7 @@
   window.ExcelFlo = {
     colLetter,
     checkCell,
+    createSheet,
     // Geteilte UI-Helfer für weitere Bereiche (z. B. engine-powerquery.js)
     el,
     LEVEL_LABELS,

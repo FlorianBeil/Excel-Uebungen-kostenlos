@@ -7,5 +7,267 @@
     "seitenUrl": "PLATZHALTER-SEITEN-URL",
     "angebotNachAufgabe": 4
   },
-  "aufgaben": []
+
+  "texte": {
+    "seitenTitel": "Kannst du Excel wirklich? – 5 kostenlose Excel-Übungen | Excel.Flo",
+    "metaBeschreibung": "Fünf interaktive Excel-Aufgaben direkt im Browser: SUMME, ZÄHLENWENN, SUMMEWENN, SVERWEIS und Pivot-Tabellen. Kein Download, keine Anmeldung.",
+    "ueberschrift": "Kannst du Excel wirklich?",
+    "einleitung": "Fünf Aufgaben, direkt im Browser. Kein Download, keine Anmeldung.",
+
+    "mobilHinweis": "Diese Übungen lassen sich am Computer deutlich angenehmer lösen.",
+    "mobilMailLink": "Link an mich selbst schicken",
+    "mobilWebinarLink": "Zum nächsten Webinar",
+    "mailBetreff": "Excel-Übungen für später",
+    "mailText": "Hier sind die fünf kostenlosen Excel-Übungen zum Lösen am Computer:",
+
+    "fortschritt": "Aufgabe {nr} von {gesamt}",
+
+    "angebotTitel": "Du hast 4 von 5 Aufgaben geschafft.",
+    "angebotText1": "Im Excel Master Kurs warten über 40 weitere Übungen – plus die Videos, die erklären, warum die Lösung funktioniert.",
+    "angebotText2": "Wie der Kurs aufgebaut ist, zeige ich jeden Monat live in einem kostenlosen Webinar.",
+    "webinarButton": "Zum nächsten Webinar",
+    "kursLink": "Oder direkt zum Master Kurs",
+
+    "abschlussTitel": "Alle fünf Aufgaben bearbeitet.",
+    "abschlussErgebnis": "Du hast {selbst} von 5 Aufgaben selbst gelöst.",
+    "abschlussMitLoesung": "Bei {mitLoesung} hast du dir die Lösung angesehen.",
+
+    "footerImpressum": "Impressum",
+    "footerDatenschutz": "Datenschutz"
+  },
+
+  "aufgaben": [
+    {
+      "id": "summe-umsatz",
+      "typ": "formel",
+      "title": "Summe der Umsätze berechnen",
+      "task": {
+        "intro": "Berechne die Summe der Umsätze von Januar bis März.",
+        "steps": [
+          "Trage in Zelle B5 eine Formel ein, die die Umsätze addiert."
+        ]
+      },
+      "grid": {
+        "cols": ["A", "B"],
+        "rowCount": 5,
+        "cells": {
+          "A1": { "value": "Monat", "type": "header" },
+          "B1": { "value": "Umsatz", "type": "header" },
+          "A2": { "value": "Jan" },
+          "B2": { "value": 4200, "format": "currency0" },
+          "A3": { "value": "Feb" },
+          "B3": { "value": 3800, "format": "currency0" },
+          "A4": { "value": "Mär" },
+          "B4": { "value": 5100, "format": "currency0" },
+          "A5": { "value": "Gesamtsumme" },
+          "B5": {
+            "type": "input",
+            "answer": {
+              "value": 13100,
+              "tolerance": 0.5,
+              "acceptedFormulas": ["=SUMME(B2:B4)"]
+            }
+          }
+        }
+      },
+      "hints": [
+        "SUMME-Aufbau: =SUMME(Zahl1; [Zahl2]; …) – addiert alle angegebenen Zahlen oder Zellbereiche.",
+        "Du kannst der Funktion einen ganzen Zellbereich übergeben, um alle Werte darin auf einmal zu addieren, statt jede Zelle einzeln aufzuzählen.",
+        "Alternativ kannst du die passenden Zellen auch einzeln mit + addieren – bei wenigen Zellen funktioniert beides, bei größeren Bereichen ist SUMME() aber deutlich schneller geschrieben.",
+        "Du kannst statt der Formel auch direkt das berechnete Ergebnis eintragen, z. B. 13100."
+      ],
+      "explanation": "SUMME(B2:B4) addiert alle Werte im Bereich – hier die Umsätze für Januar, Februar und März. Das ist besonders praktisch bei größeren Bereichen: Statt jede Zelle einzeln mit + zu verknüpfen, gibst du einfach den gesamten Bereich an.",
+      "solution": "=SUMME(B2:B4)"
+    },
+
+    {
+      "id": "zaehlenwenn-verkaeufe",
+      "typ": "formel",
+      "title": "Verkäufe über einem Schwellenwert zählen",
+      "task": {
+        "intro": "Ermittle mit ZÄHLENWENN, wie viele Verkäufe einen Betrag von mehr als 500 € haben.",
+        "steps": [
+          "Trage in Zelle B9 eine ZÄHLENWENN-Formel ein, die die Anzahl ermittelt."
+        ]
+      },
+      "grid": {
+        "cols": ["A", "B"],
+        "rowCount": 9,
+        "cells": {
+          "A1": { "value": "Verkauf", "type": "header" },
+          "B1": { "value": "Betrag (€)", "type": "header" },
+          "A2": { "value": 1 },
+          "B2": { "value": 320, "format": "currency0" },
+          "A3": { "value": 2 },
+          "B3": { "value": 610, "format": "currency0" },
+          "A4": { "value": 3 },
+          "B4": { "value": 480, "format": "currency0" },
+          "A5": { "value": 4 },
+          "B5": { "value": 750, "format": "currency0" },
+          "A6": { "value": 5 },
+          "B6": { "value": 290, "format": "currency0" },
+          "A7": { "value": 6 },
+          "B7": { "value": 505, "format": "currency0" },
+          "A8": { "value": 7 },
+          "B8": { "value": 640, "format": "currency0" },
+          "A9": { "value": "Anzahl > 500 €" },
+          "B9": {
+            "type": "input",
+            "answer": {
+              "value": 4,
+              "tolerance": 0.001,
+              "acceptedFormulas": ["=ZÄHLENWENN(B2:B8;\">500\")"]
+            }
+          }
+        }
+      },
+      "hints": [
+        "ZÄHLENWENN-Aufbau: =ZÄHLENWENN(Bereich; Kriterium)",
+        "Bereich ist der Zellbereich mit den Beträgen.",
+        "Das Kriterium gibst du als Text in Anführungszeichen an, z. B. \">500\".",
+        "Du kannst statt der Formel auch direkt die berechnete Anzahl eintragen."
+      ],
+      "explanation": "ZÄHLENWENN(B2:B8;\">500\") zählt, wie viele Zellen im Bereich B2:B8 einen Wert größer als 500 haben. Von den 7 Verkäufen liegen 4 über 500 € (610 €, 750 €, 505 € und 640 €).",
+      "solution": "=ZÄHLENWENN(B2:B8;\">500\")"
+    },
+
+    {
+      "id": "summewenn-umsatz-region",
+      "typ": "formel",
+      "title": "Umsatz je Region summieren",
+      "task": {
+        "intro": "Ermittle mit SUMMEWENN den gesamten Umsatz der Region „Nord“.",
+        "steps": [
+          "Trage in Zelle B8 eine SUMMEWENN-Formel ein, die den Umsatz der Region „Nord“ summiert."
+        ]
+      },
+      "grid": {
+        "cols": ["A", "B"],
+        "rowCount": 8,
+        "cells": {
+          "A1": { "value": "Region", "type": "header" },
+          "B1": { "value": "Umsatz (€)", "type": "header" },
+          "A2": { "value": "Nord" },
+          "B2": { "value": 1200, "format": "currency0" },
+          "A3": { "value": "Süd" },
+          "B3": { "value": 900, "format": "currency0" },
+          "A4": { "value": "Nord" },
+          "B4": { "value": 1500, "format": "currency0" },
+          "A5": { "value": "West" },
+          "B5": { "value": 700, "format": "currency0" },
+          "A6": { "value": "Nord" },
+          "B6": { "value": 800, "format": "currency0" },
+          "A8": { "value": "Summe Nord" },
+          "B8": {
+            "type": "input",
+            "answer": {
+              "value": 3500,
+              "tolerance": 0.005,
+              "acceptedFormulas": ["=SUMMEWENN(A2:A6;\"Nord\";B2:B6)"]
+            }
+          }
+        }
+      },
+      "hints": [
+        "SUMMEWENN-Aufbau: =SUMMEWENN(Bereich; Kriterium; Summe_Bereich)",
+        "Bereich ist der Zellbereich mit den Regionen.",
+        "Kriterium ist der gesuchte Regionsname als Text in Anführungszeichen, z. B. \"Nord\".",
+        "Summe_Bereich ist der Zellbereich mit den Umsätzen, die addiert werden sollen.",
+        "Du kannst statt der Formel auch direkt die berechnete Summe eintragen."
+      ],
+      "explanation": "SUMMEWENN(A2:A6;\"Nord\";B2:B6) durchsucht den Bereich A2:A6 nach dem Kriterium „Nord“ und addiert für jede Übereinstimmung den zugehörigen Wert aus B2:B6. Von den drei Nord-Einträgen (1.200 €, 1.500 € und 800 €) ergibt sich eine Summe von 3.500 €.",
+      "solution": "=SUMMEWENN(A2:A6;\"Nord\";B2:B6)"
+    },
+
+    {
+      "id": "sverweis-basis",
+      "typ": "formel",
+      "title": "Preis nachschlagen",
+      "task": {
+        "intro": "Ermittle mit SVERWEIS den Preis für das gesuchte Produkt.",
+        "steps": [
+          "Trage in Zelle B8 eine SVERWEIS-Formel ein, die den Preis für das gesuchte Produkt ermittelt."
+        ]
+      },
+      "grid": {
+        "cols": ["A", "B"],
+        "rowCount": 8,
+        "cells": {
+          "A1": { "value": "Produkt", "type": "header" },
+          "B1": { "value": "Preis", "type": "header" },
+          "A2": { "value": "Maus" },
+          "B2": { "value": 19.99, "format": "currency" },
+          "A3": { "value": "Tastatur" },
+          "B3": { "value": 34.99, "format": "currency" },
+          "A4": { "value": "Monitor" },
+          "B4": { "value": 189, "format": "currency" },
+          "A5": { "value": "Headset" },
+          "B5": { "value": 49.99, "format": "currency" },
+          "A7": { "value": "Suchwert:" },
+          "B7": { "value": "Tastatur" },
+          "A8": { "value": "Preis:" },
+          "B8": {
+            "type": "input",
+            "answer": {
+              "value": 34.99,
+              "tolerance": 0.005,
+              "acceptedFormulas": ["=SVERWEIS(B7;A2:B5;2;FALSCH)"]
+            }
+          }
+        }
+      },
+      "hints": [
+        "SVERWEIS-Aufbau: =SVERWEIS(Suchkriterium; Matrix; Spaltenindex; [Bereich_Verweis])",
+        "Suchkriterium ist die Zelle mit dem gesuchten Produktnamen.",
+        "FALSCH (oder 0) als letztes Argument sorgt für eine exakte statt ungefähre Suche.",
+        "Du kannst statt der Formel auch direkt den berechneten Preis eintragen."
+      ],
+      "explanation": "SVERWEIS(B7;A2:B5;2;FALSCH) sucht den Wert aus B7 in der ersten Spalte des Bereichs A2:B5 und gibt den Wert aus der 2. Spalte derselben Zeile zurück – den Preis. FALSCH sorgt für eine exakte statt ungefähre Suche.",
+      "solution": "=SVERWEIS(B7;A2:B5;2;FALSCH)"
+    },
+
+    {
+      "id": "umsatz-je-region",
+      "typ": "pivot",
+      "title": "Umsatz je Region auswerten",
+      "task": {
+        "intro": "Du hast eine Tabelle mit Tagesumsätzen aus 2025 und 2026 (Spalten: Datum, Region, Land, Kunde, Umsatz). Erstelle daraus eine Pivot-Tabelle, die den Umsatz je Region zusammenfasst.",
+        "steps": [
+          "Ziehe die Felder aus der PivotTable-Feldliste in die passenden Bereiche (Zeilen / Spalten / Werte / Filter) – genau wie in echten Excel-PivotTables."
+        ]
+      },
+      "datensatz": {
+        "seed": 20260101,
+        "vonDatum": "2025-01-01",
+        "bisDatum": "2026-12-31",
+        "regionen": {
+          "DACH": { "basisUmsatz": 1200, "laender": ["Deutschland", "Österreich", "Schweiz"], "kunden": ["Alpenblick", "Bergmann", "Rheinwerk", "Schwarzwald", "Ostwind", "Alpenhof"] },
+          "Benelux": { "basisUmsatz": 850, "laender": ["Niederlande", "Belgien", "Luxemburg"], "kunden": ["Delta", "Fjord", "Polderwerk", "Rotterdam", "Grachten", "Tulpen"] },
+          "Nordics": { "basisUmsatz": 950, "laender": ["Schweden", "Dänemark", "Norwegen", "Finnland"], "kunden": ["Nordlicht", "Baltic", "Polarstern", "Mitternacht", "Rentier", "Aurora"] }
+        },
+        "felder": {
+          "Datum": { "icon": "📅", "type": "date" },
+          "Region": { "icon": "🌍", "type": "text" },
+          "Land": { "icon": "🏳️", "type": "text" },
+          "Kunde": { "icon": "🧑‍🤝‍🧑", "type": "text" },
+          "Umsatz": { "icon": "💰", "type": "number" }
+        }
+      },
+      "hints": [
+        "Das Feld, nach dem gruppiert werden soll, gehört in den Bereich Zeilen (oder alternativ Spalten – beides ergibt eine inhaltlich richtige, nur transponierte Tabelle).",
+        "Das Feld, das ausgewertet werden soll, gehört in den Bereich Werte.",
+        "Klicke auf das Dropdown im „Werte“-Chip, um die Aggregation (Summe / Anzahl / Mittelwert …) zu ändern.",
+        "Ein Feld per Klick auf das × wieder aus einem Bereich entfernen."
+      ],
+      "explanation": "Die Pivot-Tabelle fasst alle 730 Tageszeilen in drei Zeilen zusammen: Region in „Zeilen“ bildet die Gruppen, Umsatz in „Werte“ wird je Gruppe summiert. Ändern sich die Quelldaten, reicht ein Klick auf „Aktualisieren“ – keine einzige Formel nötig.",
+      "solution": "Region → Bereich „Zeilen“, Umsatz → Bereich „Werte“ (Summe)",
+      "loesungPruefung": {
+        "rows": ["Region"],
+        "columns": [],
+        "filter": [],
+        "values": [{ "field": "Umsatz", "agg": "Summe" }],
+        "rowsColsInterchangeable": true
+      }
+    }
+  ]
 }

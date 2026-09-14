@@ -43,6 +43,21 @@ function ausschneiden(beschreibung, von, bis, ersatz) {
 
 ersetze("Titel", /<title>[^<]*<\/title>/, '<title>Excel.Flo – Pivot-Aufgabe</title>\n<meta name="robots" content="noindex">');
 
+// Hintergrundbild (als data-URL eingebettet) entfernen: Die Übungsseite hat ihren
+// eigenen Hintergrund, und die Datei wird dadurch deutlich kleiner.
+ersetze("Hintergrundbild", /    background-image: url\("data:image\/webp;base64,[^"]+"\);\n/, "");
+
+ersetze(
+  "CSS für die Einbettung",
+  "</style>",
+  [
+    "  /* ---------- Eingebettet in die kostenlose Übungsseite (skripte/pivot-uebernehmen.js) ---------- */",
+    "  html, body { background: transparent !important; overflow: hidden; }",
+    "  main { max-width: none; padding: 0 0 4px; }",
+    "</style>",
+  ].join("\n")
+);
+
 /* ---------------- Markup ---------------- */
 
 ausschneiden(

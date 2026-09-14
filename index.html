@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kannst du Excel wirklich? – 5 kostenlose Excel-Übungen | Excel.Flo</title>
+<meta name="description" content="Fünf interaktive Excel-Aufgaben direkt im Browser: SUMME, ZÄHLENWENN, SUMMEWENN, SVERWEIS und Pivot-Tabellen. Kein Download, keine Anmeldung.">
+<link rel="icon" type="image/svg+xml" href="assets/geteilt/img/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/geteilt/engine.css?v=1">
+<link rel="stylesheet" href="assets/seite/seite.css?v=1">
+</head>
+<body class="frei-seite">
+
+<a class="frei-skiplink" href="#aufgabe-1">Direkt zu Aufgabe 1</a>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <div class="brand">
+      <span class="brand__icon"><img src="assets/geteilt/img/logo-white.webp" alt="" width="36" height="36"></span>
+      <span class="brand__wordmark">Excel<span class="dot">.</span>Flo</span>
+    </div>
+  </div>
+</header>
+
+<main id="inhalt">
+  <!-- Überschrift und Einleitung stehen zusätzlich in daten/aufgaben.json (texte);
+       test/texte.test.js prüft, dass beide übereinstimmen. Hier fest im HTML, damit
+       sie sofort und auch ohne JavaScript (Suchmaschinen, Link-Vorschauen) da sind. -->
+  <section class="frei-start" aria-labelledby="seiten-titel">
+    <h1 id="seiten-titel">Kannst du Excel wirklich?</h1>
+    <p class="frei-start__text">Fünf Aufgaben, direkt im Browser. Kein Download, keine Anmeldung.</p>
+    <p class="frei-start__fortschritt" id="fortschritt" aria-live="polite"></p>
+  </section>
+
+  <!-- Nur auf Smartphones/Tablets sichtbar (CSS), kein Popup, keine Sperre -->
+  <aside class="frei-mobil" aria-label="Hinweis für Smartphones">
+    <p id="mobil-hinweis">Diese Übungen lassen sich am Computer deutlich angenehmer lösen.</p>
+    <p class="frei-mobil__optionen">
+      <a id="mobil-mail" href="#">Link an mich selbst schicken</a>
+      <a id="mobil-webinar" href="#">Zum nächsten Webinar</a>
+    </p>
+  </aside>
+
+  <div class="frei-aufgaben" id="aufgaben">
+    <p class="frei-laden">Aufgaben werden geladen …</p>
+  </div>
+
+  <noscript>
+    <p class="frei-laden">Die Übungen brauchen JavaScript. Bitte aktiviere es in deinem Browser.</p>
+  </noscript>
+</main>
+
+<footer class="site-footer frei-footer">
+  <span>Excel.Flo</span>
+  <a id="link-impressum" href="#" hidden>Impressum</a>
+  <a id="link-datenschutz" href="#" hidden>Datenschutz</a>
+</footer>
+
+<script src="assets/geteilt/formula-engine.js?v=1" defer></script>
+<script src="assets/geteilt/engine.js?v=1" defer></script>
+<script src="assets/seite/logik.js?v=1" defer></script>
+<script src="assets/seite/seite.js?v=1" defer></script>
+</body>
+</html>

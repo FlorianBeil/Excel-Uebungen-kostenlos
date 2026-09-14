@@ -1,0 +1,365 @@
+/* Excel.Flo – kostenlose Übungen
+ * Baut auf assets/geteilt/engine.css auf (Farben, Schriften, Tabellenblatt, Buttons).
+ * Desktop zuerst; unter 640px schlankere Abstände.
+ * Texte direkt auf dem grünen Hintergrundbild immer in --text-primary
+ * (--text-muted erreicht dort nur ~3,1:1). */
+
+.frei-seite main {
+  max-width: 1080px;
+  padding: 1.5rem 1.5rem 3rem;
+}
+
+.frei-seite .site-header {
+  padding: 0.75rem 1.5rem;
+}
+
+/* ---------- Tastatur ---------- */
+
+.frei-skiplink {
+  position: absolute;
+  left: -9999px;
+  top: 0.75rem;
+  z-index: 10000;
+  background: var(--surface);
+  color: var(--text-primary);
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.frei-skiplink:focus {
+  left: 1rem;
+}
+
+.frei-seite a:focus-visible,
+.frei-seite button:focus-visible,
+.frei-seite summary:focus-visible,
+.frei-seite iframe:focus-visible,
+.frei-aufgabe:focus-visible,
+.frei-loesung:focus-visible,
+.frei-abschluss:focus-visible {
+  outline: 3px solid var(--excel-green);
+  outline-offset: 2px;
+}
+
+.frei-aufgabe:focus,
+.frei-loesung:focus,
+.frei-abschluss:focus {
+  outline: none;
+}
+
+.frei-angebot a:focus-visible {
+  outline-color: #fff;
+}
+
+/* ---------- Start ---------- */
+
+.frei-start {
+  margin-bottom: 1.25rem;
+}
+
+.frei-start h1 {
+  font-size: 2rem;
+  line-height: 1.15;
+  margin-bottom: 0.35rem;
+}
+
+.frei-start__text {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+}
+
+.frei-start__fortschritt {
+  margin: 0.5rem 0 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.frei-start__fortschritt:empty {
+  display: none;
+}
+
+.frei-laden {
+  color: var(--text-primary);
+}
+
+/* ---------- Hinweis für Smartphones ---------- */
+
+.frei-mobil {
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 0.8rem 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 760px), (hover: none) and (pointer: coarse) {
+  .frei-mobil {
+    display: block;
+  }
+}
+
+.frei-mobil p {
+  margin: 0;
+}
+
+.frei-mobil__optionen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5rem;
+  margin-top: 0.25rem !important;
+}
+
+.frei-mobil__optionen a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+  color: var(--excel-green-dark);
+}
+
+/* ---------- Aufgaben ---------- */
+
+.frei-aufgaben {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.frei-aufgabe {
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 1.25rem 1.5rem 1.5rem;
+  scroll-margin-top: 1rem;
+}
+
+.frei-aufgabe__kopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.frei-aufgabe__nr {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.frei-aufgabe__kopf h2 {
+  flex-basis: 100%;
+  font-size: 1.3rem;
+  line-height: 1.25;
+}
+
+.frei-status {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background: var(--excel-green-tint);
+  color: var(--excel-green-dark);
+}
+
+.frei-status.is-loesung {
+  background: var(--header-gray);
+  color: var(--text-muted);
+}
+
+.frei-aufgabe .exercise-task {
+  margin-bottom: 1rem;
+}
+
+.frei-aufgabe .exercise-actions {
+  margin: 1rem 0 0;
+}
+
+.frei-aufgabe .exercise-feedback {
+  margin: 1rem 0 0;
+}
+
+.frei-weiter {
+  font-weight: 600;
+  color: var(--excel-green-dark);
+}
+
+.frei-loesung {
+  margin-top: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background: #FAFBFA;
+  padding: 0.85rem 1.1rem;
+}
+
+.frei-loesung__titel {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+.frei-loesung__formel {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-variant-ligatures: none;
+  background: var(--header-gray);
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+  overflow-wrap: anywhere;
+}
+
+.frei-loesung__text {
+  margin: 0;
+  font-weight: 500;
+}
+
+.frei-loesung__erklaerung {
+  margin: 0.6rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.frei-tipps {
+  margin-top: 1rem;
+}
+
+/* Pivot-Nachbau: Höhe setzt seite.js passend zum Inhalt, das hier ist nur der Startwert */
+.frei-pivot {
+  display: block;
+  width: 100%;
+  height: 820px;
+  border: 0;
+}
+
+.frei-pivot__aktionen:has(button[hidden]) {
+  display: none;
+}
+
+/* ---------- Angebot (nach Aufgabe 4) ---------- */
+
+.frei-angebot {
+  background: linear-gradient(135deg, var(--excel-green) 0%, var(--excel-green-dark) 100%);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 1.75rem 2rem;
+  box-shadow: var(--shadow-card);
+}
+
+.frei-angebot h2 {
+  color: #fff;
+  font-size: 1.5rem;
+  margin-bottom: 0.7rem;
+}
+
+.frei-angebot p {
+  margin: 0 0 0.6rem;
+  max-width: 660px;
+}
+
+.frei-cta {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 0.8rem 1.5rem;
+  background: var(--excel-green);
+  color: #fff;
+}
+
+.frei-cta:hover {
+  background: var(--excel-green-dark);
+}
+
+.frei-angebot .frei-cta {
+  background: #fff;
+  color: var(--excel-green-dark);
+}
+
+.frei-angebot .frei-cta:hover {
+  background: var(--excel-green-tint);
+}
+
+.frei-angebot__aktion {
+  margin-top: 1.1rem !important;
+}
+
+.frei-angebot__kurs {
+  margin-bottom: 0 !important;
+  font-size: 0.9rem;
+}
+
+.frei-textlink {
+  color: #fff;
+}
+
+/* ---------- Abschluss ---------- */
+
+.frei-abschluss {
+  background: var(--surface);
+  border: 2px solid var(--excel-green);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 1.5rem 2rem;
+  scroll-margin-top: 1rem;
+}
+
+.frei-abschluss h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.frei-abschluss p {
+  margin: 0 0 0.4rem;
+}
+
+.frei-abschluss__aktion {
+  margin-top: 1rem !important;
+}
+
+/* ---------- Fußzeile ---------- */
+
+.frei-footer {
+  color: var(--text-primary);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+}
+
+.frei-footer a {
+  color: var(--text-primary);
+}
+
+/* ---------- Schmale Bildschirme ---------- */
+
+@media (max-width: 640px) {
+  .frei-seite main {
+    padding: 1rem 1rem 2.5rem;
+  }
+
+  .frei-start h1 {
+    font-size: 1.6rem;
+  }
+
+  .frei-aufgabe {
+    padding: 1rem;
+  }
+
+  .frei-angebot,
+  .frei-abschluss {
+    padding: 1.25rem;
+  }
+
+  .frei-cta {
+    display: block;
+    text-align: center;
+  }
+}

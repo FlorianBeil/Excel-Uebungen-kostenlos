@@ -4,13 +4,16 @@
     "kursUrl": "PLATZHALTER-KURS-URL",
     "impressumUrl": "PLATZHALTER-IMPRESSUM-URL",
     "datenschutzUrl": "PLATZHALTER-DATENSCHUTZ-URL",
-    "seitenUrl": "PLATZHALTER-SEITEN-URL",
+    "seitenUrl": "https://florianbeil.github.io/Excel-Uebungen-kostenlos/",
     "angebotNachAufgabe": 4
   },
 
   "texte": {
     "seitenTitel": "Kannst du Excel wirklich? – 5 kostenlose Excel-Übungen | Excel.Flo",
     "metaBeschreibung": "Fünf interaktive Excel-Aufgaben direkt im Browser: SUMME, ZÄHLENWENN, SUMMEWENN, SVERWEIS und Pivot-Tabellen. Kein Download, keine Anmeldung.",
+    "ogTitel": "Kannst du Excel wirklich? 5 Aufgaben zum Ausprobieren",
+    "ogBeschreibung": "Interaktive Excel-Übungen direkt im Browser – von SUMME bis Pivot-Tabelle. Kein Download, keine Anmeldung.",
+    "ogBildAlt": "Excel.Flo: Kannst du Excel wirklich? Fünf Excel-Aufgaben direkt im Browser, kein Download, keine Anmeldung.",
     "ueberschrift": "Kannst du Excel wirklich?",
     "einleitung": "Fünf Aufgaben, direkt im Browser. Kein Download, keine Anmeldung.",
 

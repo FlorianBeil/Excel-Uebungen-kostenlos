@@ -338,6 +338,25 @@
   color: var(--text-primary);
 }
 
+/* ---------- Touch: ausreichend große Tippflächen (mind. 44px) ---------- */
+
+@media (pointer: coarse) {
+  .frei-seite .btn {
+    min-height: 44px;
+  }
+
+  .frei-tipps summary {
+    padding-block: 0.8rem;
+  }
+
+  .frei-weiter,
+  .frei-textlink,
+  .frei-footer a {
+    display: inline-block;
+    padding-block: 0.6rem;
+  }
+}
+
 /* ---------- Schmale Bildschirme ---------- */
 
 @media (max-width: 640px) {

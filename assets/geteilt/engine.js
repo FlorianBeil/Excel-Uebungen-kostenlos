@@ -798,6 +798,9 @@
           "data-ref": ref,
           spellcheck: "false",
           autocomplete: "off",
+          // Smartphone-Tastaturen: „=summe“ nicht zu „=Summe“ korrigieren oder Wörter ersetzen
+          autocapitalize: "off",
+          autocorrect: "off",
         });
         content.contentEditable = "false";
 
@@ -1178,10 +1181,31 @@
       entry.el.focus();
       setCaretOffset(entry.el, entry.el.textContent.length);
       handleContentChanged(ref);
+      if (lastPointerType === "touch") keepCellAboveKeyboard(entry.td);
+    }
+
+    // Touch: Die Bildschirmtastatur verkleinert den sichtbaren Bereich – die bearbeitete
+    // Zelle danach (und bei jeder weiteren Größenänderung) wieder in die Mitte holen.
+    let stopKeepingCellVisible = null;
+
+    function keepCellAboveKeyboard(td) {
+      if (stopKeepingCellVisible) stopKeepingCellVisible();
+      const show = () => {
+        if (editingRef) td.scrollIntoView({ block: "center", inline: "nearest" });
+      };
+      const timer = setTimeout(show, 350);
+      const vv = window.visualViewport;
+      if (vv) vv.addEventListener("resize", show);
+      stopKeepingCellVisible = () => {
+        clearTimeout(timer);
+        if (vv) vv.removeEventListener("resize", show);
+        stopKeepingCellVisible = null;
+      };
     }
 
     function commitEdit() {
       if (!editingRef) return;
+      if (stopKeepingCellVisible) stopKeepingCellVisible();
       const committedRef = editingRef;
       const entry = inputEntries[editingRef];
       // Reihenfolge wichtig: contentEditable=false nimmt der Zelle den Fokus, der blur-Handler ruft
@@ -1416,6 +1440,7 @@
 
     /* ---- Zellen anklicken, um sie als Bezug in eine Formel einzufügen ("Point-Modus") ---- */
 
+    let lastPointerType = "mouse"; // "touch" auf Smartphone/Tablet – siehe click-Handler und enterEditMode
     let pointDrag = null; // { editRef, before, after, anchorRef, currentHover }
     let suppressNextClick = false;
 
@@ -1496,6 +1521,10 @@
       }
     });
 
+    table.addEventListener("pointerdown", (e) => {
+      lastPointerType = e.pointerType;
+    });
+
     table.addEventListener("click", (e) => {
       if (suppressNextClick) {
         suppressNextClick = false;
@@ -1507,6 +1536,12 @@
         extendSelectionTo(td.dataset.ref);
       } else {
         select(td.dataset.ref);
+      }
+      // Touch hat weder Doppelklick-Gewohnheit noch Hardware-Tastatur: Antippen einer
+      // Eingabezelle startet direkt die Bearbeitung (öffnet die Bildschirmtastatur).
+      if (lastPointerType === "touch" && inputEntries[td.dataset.ref] && editingRef !== td.dataset.ref) {
+        enterEditMode(td.dataset.ref);
+        return;
       }
       if (document.activeElement !== (inputEntries[td.dataset.ref] || {}).el) wrap.focus({ preventScroll: true });
     });
@@ -1742,9 +1777,13 @@
     const pad = 24;
 
     const overlay = el("div", { class: "success-popup-overlay" });
-    overlay.style.left = rect.left + scrollX - pad + "px";
+    // Seitlich nie über den sichtbaren Bereich hinaus – sonst entsteht auf schmalen
+    // Bildschirmen eine waagerechte Scrollleiste, solange das Popup offen ist.
+    const overlayLeft = Math.max(scrollX, rect.left + scrollX - pad);
+    const overlayRight = Math.min(scrollX + document.documentElement.clientWidth, rect.right + scrollX + pad);
+    overlay.style.left = overlayLeft + "px";
     overlay.style.top = rect.top + scrollY - pad + "px";
-    overlay.style.width = rect.width + pad * 2 + "px";
+    overlay.style.width = overlayRight - overlayLeft + "px";
     overlay.style.height = rect.height + pad * 2 + "px";
 
     const popup = el("div", { class: "success-popup" });
@@ -1787,9 +1826,13 @@
     const pad = 24;
 
     const overlay = el("div", { class: "error-popup-overlay" });
-    overlay.style.left = rect.left + scrollX - pad + "px";
+    // Seitlich nie über den sichtbaren Bereich hinaus – sonst entsteht auf schmalen
+    // Bildschirmen eine waagerechte Scrollleiste, solange das Popup offen ist.
+    const overlayLeft = Math.max(scrollX, rect.left + scrollX - pad);
+    const overlayRight = Math.min(scrollX + document.documentElement.clientWidth, rect.right + scrollX + pad);
+    overlay.style.left = overlayLeft + "px";
     overlay.style.top = rect.top + scrollY - pad + "px";
-    overlay.style.width = rect.width + pad * 2 + "px";
+    overlay.style.width = overlayRight - overlayLeft + "px";
     overlay.style.height = rect.height + pad * 2 + "px";
 
     const popup = el("div", { class: "error-popup" });

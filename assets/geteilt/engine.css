@@ -547,6 +547,13 @@ td.cell--input {
   background: #FFFBEA;
 }
 
+/* iOS zoomt beim Fokussieren in Eingaben unter 16px – beim Tippen per Touch daher 16px */
+@media (pointer: coarse) {
+  .cell-editable[contenteditable="true"] {
+    font-size: 16px;
+  }
+}
+
 .is-copied {
   position: relative;
 }

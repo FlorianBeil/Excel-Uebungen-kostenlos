@@ -134,4 +134,19 @@ test("Mail-Link ohne Empfänger, mit Betreff und Seiten-Link", () => {
   assert.strictEqual(decodeURIComponent(link.split("subject=")[1].split("&body=")[0]), "Excel-Übungen für später");
 });
 
+test("Gerätetyp: Touch oder schmal = mobil, sonst desktop", () => {
+  assert.strictEqual(L.geraetTyp({ breite: 1366, grobZeiger: false }), "desktop");
+  assert.strictEqual(L.geraetTyp({ breite: 768, grobZeiger: false }), "desktop");
+  assert.strictEqual(L.geraetTyp({ breite: 767, grobZeiger: false }), "mobil");
+  assert.strictEqual(L.geraetTyp({ breite: 1024, grobZeiger: true }), "mobil");
+});
+
+test("Kampagne: utm-Parameter und fremde Herkunfts-Domain, keine volle Adresse", () => {
+  const k = L.kampagne("?utm_source=instagram&utm_medium=social&utm_campaign=story-sept", "https://l.instagram.com/?u=https%3A%2F%2Fx&e=geheim", "florianbeil.github.io");
+  assert.deepStrictEqual(k, { utm_source: "instagram", utm_medium: "social", utm_campaign: "story-sept", herkunft: "l.instagram.com" });
+  assert.deepStrictEqual(L.kampagne("", "https://florianbeil.github.io/Excel-Aufgaben/", "florianbeil.github.io"), { utm_source: null, utm_medium: null, utm_campaign: null, herkunft: null });
+  assert.strictEqual(L.kampagne("", "kein-url", "x").herkunft, null);
+  assert.strictEqual(L.kampagne("?utm_source=" + "a".repeat(300), "", "x").utm_source.length, 100);
+});
+
 console.log("\n" + tests + " Tests bestanden");

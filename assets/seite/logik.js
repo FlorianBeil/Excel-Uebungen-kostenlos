@@ -158,6 +158,35 @@
     );
   }
 
+  /* ---------------- Tracking-Hilfen ---------------- */
+
+  // „mobil“ für Touch-Geräte ohne Maus oder schmale Fenster, sonst „desktop“.
+  // Tablets zählen bewusst als mobil: Formeln tippen ist dort genauso mühsam.
+  function geraetTyp(umgebung) {
+    if (umgebung.grobZeiger) return "mobil";
+    return umgebung.breite < 768 ? "mobil" : "desktop";
+  }
+
+  // Herkunft eines Besuchs: utm-Parameter aus der Adresse (z. B. ?utm_source=instagram)
+  // und die Domain der verweisenden Seite – nie die volle Adresse, keine Personendaten.
+  function kampagne(suche, referrer, eigenerHost) {
+    const params = new URLSearchParams(suche || "");
+    const kurz = (wert) => (wert ? String(wert).slice(0, 100) : null);
+    let herkunft = null;
+    try {
+      const host = referrer ? new URL(referrer).host : "";
+      if (host && host !== eigenerHost) herkunft = host.slice(0, 100);
+    } catch (e) {
+      // ungültiger Referrer – ignorieren
+    }
+    return {
+      utm_source: kurz(params.get("utm_source")),
+      utm_medium: kurz(params.get("utm_medium")),
+      utm_campaign: kurz(params.get("utm_campaign")),
+      herkunft,
+    };
+  }
+
   // Liefert eine Liste von Problemen (leer = alles in Ordnung).
   function pruefeDaten(daten) {
     const probleme = [];
@@ -206,6 +235,8 @@
     abschluss,
     platzhalter,
     mailLink,
+    geraetTyp,
+    kampagne,
     pruefeDaten,
   };
 

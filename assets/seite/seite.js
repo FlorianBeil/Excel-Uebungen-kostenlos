@@ -10,6 +10,21 @@
  *
  * Bewusst kein automatisches Scrollen: Nach dem Lösen erscheint ein Link zur
  * nächsten Aufgabe, die Seite selbst bewegt sich nicht.
+ *
+ * Tracking (assets/geteilt/tracking.js → Supabase-Tabelle events, portal = 'kostenlos',
+ * Auswertungen in supabase/kostenlos.sql). Jedes Ereignis trägt detail.geraet
+ * („desktop“/„mobil“), Aufgaben-Ereignisse zusätzlich exercise_id und detail.nr:
+ *   page_view        Seite aufgerufen       breite, wiederkehrer, bearbeitet, utm_*, herkunft
+ *   exercise_view    Aufgabe ins Bild gescrollt (einmal pro Seitenaufruf)
+ *   exercise_start   erste Bedienung der Aufgabe (Tabelle/Pivot angetippt oder Taste, Prüfen)
+ *   check            Prüfen                 richtig, leer, versuch
+ *   exercise_solved  Aufgabe gelöst         mit_loesung
+ *   solution_show    Lösung angezeigt
+ *   hints_open       Tipps aufgeklappt
+ *   offer_view       Angebotsblock nach Aufgabe 4 im Bild
+ *   webinar_click    Webinar-Button/-Link   ort: angebot | abschluss | mobil_hinweis
+ *   course_click     Textlink zum Master Kurs
+ *   mail_link_click  „Link an mich selbst schicken“
  */
 
 (function () {
@@ -18,6 +33,7 @@
   const L = window.ExcelFloKostenlos;
   const E = window.ExcelFlo;
   const DATEN_URL = "daten/aufgaben.json";
+  const TRACKING_PORTAL = "kostenlos";
   const reduzierteBewegung = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   let speicher = null;
@@ -27,9 +43,14 @@
     // blockiert – Fortschritt gilt dann nur für diesen Besuch
   }
 
+  const geraet = L.geraetTyp({
+    breite: window.innerWidth,
+    grobZeiger: !!(window.matchMedia && window.matchMedia("(hover: none) and (pointer: coarse)").matches),
+  });
+
   let daten = null;
   let stand = null;
-  const eintraege = []; // pro Aufgabe: { a, nr, karte, status, feedback, loesungBtn, loesungBox }
+  const eintraege = []; // pro Aufgabe: { a, nr, karte, status, feedback, loesungBtn, loesungBox, gestartet, versuche }
   let angebotEl = null;
   let abschlussEl = null;
 
@@ -69,10 +90,52 @@
     ziel.focus({ preventScroll: true });
   }
 
+  /* ---------------- Tracking ---------------- */
+
+  // window.ExcelFloTracking erst beim Senden nachschlagen – fehlt es (Blocker, Ladefehler),
+  // passiert einfach nichts. Die Übungen funktionieren immer ohne Tracking.
+  function track(event, detail, eintrag) {
+    const t = window.ExcelFloTracking;
+    if (!t) return;
+    const d = Object.assign({ geraet }, eintrag ? { nr: eintrag.nr } : {}, detail || {});
+    t.track(TRACKING_PORTAL, eintrag ? eintrag.a.id : null, event, d);
+  }
+
+  function aufgabeGestartet(eintrag) {
+    if (eintrag.gestartet) return;
+    eintrag.gestartet = true;
+    track("exercise_start", null, eintrag);
+  }
+
+  // Zählt als „gesehen“, sobald ein nennenswerter Teil sichtbar ist – bei sehr hohen
+  // Blöcken (Pivot auf dem Smartphone) reicht eine halbe Bildschirmhöhe.
+  function beiSichtbarkeit(element, callback) {
+    if (!("IntersectionObserver" in window)) return;
+    const beobachter = new IntersectionObserver(
+      (eintraegeIO) => {
+        eintraegeIO.forEach((io) => {
+          if (!io.isIntersecting) return;
+          const noetig = Math.min(io.boundingClientRect.height * 0.4, window.innerHeight * 0.5);
+          if (io.intersectionRect.height >= noetig) {
+            beobachter.disconnect();
+            callback();
+          }
+        });
+      },
+      { threshold: [0, 0.1, 0.25, 0.4, 0.6, 1] }
+    );
+    beobachter.observe(element);
+  }
+
+  function klickTracken(link, event, detail) {
+    link.addEventListener("click", () => track(event, detail));
+  }
+
   /* ---------------- Start ---------------- */
 
   function start() {
     const root = document.getElementById("aufgaben");
+    const herkunft = L.kampagne(location.search, document.referrer, location.host);
     fetch(DATEN_URL, { cache: "no-cache" })
       .then((res) => {
         if (!res.ok) throw new Error("HTTP " + res.status);
@@ -83,11 +146,14 @@
         const probleme = L.pruefeDaten(d);
         if (probleme.length) console.warn("daten/aufgaben.json:", probleme);
         stand = L.ladeStand(speicher, d);
+        const bearbeitet = L.anzahlBearbeitet(d, stand);
+        track("page_view", Object.assign({ breite: window.innerWidth, wiederkehrer: Object.keys(stand.aufgaben).length > 0, bearbeitet }, herkunft));
         aufbauen(root);
         aktualisieren();
       })
       .catch((err) => {
         console.error(err);
+        track("page_view", Object.assign({ breite: window.innerWidth, ladefehler: true }, herkunft));
         root.textContent = "";
         root.appendChild(h("p", { class: "frei-laden", text: "Die Aufgaben konnten nicht geladen werden. Bitte lade die Seite neu." }));
       });
@@ -104,9 +170,11 @@
     const mail = document.getElementById("mobil-mail");
     mail.textContent = t.mobilMailLink;
     mail.href = L.mailLink(daten, seitenUrl());
+    klickTracken(mail, "mail_link_click");
     const webinar = document.getElementById("mobil-webinar");
     webinar.textContent = t.mobilWebinarLink;
     webinar.href = k.webinarUrl;
+    klickTracken(webinar, "webinar_click", { ort: "mobil_hinweis" });
 
     [["link-impressum", k.impressumUrl, t.footerImpressum], ["link-datenschutz", k.datenschutzUrl, t.footerDatenschutz]].forEach(([id, url, text]) => {
       const link = document.getElementById(id);
@@ -126,10 +194,12 @@
     abschlussEl = abschlussBauen();
     root.appendChild(abschlussEl);
 
-    // Wiederkehrer: bereits gelöste Aufgaben zeigen ihre Erklärung wieder
     eintraege.forEach((e) => {
+      // Wiederkehrer: bereits gelöste Aufgaben zeigen ihre Erklärung wieder
       if (L.aufgabeStatus(stand, e.a.id).geloest) feedbackErfolg(e, true);
+      beiSichtbarkeit(e.karte, () => track("exercise_view", null, e));
     });
+    beiSichtbarkeit(angebotEl, () => track("offer_view"));
   }
 
   /* ---------------- Aufgaben-Karte ---------------- */
@@ -160,6 +230,8 @@
       nr,
       karte,
       status,
+      gestartet: false,
+      versuche: 0,
       feedback: h("div", { class: "exercise-feedback frei-feedback", role: "status" }),
       loesungBtn: h("button", { type: "button", class: "btn btn--secondary", text: "Lösung anzeigen", "aria-controls": loesungId, hidden: true }),
       loesungBox: h("div", { class: "frei-loesung", id: loesungId, tabindex: "-1", hidden: true }, [
@@ -176,6 +248,7 @@
     eintrag.loesungBtn.addEventListener("click", () => {
       stand = L.loesungAnzeigen(stand, a.id);
       speichern();
+      track("solution_show", null, eintrag);
       aktualisieren();
       eintrag.loesungBox.focus({ preventScroll: true });
     });
@@ -183,12 +256,14 @@
     karte.appendChild(eintrag.feedback);
     karte.appendChild(eintrag.loesungBox);
     if (a.hints && a.hints.length) {
-      karte.appendChild(
-        h("details", { class: "exercise-hints frei-tipps" }, [
-          h("summary", { text: "Tipps anzeigen" }),
-          h("ol", {}, a.hints.map((tipp) => h("li", { text: tipp }))),
-        ])
-      );
+      const tipps = h("details", { class: "exercise-hints frei-tipps" }, [
+        h("summary", { text: "Tipps anzeigen" }),
+        h("ol", {}, a.hints.map((tipp) => h("li", { text: tipp }))),
+      ]);
+      tipps.addEventListener("toggle", () => {
+        if (tipps.open) track("hints_open", null, eintrag);
+      });
+      karte.appendChild(tipps);
     }
     return karte;
   }
@@ -205,6 +280,11 @@
       feedbackLeeren(eintrag);
     });
 
+    // Erste echte Bedienung der Tabelle = Aufgabe gestartet (Tab-Durchlaufen zählt nicht:
+    // dessen keydown landet beim vorherigen Element)
+    sheet.node.addEventListener("pointerdown", () => aufgabeGestartet(eintrag));
+    sheet.node.addEventListener("keydown", () => aufgabeGestartet(eintrag));
+
     sheet.node.setAttribute("role", "group");
     sheet.node.setAttribute(
       "aria-label",
@@ -215,6 +295,7 @@
   }
 
   function formelPruefen(eintrag, sheet) {
+    aufgabeGestartet(eintrag);
     const refs = Object.keys(sheet.inputEntries);
     let beantwortet = 0;
     let richtig = 0;
@@ -234,6 +315,7 @@
 
     if (beantwortet === 0) {
       // zählt nicht als Fehlversuch – es wurde ja noch nichts eingegeben
+      track("check", { richtig: false, leer: true }, eintrag);
       const meldung = "Trag zuerst eine Formel in die gelb markierte Zelle ein.";
       feedbackFehler(eintrag, meldung);
       E.showErrorPopup(sheet.node, meldung);
@@ -260,15 +342,18 @@
       loading: "lazy",
     });
 
-    // Höhe folgt dem Inhalt (gleiche Herkunft, daher direkt messbar) – keine zweite Scrollleiste.
     iframe.addEventListener("load", () => {
       try {
         const doc = iframe.contentDocument;
+        // Höhe folgt dem Inhalt (gleiche Herkunft, daher direkt messbar) – keine zweite Scrollleiste.
         const anpassen = () => {
           iframe.style.height = Math.ceil(doc.body.getBoundingClientRect().height) + "px";
         };
         anpassen();
         new ResizeObserver(anpassen).observe(doc.body);
+        // Erste Bedienung im Pivot-Nachbau = Aufgabe gestartet
+        doc.addEventListener("pointerdown", () => aufgabeGestartet(eintrag));
+        doc.addEventListener("keydown", () => aufgabeGestartet(eintrag));
       } catch (e) {
         // Messen nicht möglich – feste Höhe aus dem CSS bleibt
       }
@@ -278,6 +363,7 @@
       if (ev.origin !== location.origin || ev.source !== iframe.contentWindow) return;
       const m = ev.data;
       if (!m || m.quelle !== "excelflo-pivot" || m.typ !== "pruefung") return;
+      aufgabeGestartet(eintrag);
       const ok = !!(m.daten && m.daten.richtig);
       pruefungVerarbeiten(eintrag, ok);
       // Rückmeldung zum Fehler zeigt der Pivot-Nachbau selbst; hier nur Erfolg + Weiter
@@ -290,8 +376,13 @@
   }
 
   function pruefungVerarbeiten(eintrag, ok) {
+    const vorher = L.aufgabeStatus(stand, eintrag.a.id);
     stand = L.pruefungErgebnis(stand, eintrag.a.id, ok);
     speichern();
+    eintrag.versuche++;
+    track("check", { richtig: ok, versuch: eintrag.versuche }, eintrag);
+    const nachher = L.aufgabeStatus(stand, eintrag.a.id);
+    if (!vorher.geloest && nachher.geloest) track("exercise_solved", { mit_loesung: nachher.mitLoesung }, eintrag);
     aktualisieren();
   }
 
@@ -330,18 +421,22 @@
 
   /* ---------------- Angebot und Abschluss ---------------- */
 
-  function webinarButton() {
-    return h("a", { class: "btn frei-cta", href: daten.konfiguration.webinarUrl, text: daten.texte.webinarButton });
+  function webinarButton(ort) {
+    const link = h("a", { class: "btn frei-cta", href: daten.konfiguration.webinarUrl, text: daten.texte.webinarButton });
+    klickTracken(link, "webinar_click", { ort });
+    return link;
   }
 
   function angebotBauen() {
     const t = daten.texte;
+    const kurs = h("a", { class: "frei-textlink", href: daten.konfiguration.kursUrl, text: t.kursLink });
+    klickTracken(kurs, "course_click");
     return h("section", { class: "frei-angebot", id: "angebot", "aria-labelledby": "angebot-titel", hidden: true }, [
       h("h2", { id: "angebot-titel", text: t.angebotTitel }),
       h("p", { text: t.angebotText1 }),
       h("p", { text: t.angebotText2 }),
-      h("p", { class: "frei-angebot__aktion" }, [webinarButton()]),
-      h("p", { class: "frei-angebot__kurs" }, [h("a", { class: "frei-textlink", href: daten.konfiguration.kursUrl, text: t.kursLink })]),
+      h("p", { class: "frei-angebot__aktion" }, [webinarButton("angebot")]),
+      h("p", { class: "frei-angebot__kurs" }, [kurs]),
     ]);
   }
 
@@ -350,7 +445,7 @@
       h("h2", { id: "abschluss-titel" }),
       h("p", { class: "frei-abschluss__ergebnis" }),
       h("p", { class: "frei-abschluss__zusatz" }),
-      h("p", { class: "frei-abschluss__aktion" }, [webinarButton()]),
+      h("p", { class: "frei-abschluss__aktion" }, [webinarButton("abschluss")]),
     ]);
   }
 

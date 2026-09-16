@@ -1,11 +1,17 @@
 {
   "konfiguration": {
-    "webinarUrl": "PLATZHALTER-WEBINAR-URL",
-    "kursUrl": "PLATZHALTER-KURS-URL",
     "impressumUrl": "PLATZHALTER-IMPRESSUM-URL",
     "datenschutzUrl": "PLATZHALTER-DATENSCHUTZ-URL",
     "seitenUrl": "https://florianbeil.github.io/Excel-Uebungen-kostenlos/",
-    "angebotNachAufgabe": 4
+    "hinweisNachAufgabe": 4,
+
+    "_klicktipp": "Werte aus dem HTML-Code des Klick-Tipp-Formulars übernehmen: action = Formular-Adresse, feldVorname/feldEmail = name-Attribute der Eingabefelder, versteckteFelder = alle <input type=hidden> (name → value).",
+    "klicktipp": {
+      "action": "PLATZHALTER-KLICKTIPP-FORMULAR-URL",
+      "feldVorname": "PLATZHALTER-FELDNAME-VORNAME",
+      "feldEmail": "PLATZHALTER-FELDNAME-EMAIL",
+      "versteckteFelder": {}
+    }
   },
 
   "texte": {
@@ -18,22 +24,26 @@
     "einleitung": "Fünf Aufgaben, direkt im Browser. Kein Download, keine Anmeldung.",
 
     "mobilHinweis": "Diese Übungen lassen sich am Computer deutlich angenehmer lösen.",
-    "mobilMailLink": "Link an mich selbst schicken",
-    "mobilWebinarLink": "Zum nächsten Webinar",
-    "mailBetreff": "Excel-Übungen für später",
-    "mailText": "Hier sind die fünf kostenlosen Excel-Übungen zum Lösen am Computer:",
+    "mobilFormularOeffnen": "Übungsportal Light per E-Mail freischalten",
+    "mobilFormularText": "7 weitere interaktive Übungen zu Excel-Funktionen und Pivot-Tabellen, kostenlos. Den Link bekommst du per E-Mail – ideal, um später am Computer weiterzuüben.",
 
     "fortschritt": "Aufgabe {nr} von {gesamt}",
 
-    "angebotTitel": "Du hast 4 von 5 Aufgaben geschafft.",
-    "angebotText1": "Im Excel Master Kurs warten über 40 weitere Übungen – plus die Videos, die erklären, warum die Lösung funktioniert.",
-    "angebotText2": "Wie der Kurs aufgebaut ist, zeige ich jeden Monat live in einem kostenlosen Webinar.",
-    "webinarButton": "Zum nächsten Webinar",
-    "kursLink": "Oder direkt zum Master Kurs",
+    "hinweisTitel": "Du hast 4 von 5 Aufgaben geschafft.",
+    "hinweisText": "Noch eine Aufgabe – danach kannst du dir kostenlos das Übungsportal Light freischalten: 7 weitere interaktive Übungen zu Excel-Funktionen und Pivot-Tabellen.",
 
     "abschlussTitel": "Alle fünf Aufgaben bearbeitet.",
     "abschlussErgebnis": "Du hast {selbst} von 5 Aufgaben selbst gelöst.",
     "abschlussMitLoesung": "Bei {mitLoesung} hast du dir die Lösung angesehen.",
+
+    "formularTitel": "Schalte jetzt das Übungsportal Light frei",
+    "formularText": "7 weitere interaktive Übungen – von WENN und DATEDIF bis XVERWEIS und Pivot-Tabelle. Kostenlos, den Link bekommst du per E-Mail.",
+    "formularVorname": "Vorname",
+    "formularEmail": "E-Mail-Adresse",
+    "formularButton": "Kostenlos freischalten",
+    "formularRechtstext": "Nach dem Absenden bekommst du eine E-Mail, in der du deine Adresse bestätigst. Danach schicke ich dir den Link zum Übungsportal Light und weitere E-Mails rund um Excel. Abmelden kannst du dich jederzeit mit einem Klick. Mehr dazu in der",
+    "formularDatenschutzLink": "Datenschutzerklärung",
+    "formularNichtVerbunden": "Das Formular ist noch nicht mit Klick-Tipp verbunden (Vorschau).",
 
     "footerImpressum": "Impressum",
     "footerDatenschutz": "Datenschutz"

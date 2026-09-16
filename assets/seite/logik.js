@@ -118,9 +118,9 @@
     return platzhalter(daten.texte.fortschritt, { nr: idx === null ? gesamt : idx + 1, gesamt });
   }
 
-  // Angebotsblock erscheint, sobald die ersten N Aufgaben (Standard 4) bearbeitet sind.
-  function angebotSichtbar(daten, stand) {
-    const n = daten.konfiguration.angebotNachAufgabe;
+  // Hinweis auf das Übungsportal Light erscheint, sobald die ersten N Aufgaben (Standard 4) bearbeitet sind.
+  function hinweisSichtbar(daten, stand) {
+    const n = daten.konfiguration.hinweisNachAufgabe;
     return daten.aufgaben.slice(0, n).every((a) => istBearbeitet(stand, a.id));
   }
 
@@ -148,14 +148,13 @@
     return String(text).replace(/\{(\w+)\}/g, (voll, name) => (name in werte ? String(werte[name]) : voll));
   }
 
-  // mailto ohne Empfänger: das Mailprogramm öffnet sich, der Besucher trägt seine
-  // eigene Adresse ein. Die Seite erfährt keine Adresse.
-  function mailLink(daten, seitenUrl) {
-    const t = daten.texte;
-    return (
-      "mailto:?subject=" + encodeURIComponent(t.mailBetreff) +
-      "&body=" + encodeURIComponent(t.mailText + "\n\n" + seitenUrl)
-    );
+  const istPlatzhalter = (wert) => !wert || /^PLATZHALTER/.test(wert);
+
+  // Klick-Tipp-Formular ist erst nutzbar, wenn Adresse und beide Feldnamen aus dem
+  // Klick-Tipp-HTML-Code eingetragen sind. Vorher zeigt die Seite das Formular nur als Vorschau.
+  function formularVerbunden(konfiguration) {
+    const k = konfiguration && konfiguration.klicktipp;
+    return !!(k && !istPlatzhalter(k.action) && /^https:\/\//.test(k.action) && !istPlatzhalter(k.feldVorname) && !istPlatzhalter(k.feldEmail));
   }
 
   /* ---------------- Tracking-Hilfen ---------------- */
@@ -207,13 +206,15 @@
       if (a.typ === "pivot" && (!a.datensatz || !a.loesungPruefung)) probleme.push(wo + ": Pivot-Aufgabe ohne datensatz/loesungPruefung");
     });
     if (daten.konfiguration) {
-      ["webinarUrl", "kursUrl", "impressumUrl", "datenschutzUrl", "seitenUrl"].forEach((k) => {
+      ["impressumUrl", "datenschutzUrl", "seitenUrl"].forEach((k) => {
         if (!daten.konfiguration[k]) probleme.push("konfiguration." + k + " fehlt");
       });
-      const n = daten.konfiguration.angebotNachAufgabe;
+      const n = daten.konfiguration.hinweisNachAufgabe;
       if (!Number.isInteger(n) || n < 1 || n >= daten.aufgaben.length) {
-        probleme.push("konfiguration.angebotNachAufgabe muss zwischen 1 und " + (daten.aufgaben.length - 1) + " liegen");
+        probleme.push("konfiguration.hinweisNachAufgabe muss zwischen 1 und " + (daten.aufgaben.length - 1) + " liegen");
       }
+      const kt = daten.konfiguration.klicktipp;
+      if (!kt || typeof kt.versteckteFelder !== "object") probleme.push("konfiguration.klicktipp unvollständig");
     }
     return probleme;
   }
@@ -231,10 +232,10 @@
     anzahlBearbeitet,
     aktuelleAufgabe,
     fortschrittText,
-    angebotSichtbar,
+    hinweisSichtbar,
     abschluss,
     platzhalter,
-    mailLink,
+    formularVerbunden,
     geraetTyp,
     kampagne,
     pruefeDaten,

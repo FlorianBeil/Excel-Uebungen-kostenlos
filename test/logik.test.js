@@ -28,19 +28,19 @@ test("Datendatei ist gültig", () => {
 test("pruefeDaten findet Fehler", () => {
   const kaputt = JSON.parse(JSON.stringify(daten));
   kaputt.aufgaben[1].id = kaputt.aufgaben[0].id;
-  kaputt.konfiguration.angebotNachAufgabe = 5;
-  delete kaputt.konfiguration.webinarUrl;
+  kaputt.konfiguration.hinweisNachAufgabe = 5;
+  delete kaputt.konfiguration.datenschutzUrl;
   const p = L.pruefeDaten(kaputt);
   assert.ok(p.some((x) => x.includes("doppelt")));
-  assert.ok(p.some((x) => x.includes("angebotNachAufgabe")));
-  assert.ok(p.some((x) => x.includes("webinarUrl")));
+  assert.ok(p.some((x) => x.includes("hinweisNachAufgabe")));
+  assert.ok(p.some((x) => x.includes("datenschutzUrl")));
 });
 
 test("neuer Besucher: Aufgabe 1 von 5, kein Angebot, kein Abschluss", () => {
   const s = L.neuerStand();
   assert.strictEqual(L.aktuelleAufgabe(daten, s), 0);
   assert.strictEqual(L.fortschrittText(daten, s), "Aufgabe 1 von 5");
-  assert.strictEqual(L.angebotSichtbar(daten, s), false);
+  assert.strictEqual(L.hinweisSichtbar(daten, s), false);
   assert.strictEqual(L.abschluss(daten, s), null);
 });
 
@@ -75,9 +75,9 @@ test("richtig nach Lösung zählt als mitLoesung, erneutes Prüfen ändert nicht
 test("Angebot erscheint nach Aufgabe 4, nicht vorher", () => {
   let s = L.neuerStand();
   for (let i = 0; i < 3; i++) s = L.pruefungErgebnis(s, ids[i], true);
-  assert.strictEqual(L.angebotSichtbar(daten, s), false);
+  assert.strictEqual(L.hinweisSichtbar(daten, s), false);
   s = L.pruefungErgebnis(s, ids[3], true);
-  assert.strictEqual(L.angebotSichtbar(daten, s), true);
+  assert.strictEqual(L.hinweisSichtbar(daten, s), true);
   assert.strictEqual(L.fortschrittText(daten, s), "Aufgabe 5 von 5");
   assert.strictEqual(L.abschluss(daten, s), null);
 });
@@ -126,12 +126,13 @@ test("Speichern bei blockiertem localStorage wirft nicht", () => {
   L.speichereStand({ setItem() { throw new Error("blockiert"); } }, L.neuerStand());
 });
 
-test("Mail-Link ohne Empfänger, mit Betreff und Seiten-Link", () => {
-  const link = L.mailLink(daten, "https://example.org/uebungen/?a=1&b=2");
-  assert.ok(link.startsWith("mailto:?subject="));
-  const body = decodeURIComponent(link.split("&body=")[1]);
-  assert.ok(body.endsWith("https://example.org/uebungen/?a=1&b=2"));
-  assert.strictEqual(decodeURIComponent(link.split("subject=")[1].split("&body=")[0]), "Excel-Übungen für später");
+test("Klick-Tipp-Formular erst mit echter Adresse und Feldnamen verbunden", () => {
+  assert.strictEqual(L.formularVerbunden(daten.konfiguration), false, "Platzhalter in daten/aufgaben.json");
+  const k = (werte) => ({ klicktipp: Object.assign({ action: "https://app.klick-tipp.com/formular", feldVorname: "fields[fieldFirstName]", feldEmail: "email", versteckteFelder: {} }, werte) });
+  assert.strictEqual(L.formularVerbunden(k({})), true);
+  assert.strictEqual(L.formularVerbunden(k({ action: "http://unsicher.example/" })), false, "nur https");
+  assert.strictEqual(L.formularVerbunden(k({ feldEmail: "PLATZHALTER-FELDNAME-EMAIL" })), false);
+  assert.strictEqual(L.formularVerbunden({}), false);
 });
 
 test("Gerätetyp: Touch oder schmal = mobil, sonst desktop", () => {

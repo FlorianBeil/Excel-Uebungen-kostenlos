@@ -13,10 +13,14 @@
 --   exercise_solved  Aufgabe gelöst                    exercise_id, nr, mit_loesung
 --   solution_show    Lösung angezeigt                  exercise_id, nr
 --   hints_open       Tipps aufgeklappt                 exercise_id, nr
---   offer_view       Angebotsblock nach Aufgabe 4 gesehen
---   webinar_click    Klick zum Webinar                 detail.ort = angebot | abschluss | mobil_hinweis
---   course_click     Klick auf „Oder direkt zum Master Kurs“
---   mail_link_click  Klick auf „Link an mich selbst schicken“
+--   teaser_view      Hinweis auf das Übungsportal Light nach Aufgabe 4 gesehen
+--   form_view        Anmeldeformular gesehen           detail.ort = abschluss | mobil (mobil = aufgeklappt)
+--   form_submit      Anmeldeformular abgesendet        detail.ort = abschluss | mobil
+--   form_thankyou_view  Bestätigungsseite danke.html aufgerufen (Klick-Tipp hat die Anmeldung angenommen)
+--
+-- Seit 2026-09 wirbt die Seite nicht mehr für Webinar und Kurs, sondern nur noch für das
+-- Übungsportal Light (Anmeldung über Klick-Tipp). Ältere Ereignisse (offer_view, webinar_click,
+-- course_click, mail_link_click) bleiben in der Tabelle, tauchen in den Auswertungen aber nicht mehr auf.
 --
 -- Hinweis: Die bestehenden Übersichten „Auswertung Übungsportal“ und „Auswertung Einzelklicks“
 -- zeigen alle Bereiche – Zeilen dieser Seite erkennst du dort an Portal = kostenlos.
@@ -45,13 +49,11 @@ with sitzungen as (
     bool_or(event = 'page_view' and detail->>'wiederkehrer' = 'true')                      as wiederkehrer,
     bool_or(event = 'exercise_start')                                                      as irgendeine_gestartet,
     count(distinct detail->>'nr') filter (where event in ('exercise_solved', 'solution_show')) as bearbeitet,
-    bool_or(event = 'offer_view')                                                          as angebot,
-    bool_or(event = 'webinar_click')                                                       as webinar,
-    bool_or(event = 'webinar_click' and detail->>'ort' = 'angebot')                        as webinar_angebot,
-    bool_or(event = 'webinar_click' and detail->>'ort' = 'abschluss')                      as webinar_abschluss,
-    bool_or(event = 'webinar_click' and detail->>'ort' = 'mobil_hinweis')                  as webinar_mobil,
-    bool_or(event = 'course_click')                                                        as kurs,
-    bool_or(event = 'mail_link_click')                                                     as mail,
+    bool_or(event = 'teaser_view')                                                         as hinweis,
+    bool_or(event = 'form_view')                                                           as formular,
+    bool_or(event = 'form_submit')                                                         as abgesendet,
+    bool_or(event = 'form_submit' and detail->>'ort' = 'abschluss')                        as abgesendet_abschluss,
+    bool_or(event = 'form_submit' and detail->>'ort' = 'mobil')                            as abgesendet_mobil,
     max(created_at)                                                                        as zuletzt
   from public.events
   where portal = 'kostenlos'
@@ -65,17 +67,15 @@ select
   round(100.0 * count(*) filter (where besuch and not irgendeine_gestartet)
         / nullif(count(*) filter (where besuch), 0), 1)                                    as "Keine Aufgabe angefangen in %",
   count(*) filter (where bearbeitet >= 5)                                                  as "Alle 5 bearbeitet",
-  count(*) filter (where angebot)                                                          as "Angebot gesehen",
-  count(*) filter (where webinar)                                                          as "Webinar-Klick",
-  round(100.0 * count(*) filter (where webinar)
-        / nullif(count(*) filter (where besuch), 0), 1)                                    as "Webinar-Klick in % der Besuche",
-  round(100.0 * count(*) filter (where webinar_angebot)
-        / nullif(count(*) filter (where angebot), 0), 1)                                   as "Webinar-Klick in % Angebot gesehen",
-  count(*) filter (where webinar_angebot)                                                  as "Webinar aus Angebot",
-  count(*) filter (where webinar_abschluss)                                                as "Webinar aus Abschluss",
-  count(*) filter (where webinar_mobil)                                                    as "Webinar aus Handy-Hinweis",
-  count(*) filter (where kurs)                                                             as "Kurs-Klick",
-  count(*) filter (where mail)                                                             as "Link an mich geschickt",
+  count(*) filter (where hinweis)                                                          as "Light-Hinweis gesehen",
+  count(*) filter (where formular)                                                         as "Formular gesehen",
+  count(*) filter (where abgesendet)                                                       as "Formular abgesendet",
+  round(100.0 * count(*) filter (where abgesendet)
+        / nullif(count(*) filter (where besuch), 0), 1)                                    as "Abgesendet in % der Besuche",
+  round(100.0 * count(*) filter (where abgesendet)
+        / nullif(count(*) filter (where formular), 0), 1)                                  as "Abgesendet in % Formular gesehen",
+  count(*) filter (where abgesendet_abschluss)                                             as "Abgesendet nach Aufgabe 5",
+  count(*) filter (where abgesendet_mobil)                                                 as "Abgesendet im Handy-Hinweis",
   max(zuletzt) at time zone 'Europe/Berlin'                                                as "Zuletzt"
 from sitzungen
 where geraet in ('desktop', 'mobil')

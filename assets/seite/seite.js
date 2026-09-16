@@ -1,7 +1,10 @@
 /* Excel.Flo – kostenlose Übungen: Bildschirmaufbau
  *
  * Baut die fünf Aufgaben untereinander auf, dazwischen (nach Aufgabe 4) den
- * Angebotsblock, darunter den Abschluss. Alle Entscheidungen (was ist gelöst,
+ * Hinweis auf das Übungsportal Light, darunter den Abschluss mit dem Klick-Tipp-Formular
+ * (Vorname + E-Mail → Double-Opt-in → Mail mit dem Link zum Light-Portal). Dasselbe
+ * Formular gibt es aufklappbar im Hinweis für Smartphones. Webinar und Kurs werden auf
+ * dieser Seite bewusst nicht beworben. Alle Entscheidungen (was ist gelöst,
  * wann erscheint was) trifft logik.js – hier nur Anzeige und Bedienung.
  *
  * Formel-Aufgaben nutzen das Tabellenblatt aus assets/geteilt/engine.js
@@ -21,10 +24,9 @@
  *   exercise_solved  Aufgabe gelöst         mit_loesung
  *   solution_show    Lösung angezeigt
  *   hints_open       Tipps aufgeklappt
- *   offer_view       Angebotsblock nach Aufgabe 4 im Bild
- *   webinar_click    Webinar-Button/-Link   ort: angebot | abschluss | mobil_hinweis
- *   course_click     Textlink zum Master Kurs
- *   mail_link_click  „Link an mich selbst schicken“
+ *   teaser_view      Hinweis auf das Light-Portal nach Aufgabe 4 im Bild
+ *   form_view        Formular gesehen       ort: abschluss | mobil (mobil = aufgeklappt)
+ *   form_submit      Formular abgesendet    ort: abschluss | mobil (vor der Weiterleitung zu Klick-Tipp)
  */
 
 (function () {
@@ -51,7 +53,7 @@
   let daten = null;
   let stand = null;
   const eintraege = []; // pro Aufgabe: { a, nr, karte, status, feedback, loesungBtn, loesungBox, gestartet, versuche }
-  let angebotEl = null;
+  let hinweisEl = null;
   let abschlussEl = null;
 
   /* ---------------- Hilfen ---------------- */
@@ -73,11 +75,6 @@
 
   function istPlatzhalter(url) {
     return !url || /^PLATZHALTER/.test(url);
-  }
-
-  function seitenUrl() {
-    const k = daten.konfiguration;
-    return istPlatzhalter(k.seitenUrl) ? location.origin + location.pathname : k.seitenUrl;
   }
 
   function speichern() {
@@ -127,10 +124,6 @@
     beobachter.observe(element);
   }
 
-  function klickTracken(link, event, detail) {
-    link.addEventListener("click", () => track(event, detail));
-  }
-
   /* ---------------- Start ---------------- */
 
   function start() {
@@ -167,14 +160,7 @@
     document.querySelector(".frei-start__text").textContent = t.einleitung;
 
     document.getElementById("mobil-hinweis").textContent = t.mobilHinweis;
-    const mail = document.getElementById("mobil-mail");
-    mail.textContent = t.mobilMailLink;
-    mail.href = L.mailLink(daten, seitenUrl());
-    klickTracken(mail, "mail_link_click");
-    const webinar = document.getElementById("mobil-webinar");
-    webinar.textContent = t.mobilWebinarLink;
-    webinar.href = k.webinarUrl;
-    klickTracken(webinar, "webinar_click", { ort: "mobil_hinweis" });
+    mobilFormularBauen();
 
     [["link-impressum", k.impressumUrl, t.footerImpressum], ["link-datenschutz", k.datenschutzUrl, t.footerDatenschutz]].forEach(([id, url, text]) => {
       const link = document.getElementById(id);
@@ -186,9 +172,9 @@
     root.textContent = "";
     daten.aufgaben.forEach((a, i) => {
       root.appendChild(karteBauen(a, i));
-      if (i + 1 === k.angebotNachAufgabe) {
-        angebotEl = angebotBauen();
-        root.appendChild(angebotEl);
+      if (i + 1 === k.hinweisNachAufgabe) {
+        hinweisEl = hinweisBauen();
+        root.appendChild(hinweisEl);
       }
     });
     abschlussEl = abschlussBauen();
@@ -199,7 +185,8 @@
       if (L.aufgabeStatus(stand, e.a.id).geloest) feedbackErfolg(e, true);
       beiSichtbarkeit(e.karte, () => track("exercise_view", null, e));
     });
-    beiSichtbarkeit(angebotEl, () => track("offer_view"));
+    beiSichtbarkeit(hinweisEl, () => track("teaser_view"));
+    beiSichtbarkeit(abschlussEl.querySelector(".frei-formular"), () => track("form_view", { ort: "abschluss" }));
   }
 
   /* ---------------- Aufgaben-Karte ---------------- */
@@ -419,33 +406,97 @@
     f.appendChild(h("p", {}, [link]));
   }
 
-  /* ---------------- Angebot und Abschluss ---------------- */
+  /* ---------------- Light-Portal: Hinweis, Formular, Abschluss ---------------- */
 
-  function webinarButton(ort) {
-    const link = h("a", { class: "btn frei-cta", href: daten.konfiguration.webinarUrl, text: daten.texte.webinarButton });
-    klickTracken(link, "webinar_click", { ort });
-    return link;
-  }
-
-  function angebotBauen() {
+  function hinweisBauen() {
     const t = daten.texte;
-    const kurs = h("a", { class: "frei-textlink", href: daten.konfiguration.kursUrl, text: t.kursLink });
-    klickTracken(kurs, "course_click");
-    return h("section", { class: "frei-angebot", id: "angebot", "aria-labelledby": "angebot-titel", hidden: true }, [
-      h("h2", { id: "angebot-titel", text: t.angebotTitel }),
-      h("p", { text: t.angebotText1 }),
-      h("p", { text: t.angebotText2 }),
-      h("p", { class: "frei-angebot__aktion" }, [webinarButton("angebot")]),
-      h("p", { class: "frei-angebot__kurs" }, [kurs]),
+    return h("section", { class: "frei-hinweis", id: "hinweis", "aria-labelledby": "hinweis-titel", hidden: true }, [
+      h("h2", { id: "hinweis-titel", text: t.hinweisTitel }),
+      h("p", { text: t.hinweisText }),
     ]);
   }
 
+  // Klick-Tipp-Anmeldeformular. Absenden = normaler POST an Klick-Tipp (kein fetch: Klick-Tipp
+  // leitet danach selbst auf die Bestätigungsseite weiter). Die Seite speichert keine Eingaben.
+  // Solange die Klick-Tipp-Werte Platzhalter sind, wird nichts gesendet (Vorschau).
+  function formularBauen(ort) {
+    const t = daten.texte;
+    const k = daten.konfiguration;
+    const kt = k.klicktipp || {};
+    const verbunden = L.formularVerbunden(k);
+    const id = (name) => "formular-" + ort + "-" + name;
+
+    const meldung = h("p", { class: "frei-formular__meldung", role: "status", hidden: true });
+    const datenschutz = istPlatzhalter(k.datenschutzUrl)
+      ? document.createTextNode(t.formularDatenschutzLink)
+      : h("a", { href: k.datenschutzUrl, target: "_blank", rel: "noopener", text: t.formularDatenschutzLink });
+
+    const form = h("form", { class: "frei-formular", method: "post", action: verbunden ? kt.action : null, "accept-charset": "UTF-8" }, [
+      h("div", { class: "frei-formular__felder" }, [
+        h("div", { class: "frei-formular__feld" }, [
+          h("label", { for: id("vorname"), text: t.formularVorname }),
+          h("input", { id: id("vorname"), name: verbunden ? kt.feldVorname : "vorname", type: "text", autocomplete: "given-name", required: true, maxlength: "80" }),
+        ]),
+        h("div", { class: "frei-formular__feld" }, [
+          h("label", { for: id("email"), text: t.formularEmail }),
+          h("input", { id: id("email"), name: verbunden ? kt.feldEmail : "email", type: "email", autocomplete: "email", inputmode: "email", autocapitalize: "off", spellcheck: "false", required: true, maxlength: "200" }),
+        ]),
+        h("button", { type: "submit", class: "btn frei-cta frei-formular__button", text: t.formularButton }),
+      ]),
+      h("p", { class: "frei-formular__rechtstext" }, [document.createTextNode(t.formularRechtstext + " "), datenschutz, document.createTextNode(".")]),
+      meldung,
+    ]);
+
+    if (verbunden) {
+      Object.entries(kt.versteckteFelder || {}).forEach(([name, wert]) => form.appendChild(h("input", { type: "hidden", name, value: String(wert) })));
+    }
+
+    let gesendet = false;
+    form.addEventListener("submit", (ev) => {
+      if (!verbunden) {
+        ev.preventDefault();
+        meldung.textContent = t.formularNichtVerbunden;
+        meldung.hidden = false;
+        return;
+      }
+      if (gesendet) {
+        ev.preventDefault(); // Doppelklick: nur einmal absenden
+        return;
+      }
+      gesendet = true;
+      // tracking.js sendet mit keepalive – das Ereignis kommt auch an, wenn die Seite gleich wechselt
+      track("form_submit", { ort });
+    });
+    return form;
+  }
+
+  function mobilFormularBauen() {
+    const t = daten.texte;
+    const aufklapper = h("details", { class: "frei-mobil__formular" }, [
+      h("summary", { text: t.mobilFormularOeffnen }),
+      h("p", { text: t.mobilFormularText }),
+      formularBauen("mobil"),
+    ]);
+    let gezaehlt = false;
+    aufklapper.addEventListener("toggle", () => {
+      if (!aufklapper.open || gezaehlt) return;
+      gezaehlt = true;
+      track("form_view", { ort: "mobil" });
+    });
+    document.getElementById("mobil-formular").appendChild(aufklapper);
+  }
+
   function abschlussBauen() {
+    const t = daten.texte;
     return h("section", { class: "frei-abschluss", id: "abschluss", "aria-labelledby": "abschluss-titel", tabindex: "-1", hidden: true }, [
       h("h2", { id: "abschluss-titel" }),
       h("p", { class: "frei-abschluss__ergebnis" }),
       h("p", { class: "frei-abschluss__zusatz" }),
-      h("p", { class: "frei-abschluss__aktion" }, [webinarButton("abschluss")]),
+      h("div", { class: "frei-abschluss__freischalten" }, [
+        h("h3", { text: t.formularTitel }),
+        h("p", { class: "frei-abschluss__formulartext", text: t.formularText }),
+        formularBauen("abschluss"),
+      ]),
     ]);
   }
 
@@ -465,7 +516,7 @@
       e.loesungBox.hidden = !s.loesungAngezeigt;
     });
 
-    angebotEl.hidden = !L.angebotSichtbar(daten, stand);
+    hinweisEl.hidden = !L.hinweisSichtbar(daten, stand);
 
     const a = L.abschluss(daten, stand);
     abschlussEl.hidden = !a;

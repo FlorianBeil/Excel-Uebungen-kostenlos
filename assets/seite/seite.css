@@ -48,8 +48,9 @@
   outline: none;
 }
 
-.frei-angebot a:focus-visible {
-  outline-color: #fff;
+.frei-formular input:focus-visible {
+  outline: 3px solid var(--excel-green);
+  outline-offset: 1px;
 }
 
 /* Tabellenblatt: sichtbarer Fokus, wenn es per Tab erreicht wird */
@@ -128,19 +129,35 @@
   margin: 0;
 }
 
-.frei-mobil__optionen {
+.frei-mobil__formular summary {
+  list-style: none;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0 1.5rem;
-  margin-top: 0.25rem !important;
-}
-
-.frei-mobil__optionen a {
-  display: inline-flex;
   align-items: center;
   min-height: 44px;
   font-weight: 600;
   color: var(--excel-green-dark);
+  cursor: pointer;
+}
+
+.frei-mobil__formular summary::-webkit-details-marker {
+  display: none;
+}
+
+.frei-mobil__formular summary::before {
+  content: "▸";
+  margin-right: 0.45rem;
+}
+
+.frei-mobil__formular[open] summary::before {
+  content: "▾";
+}
+
+.frei-mobil__formular[open] summary {
+  margin-bottom: 0.4rem;
+}
+
+.frei-mobil__formular > p {
+  margin-bottom: 0.8rem;
 }
 
 /* ---------- Aufgaben ---------- */
@@ -265,25 +282,25 @@
   display: none;
 }
 
-/* ---------- Angebot (nach Aufgabe 4) ---------- */
+/* ---------- Hinweis auf das Übungsportal Light (nach Aufgabe 4) ---------- */
 
-.frei-angebot {
+.frei-hinweis {
   background: linear-gradient(135deg, var(--excel-green) 0%, var(--excel-green-dark) 100%);
   color: #fff;
   border-radius: var(--radius);
-  padding: 1.75rem 2rem;
+  padding: 1.5rem 2rem;
   box-shadow: var(--shadow-card);
 }
 
-.frei-angebot h2 {
+.frei-hinweis h2 {
   color: #fff;
-  font-size: 1.5rem;
-  margin-bottom: 0.7rem;
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
 }
 
-.frei-angebot p {
-  margin: 0 0 0.6rem;
-  max-width: 660px;
+.frei-hinweis p {
+  margin: 0;
+  max-width: 680px;
 }
 
 .frei-cta {
@@ -299,26 +316,64 @@
   background: var(--excel-green-dark);
 }
 
-.frei-angebot .frei-cta {
+/* ---------- Anmeldeformular (Klick-Tipp) ---------- */
+
+.frei-formular__felder {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.frei-formular__feld {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1 1 200px;
+}
+
+.frei-formular label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.frei-formular input {
+  font: inherit;
+  font-size: 1rem;
+  padding: 0.7rem 0.8rem;
+  min-height: 46px;
+  border: 1.5px solid var(--grid-gray);
+  border-radius: 8px;
   background: #fff;
+  color: var(--text-primary);
+}
+
+.frei-formular input:focus {
+  border-color: var(--excel-green);
+}
+
+.frei-formular__button {
+  flex: 0 0 auto;
+  min-height: 46px;
+}
+
+.frei-formular__rechtstext {
+  margin: 0.8rem 0 0 !important;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  max-width: 720px;
+}
+
+.frei-formular__rechtstext a {
   color: var(--excel-green-dark);
 }
 
-.frei-angebot .frei-cta:hover {
-  background: var(--excel-green-tint);
-}
-
-.frei-angebot__aktion {
-  margin-top: 1.1rem !important;
-}
-
-.frei-angebot__kurs {
-  margin-bottom: 0 !important;
+.frei-formular__meldung {
+  margin: 0.6rem 0 0 !important;
   font-size: 0.9rem;
-}
-
-.frei-textlink {
-  color: #fff;
+  font-weight: 600;
+  color: #B42318;
 }
 
 /* ---------- Abschluss ---------- */
@@ -341,8 +396,20 @@
   margin: 0 0 0.4rem;
 }
 
-.frei-abschluss__aktion {
-  margin-top: 1rem !important;
+.frei-abschluss__freischalten {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.frei-abschluss__freischalten h3 {
+  font-size: 1.25rem;
+  margin: 0 0 0.35rem;
+  color: var(--excel-green-dark);
+}
+
+.frei-abschluss__formulartext {
+  margin-bottom: 1rem !important;
 }
 
 /* ---------- Fußzeile ---------- */
@@ -371,7 +438,6 @@
   }
 
   .frei-weiter,
-  .frei-textlink,
   .frei-footer a {
     display: inline-block;
     padding-block: 0.6rem;
@@ -393,7 +459,7 @@
     padding: 1rem;
   }
 
-  .frei-angebot,
+  .frei-hinweis,
   .frei-abschluss {
     padding: 1.25rem;
   }
@@ -402,4 +468,31 @@
     display: block;
     text-align: center;
   }
+
+  .frei-formular__button {
+    flex-basis: 100%;
+  }
+}
+
+/* ---------- Bestätigungsseite nach dem Formular (danke.html) ---------- */
+
+.frei-danke {
+  max-width: 720px;
+  margin: 2rem auto;
+}
+
+.frei-danke h1 {
+  font-size: 1.8rem;
+  margin: 0 0 0.6rem;
+}
+
+.frei-danke__schritte {
+  margin: 1rem 0;
+  padding-left: 1.3rem;
+  line-height: 1.7;
+}
+
+.frei-danke__tipp {
+  font-size: 0.9rem;
+  color: var(--text-muted);
 }

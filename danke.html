@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fast geschafft – bitte bestätige deine E-Mail-Adresse | Excel.Flo</title>
+<!-- Ziel der Weiterleitung nach dem Klick-Tipp-Formular (in Klick-Tipp als Bestätigungs-/Danke-Seite eintragen) -->
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="assets/geteilt/img/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/geteilt/engine.css?v=2">
+<link rel="stylesheet" href="assets/seite/seite.css?v=4">
+</head>
+<body class="frei-seite">
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="./">
+      <span class="brand__icon"><img src="assets/geteilt/img/logo-white.webp" alt="" width="36" height="36"></span>
+      <span class="brand__wordmark">Excel<span class="dot">.</span>Flo</span>
+    </a>
+  </div>
+</header>
+
+<main>
+  <section class="frei-abschluss frei-danke" aria-labelledby="danke-titel">
+    <h1 id="danke-titel">Fast geschafft!</h1>
+    <p>Ich habe dir gerade eine E-Mail geschickt. Bitte klicke darin auf den Bestätigungslink – direkt danach bekommst du den Link zum <strong>Übungsportal Light</strong>.</p>
+    <ol class="frei-danke__schritte">
+      <li>Öffne dein E-Mail-Postfach.</li>
+      <li>Klicke in der E-Mail von Excel.Flo auf den Bestätigungslink.</li>
+      <li>Du erhältst sofort eine zweite E-Mail mit dem Link zum Übungsportal Light.</li>
+    </ol>
+    <p class="frei-danke__tipp">Keine E-Mail da? Schau nach ein paar Minuten auch im Spam- oder Werbung-Ordner nach.</p>
+  </section>
+</main>
+
+<footer class="site-footer frei-footer">
+  <span>Excel.Flo</span>
+</footer>
+
+<script src="assets/geteilt/tracking.js?v=1" defer></script>
+<script>
+  // Zählt, wie viele Anmeldungen wirklich bei Klick-Tipp angekommen sind (Weiterleitung hierher)
+  window.addEventListener("DOMContentLoaded", function () {
+    if (window.ExcelFloTracking) window.ExcelFloTracking.track("kostenlos", null, "form_thankyou_view", {});
+  });
+</script>
+</body>
+</html>

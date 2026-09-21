@@ -1,7 +1,7 @@
 {
   "konfiguration": {
-    "impressumUrl": "PLATZHALTER-IMPRESSUM-URL",
-    "datenschutzUrl": "PLATZHALTER-DATENSCHUTZ-URL",
+    "impressumUrl": "https://go.excel-flo.de/impressum/",
+    "datenschutzUrl": "https://go.excel-flo.de/datenschutz/",
     "seitenUrl": "https://florianbeil.github.io/Excel-Uebungen-kostenlos/",
     "hinweisNachAufgabe": 4,
 

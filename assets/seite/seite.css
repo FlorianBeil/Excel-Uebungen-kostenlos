@@ -496,3 +496,38 @@
   font-size: 0.9rem;
   color: var(--text-muted);
 }
+
+/* ---------- Anmeldeformular im grünen Hinweis (nach Aufgabe 4) ---------- */
+
+.frei-hinweis .frei-formular {
+  margin-top: 1.1rem;
+}
+
+.frei-hinweis .frei-formular label {
+  color: #fff;
+}
+
+.frei-hinweis .frei-formular__button {
+  background: #fff;
+  color: var(--excel-green-dark);
+}
+
+.frei-hinweis .frei-formular__button:hover {
+  background: var(--excel-green-tint);
+}
+
+.frei-hinweis .frei-formular__rechtstext {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.frei-hinweis .frei-formular__rechtstext a {
+  color: #fff;
+}
+
+.frei-hinweis .frei-formular__meldung {
+  color: #FFE0DC;
+}
+
+.frei-hinweis .frei-formular input:focus-visible {
+  outline-color: #fff;
+}

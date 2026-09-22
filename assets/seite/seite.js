@@ -25,8 +25,8 @@
  *   solution_show    Lösung angezeigt
  *   hints_open       Tipps aufgeklappt
  *   teaser_view      Hinweis auf das Light-Portal nach Aufgabe 4 im Bild
- *   form_view        Formular gesehen       ort: abschluss | mobil (mobil = aufgeklappt)
- *   form_submit      Formular abgesendet    ort: abschluss | mobil (vor der Weiterleitung zu Klick-Tipp)
+ *   form_view        Formular gesehen       ort: hinweis | abschluss | mobil (mobil = aufgeklappt)
+ *   form_submit      Formular abgesendet    ort: hinweis | abschluss | mobil (vor der Weiterleitung zu Klick-Tipp)
  */
 
 (function () {
@@ -187,6 +187,7 @@
     });
     schutzSkriptLaden();
     beiSichtbarkeit(hinweisEl, () => track("teaser_view"));
+    beiSichtbarkeit(hinweisEl.querySelector(".frei-formular"), () => track("form_view", { ort: "hinweis" }));
     beiSichtbarkeit(abschlussEl.querySelector(".frei-formular"), () => track("form_view", { ort: "abschluss" }));
   }
 
@@ -409,11 +410,14 @@
 
   /* ---------------- Light-Portal: Hinweis, Formular, Abschluss ---------------- */
 
+  // Nach Aufgabe 4: derselbe Anmeldeblock wie im Abschluss, damit niemand bis ganz
+  // nach unten scrollen muss. Wer durchzieht, findet ihn unten noch einmal.
   function hinweisBauen() {
     const t = daten.texte;
     return h("section", { class: "frei-hinweis", id: "hinweis", "aria-labelledby": "hinweis-titel", hidden: true }, [
       h("h2", { id: "hinweis-titel", text: t.hinweisTitel }),
       h("p", { text: t.hinweisText }),
+      formularBauen("hinweis"),
     ]);
   }
 

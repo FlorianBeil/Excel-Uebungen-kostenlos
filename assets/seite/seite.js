@@ -185,6 +185,7 @@
       if (L.aufgabeStatus(stand, e.a.id).geloest) feedbackErfolg(e, true);
       beiSichtbarkeit(e.karte, () => track("exercise_view", null, e));
     });
+    schutzSkriptLaden();
     beiSichtbarkeit(hinweisEl, () => track("teaser_view"));
     beiSichtbarkeit(abschlussEl.querySelector(".frei-formular"), () => track("form_view", { ort: "abschluss" }));
   }
@@ -468,6 +469,15 @@
       track("form_submit", { ort });
     });
     return form;
+  }
+
+  // Spamschutz von Klick-Tipp (aus dem Einbettungscode). Wird bewusst erst geladen,
+  // nachdem beide Formulare im Seiteninhalt stehen – sonst findet das Skript sie nicht.
+  // Fehlt es (Blocker, offline), bleiben die Formulare bedienbar.
+  function schutzSkriptLaden() {
+    const url = (daten.konfiguration.klicktipp || {}).schutzSkript;
+    if (!url || istPlatzhalter(url) || !L.formularVerbunden(daten.konfiguration)) return;
+    document.body.appendChild(h("script", { src: url, async: true }));
   }
 
   function mobilFormularBauen() {

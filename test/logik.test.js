@@ -127,7 +127,7 @@ test("Speichern bei blockiertem localStorage wirft nicht", () => {
 });
 
 test("Klick-Tipp-Formular erst mit echter Adresse und Feldnamen verbunden", () => {
-  assert.strictEqual(L.formularVerbunden(daten.konfiguration), false, "Platzhalter in daten/aufgaben.json");
+  assert.strictEqual(L.formularVerbunden(daten.konfiguration), true, "Klick-Tipp-Werte in daten/aufgaben.json fehlen oder sind Platzhalter");
   const k = (werte) => ({ klicktipp: Object.assign({ action: "https://app.klick-tipp.com/formular", feldVorname: "fields[fieldFirstName]", feldEmail: "email", versteckteFelder: {} }, werte) });
   assert.strictEqual(L.formularVerbunden(k({})), true);
   assert.strictEqual(L.formularVerbunden(k({ action: "http://unsicher.example/" })), false, "nur https");

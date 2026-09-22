@@ -5,12 +5,16 @@
     "seitenUrl": "https://florianbeil.github.io/Excel-Uebungen-kostenlos/",
     "hinweisNachAufgabe": 4,
 
-    "_klicktipp": "Werte aus dem HTML-Code des Klick-Tipp-Formulars übernehmen: action = Formular-Adresse, feldVorname/feldEmail = name-Attribute der Eingabefelder, versteckteFelder = alle <input type=hidden> (name → value).",
+    "_klicktipp": "Werte aus dem HTML-Code des Klick-Tipp-Formulars (Listbuilding → Einbettungscode): action = Formular-Adresse, feldVorname/feldEmail = name-Attribute der Eingabefelder, versteckteFelder = alle <input type=hidden> (name → value), schutzSkript = das <script> aus dem Einbettungscode (Spamschutz; wird erst geladen, wenn die Formulare stehen).",
     "klicktipp": {
-      "action": "PLATZHALTER-KLICKTIPP-FORMULAR-URL",
-      "feldVorname": "PLATZHALTER-FELDNAME-VORNAME",
-      "feldEmail": "PLATZHALTER-FELDNAME-EMAIL",
-      "versteckteFelder": {}
+      "action": "https://app.klicktipp.com/api/subscriber/signin.html",
+      "feldVorname": "fields[fieldFirstName]",
+      "feldEmail": "email",
+      "versteckteFelder": {
+        "apikey": "8cjdzrlerz8za933",
+        "fields[fieldDigit]": ""
+      },
+      "schutzSkript": "https://scripts.cdn.klicktipp.cloud/captcha/protect.js"
     }
   },
 

@@ -29,19 +29,19 @@
 
     "mobilHinweis": "Diese Übungen lassen sich am Computer deutlich angenehmer lösen.",
     "mobilFormularOeffnen": "Bonus-Übungen per E-Mail freischalten",
-    "mobilFormularText": "7 weitere interaktive Übungen zu Excel-Funktionen und Pivot-Tabellen, kostenlos. Den Link bekommst du per E-Mail – ideal, um später am Computer weiterzuüben.",
+    "mobilFormularText": "6 neue interaktive Aufgaben zu Excel-Funktionen und Pivot-Tabellen, kostenlos. Den Link bekommst du per E-Mail – ideal, um später am Computer weiterzuüben.",
 
     "fortschritt": "Aufgabe {nr} von {gesamt}",
 
     "hinweisTitel": "Du hast 4 von 5 Aufgaben geschafft.",
-    "hinweisText": "Schalte dir jetzt kostenlos deine Bonus-Übungen frei: 7 weitere interaktive Aufgaben zu Excel-Funktionen und Pivot-Tabellen. Den Link bekommst du per E-Mail – die letzte Aufgabe kannst du in Ruhe danach machen.",
+    "hinweisText": "Schalte dir jetzt kostenlos deine Bonus-Übungen frei: 6 neue Aufgaben, alle anders als die fünf von eben – inklusive einer echten Pivot-Tabelle. Den Link bekommst du per E-Mail – die letzte Aufgabe kannst du in Ruhe danach machen.",
 
     "abschlussTitel": "Alle fünf Aufgaben bearbeitet.",
     "abschlussErgebnis": "Du hast {selbst} von 5 Aufgaben selbst gelöst.",
     "abschlussMitLoesung": "Bei {mitLoesung} hast du dir die Lösung angesehen.",
 
     "formularTitel": "Schalte dir jetzt deine Bonus-Übungen frei",
-    "formularText": "7 weitere interaktive Aufgaben – von WENN und DATEDIF bis XVERWEIS und Pivot-Tabelle. Kostenlos, den Link bekommst du per E-Mail.",
+    "formularText": "6 neue Aufgaben – von WENN über XVERWEIS bis zur echten Pivot-Tabelle. Kostenlos, den Link bekommst du per E-Mail.",
     "formularVorname": "Vorname",
     "formularEmail": "E-Mail-Adresse",
     "formularButton": "Kostenlos freischalten",

@@ -1,7 +1,7 @@
 # Excel.Flo – kostenlose Übungen
 
 Öffentliche Seite mit fünf frei nutzbaren Excel-Übungen für Interessenten des
-Excel Master Kurses. Einziges Angebot der Seite: das kostenlose Übungsportal Light
+Excel Master Kurses. Einziges Angebot der Seite: die kostenlosen Bonus-Übungen
 ([Excel-Uebungsportal-Light](https://github.com/FlorianBeil/Excel-Uebungsportal-Light)) – nach Aufgabe 5
 (und aufklappbar im Handy-Hinweis) per Klick-Tipp-Formular (Vorname + E-Mail, Double-Opt-in),
 Klick-Tipp schickt danach den Link. Webinar und Kurs werden hier bewusst nicht beworben.

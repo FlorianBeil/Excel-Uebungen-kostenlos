@@ -1,8 +1,8 @@
 /* Excel.Flo – kostenlose Übungen: Bildschirmaufbau
  *
  * Baut die fünf Aufgaben untereinander auf, dazwischen (nach Aufgabe 4) den
- * Hinweis auf das Übungsportal Light, darunter den Abschluss mit dem Klick-Tipp-Formular
- * (Vorname + E-Mail → Double-Opt-in → Mail mit dem Link zum Light-Portal). Dasselbe
+ * Hinweis auf die Bonus-Übungen, darunter den Abschluss mit dem Klick-Tipp-Formular
+ * (Vorname + E-Mail → Double-Opt-in → Mail mit dem Link zu den Bonus-Übungen). Dasselbe
  * Formular gibt es aufklappbar im Hinweis für Smartphones. Webinar und Kurs werden auf
  * dieser Seite bewusst nicht beworben. Alle Entscheidungen (was ist gelöst,
  * wann erscheint was) trifft logik.js – hier nur Anzeige und Bedienung.

@@ -28,24 +28,24 @@
     "einleitung": "Fünf Aufgaben, direkt im Browser. Kein Download, keine Anmeldung.",
 
     "mobilHinweis": "Diese Übungen lassen sich am Computer deutlich angenehmer lösen.",
-    "mobilFormularOeffnen": "Übungsportal Light per E-Mail freischalten",
+    "mobilFormularOeffnen": "Bonus-Übungen per E-Mail freischalten",
     "mobilFormularText": "7 weitere interaktive Übungen zu Excel-Funktionen und Pivot-Tabellen, kostenlos. Den Link bekommst du per E-Mail – ideal, um später am Computer weiterzuüben.",
 
     "fortschritt": "Aufgabe {nr} von {gesamt}",
 
     "hinweisTitel": "Du hast 4 von 5 Aufgaben geschafft.",
-    "hinweisText": "Schalte dir jetzt kostenlos das Übungsportal Light frei: 7 weitere interaktive Übungen zu Excel-Funktionen und Pivot-Tabellen. Den Link bekommst du per E-Mail – die letzte Aufgabe kannst du in Ruhe danach machen.",
+    "hinweisText": "Schalte dir jetzt kostenlos deine Bonus-Übungen frei: 7 weitere interaktive Aufgaben zu Excel-Funktionen und Pivot-Tabellen. Den Link bekommst du per E-Mail – die letzte Aufgabe kannst du in Ruhe danach machen.",
 
     "abschlussTitel": "Alle fünf Aufgaben bearbeitet.",
     "abschlussErgebnis": "Du hast {selbst} von 5 Aufgaben selbst gelöst.",
     "abschlussMitLoesung": "Bei {mitLoesung} hast du dir die Lösung angesehen.",
 
-    "formularTitel": "Schalte jetzt das Übungsportal Light frei",
-    "formularText": "7 weitere interaktive Übungen – von WENN und DATEDIF bis XVERWEIS und Pivot-Tabelle. Kostenlos, den Link bekommst du per E-Mail.",
+    "formularTitel": "Schalte dir jetzt deine Bonus-Übungen frei",
+    "formularText": "7 weitere interaktive Aufgaben – von WENN und DATEDIF bis XVERWEIS und Pivot-Tabelle. Kostenlos, den Link bekommst du per E-Mail.",
     "formularVorname": "Vorname",
     "formularEmail": "E-Mail-Adresse",
     "formularButton": "Kostenlos freischalten",
-    "formularRechtstext": "Nach dem Absenden bekommst du eine E-Mail, in der du deine Adresse bestätigst. Danach schicke ich dir den Link zum Übungsportal Light und weitere E-Mails rund um Excel. Abmelden kannst du dich jederzeit mit einem Klick. Mehr dazu in der",
+    "formularRechtstext": "Nach dem Absenden bekommst du eine E-Mail, in der du deine Adresse bestätigst. Danach schicke ich dir den Link zu den Bonus-Übungen und weitere E-Mails rund um Excel. Abmelden kannst du dich jederzeit mit einem Klick. Mehr dazu in der",
     "formularDatenschutzLink": "Datenschutzerklärung",
     "formularNichtVerbunden": "Das Formular ist noch nicht mit Klick-Tipp verbunden (Vorschau).",
 

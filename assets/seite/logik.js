@@ -118,7 +118,7 @@
     return platzhalter(daten.texte.fortschritt, { nr: idx === null ? gesamt : idx + 1, gesamt });
   }
 
-  // Hinweis auf das Übungsportal Light erscheint, sobald die ersten N Aufgaben (Standard 4) bearbeitet sind.
+  // Hinweis auf die Bonus-Übungen erscheint, sobald die ersten N Aufgaben (Standard 4) bearbeitet sind.
   function hinweisSichtbar(daten, stand) {
     const n = daten.konfiguration.hinweisNachAufgabe;
     return daten.aufgaben.slice(0, n).every((a) => istBearbeitet(stand, a.id));

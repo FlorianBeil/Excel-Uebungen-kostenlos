@@ -421,6 +421,29 @@
     ]);
   }
 
+  // Kampagnen-Parameter der Sitzung merken: Sie stehen nur beim ersten Aufruf in der
+  // Adresse, das Formular wird aber erst später im Ablauf ausgefüllt.
+  const KAMPAGNE_KEY = "excelflo_kostenlos_kampagne";
+
+  function gemerkteKampagne() {
+    let gemerkt = {};
+    try {
+      gemerkt = JSON.parse(sessionStorage.getItem(KAMPAGNE_KEY) || "{}") || {};
+    } catch (e) { /* z.B. sessionStorage blockiert */ }
+
+    const kt = (daten.konfiguration || {}).klicktipp || {};
+    const params = new URLSearchParams(location.search);
+    let neu = false;
+    Object.values(kt.kampagnenFelder || {}).forEach((parameter) => {
+      const wert = params.get(parameter);
+      if (wert) { gemerkt[parameter] = String(wert).slice(0, 200); neu = true; }
+    });
+    if (neu) {
+      try { sessionStorage.setItem(KAMPAGNE_KEY, JSON.stringify(gemerkt)); } catch (e) { /* dann nur dieser Aufruf */ }
+    }
+    return gemerkt;
+  }
+
   // Klick-Tipp-Anmeldeformular. Absenden = normaler POST an Klick-Tipp (kein fetch: Klick-Tipp
   // leitet danach selbst auf die Bestätigungsseite weiter). Die Seite speichert keine Eingaben.
   // Solange die Klick-Tipp-Werte Platzhalter sind, wird nichts gesendet (Vorschau).
@@ -454,6 +477,9 @@
 
     if (verbunden) {
       Object.entries(kt.versteckteFelder || {}).forEach(([name, wert]) => form.appendChild(h("input", { type: "hidden", name, value: String(wert) })));
+      // Kampagnenfelder: Woher kam der Kontakt? Werte stehen in der Adresse der Seite.
+      Object.entries(L.kampagnenFelder(kt.kampagnenFelder, location.search, gemerkteKampagne()))
+        .forEach(([name, wert]) => form.appendChild(h("input", { type: "hidden", name, value: wert })));
     }
 
     let gesendet = false;

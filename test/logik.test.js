@@ -150,4 +150,16 @@ test("Kampagne: utm-Parameter und fremde Herkunfts-Domain, keine volle Adresse",
   assert.strictEqual(L.kampagne("?utm_source=" + "a".repeat(300), "", "x").utm_source.length, 100);
 });
 
+test("Kampagnenfelder: Adresse schlaegt gemerkten Wert, fehlende Parameter bleiben leer", () => {
+  const zuordnung = { "fields[field231071]": "utm_source", "fields[field231072]": "gclid", "fields[field231067]": "utm_campaign" };
+  const werte = L.kampagnenFelder(zuordnung, "?utm_source=newsletter", { gclid: "abc123", utm_source: "alt" });
+  assert.deepStrictEqual(werte, {
+    "fields[field231071]": "newsletter", // aus der Adresse, nicht der gemerkte Wert
+    "fields[field231072]": "abc123",     // nur gemerkt, trotzdem dabei
+    "fields[field231067]": "",           // weder noch: leer statt "null"
+  });
+  assert.deepStrictEqual(L.kampagnenFelder(null, "?utm_source=x", null), {});
+  assert.strictEqual(L.kampagnenFelder({ f: "utm_source" }, "?utm_source=" + "a".repeat(300), null).f.length, 200);
+});
+
 console.log("\n" + tests + " Tests bestanden");

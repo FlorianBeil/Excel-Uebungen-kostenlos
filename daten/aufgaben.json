@@ -14,6 +14,14 @@
         "apikey": "8cjdzrlerz8za933",
         "fields[fieldDigit]": ""
       },
+      "kampagnenFelder": {
+        "fields[field231067]": "utm_campaign",
+        "fields[field231068]": "utm_medium",
+        "fields[field231070]": "utm_content",
+        "fields[field231071]": "utm_source",
+        "fields[field231072]": "gclid",
+        "fields[field231073]": "fbclid"
+      },
       "schutzSkript": "https://scripts.cdn.klicktipp.cloud/captcha/protect.js"
     }
   },

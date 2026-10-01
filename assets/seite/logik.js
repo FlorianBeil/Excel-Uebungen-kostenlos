@@ -186,6 +186,21 @@
     };
   }
 
+  // Werte für die Kampagnenfelder des Klick-Tipp-Formulars: Für jedes Feld aus der
+  // Zuordnung (Feldname -> Parametername) der Wert aus der Adresse. Gemerkte Werte
+  // aus einem früheren Aufruf derselben Sitzung haben Vorrang vor nichts – so geht
+  // die Herkunft nicht verloren, wenn jemand die Seite zwischendurch neu lädt.
+  function kampagnenFelder(zuordnung, suche, gemerkt) {
+    const params = new URLSearchParams(suche || "");
+    const werte = {};
+    Object.entries(zuordnung || {}).forEach(([feldName, parameter]) => {
+      const ausAdresse = params.get(parameter);
+      const wert = ausAdresse || (gemerkt && gemerkt[parameter]) || "";
+      werte[feldName] = String(wert).slice(0, 200); // Klick-Tipp-Felder nicht sprengen
+    });
+    return werte;
+  }
+
   // Liefert eine Liste von Problemen (leer = alles in Ordnung).
   function pruefeDaten(daten) {
     const probleme = [];
@@ -238,6 +253,7 @@
     formularVerbunden,
     geraetTyp,
     kampagne,
+    kampagnenFelder,
     pruefeDaten,
   };
 

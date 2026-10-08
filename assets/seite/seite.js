@@ -1,6 +1,6 @@
 /* Excel.Flo – kostenlose Übungen: Bildschirmaufbau
  *
- * Baut die fünf Aufgaben untereinander auf, dazwischen (nach Aufgabe 4) den
+ * Baut die vier Aufgaben untereinander auf, dazwischen (vor der Pivot-Aufgabe) den
  * Hinweis auf die Bonus-Übungen, darunter den Abschluss mit dem Klick-Tipp-Formular
  * (Vorname + E-Mail → Double-Opt-in → Mail mit dem Link zu den Bonus-Übungen). Dasselbe
  * Formular gibt es aufklappbar im Hinweis für Smartphones. Webinar und Kurs werden auf
@@ -24,7 +24,7 @@
  *   exercise_solved  Aufgabe gelöst         mit_loesung
  *   solution_show    Lösung angezeigt
  *   hints_open       Tipps aufgeklappt
- *   teaser_view      Hinweis auf das Light-Portal nach Aufgabe 4 im Bild
+ *   teaser_view      Hinweis auf die Bonus-Übungen (nach Aufgabe 3) im Bild
  *   form_view        Formular gesehen       ort: hinweis | abschluss | mobil (mobil = aufgeklappt)
  *   form_submit      Formular abgesendet    ort: hinweis | abschluss | mobil (vor der Weiterleitung zu Klick-Tipp)
  */
@@ -410,7 +410,7 @@
 
   /* ---------------- Light-Portal: Hinweis, Formular, Abschluss ---------------- */
 
-  // Nach Aufgabe 4: derselbe Anmeldeblock wie im Abschluss, damit niemand bis ganz
+  // Vor der letzten Aufgabe: derselbe Anmeldeblock wie im Abschluss, damit niemand bis ganz
   // nach unten scrollen muss. Wer durchzieht, findet ihn unten noch einmal.
   function hinweisBauen() {
     const t = daten.texte;

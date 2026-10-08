@@ -21,14 +21,14 @@ function speicher(anfang) {
 
 test("Datendatei ist gültig", () => {
   assert.deepStrictEqual(L.pruefeDaten(daten), []);
-  assert.strictEqual(daten.aufgaben.length, 5);
-  assert.deepStrictEqual(daten.aufgaben.map((a) => a.typ), ["formel", "formel", "formel", "formel", "pivot"]);
+  assert.strictEqual(daten.aufgaben.length, 4);
+  assert.deepStrictEqual(daten.aufgaben.map((a) => a.typ), ["formel", "formel", "formel", "pivot"]);
 });
 
 test("pruefeDaten findet Fehler", () => {
   const kaputt = JSON.parse(JSON.stringify(daten));
   kaputt.aufgaben[1].id = kaputt.aufgaben[0].id;
-  kaputt.konfiguration.hinweisNachAufgabe = 5;
+  kaputt.konfiguration.hinweisNachAufgabe = 4;
   delete kaputt.konfiguration.datenschutzUrl;
   const p = L.pruefeDaten(kaputt);
   assert.ok(p.some((x) => x.includes("doppelt")));
@@ -36,10 +36,10 @@ test("pruefeDaten findet Fehler", () => {
   assert.ok(p.some((x) => x.includes("datenschutzUrl")));
 });
 
-test("neuer Besucher: Aufgabe 1 von 5, kein Angebot, kein Abschluss", () => {
+test("neuer Besucher: Aufgabe 1 von 4, kein Angebot, kein Abschluss", () => {
   const s = L.neuerStand();
   assert.strictEqual(L.aktuelleAufgabe(daten, s), 0);
-  assert.strictEqual(L.fortschrittText(daten, s), "Aufgabe 1 von 5");
+  assert.strictEqual(L.fortschrittText(daten, s), "Aufgabe 1 von 4");
   assert.strictEqual(L.hinweisSichtbar(daten, s), false);
   assert.strictEqual(L.abschluss(daten, s), null);
 });
@@ -53,7 +53,7 @@ test("Lösung erst nach einem Fehlversuch", () => {
   s = L.loesungAnzeigen(s, ids[0]);
   assert.strictEqual(L.aufgabeStatus(s, ids[0]).loesungAngezeigt, true);
   assert.strictEqual(L.istBearbeitet(s, ids[0]), true);
-  assert.strictEqual(L.fortschrittText(daten, s), "Aufgabe 2 von 5");
+  assert.strictEqual(L.fortschrittText(daten, s), "Aufgabe 2 von 4");
 });
 
 test("Stand wird nie verändert", () => {
@@ -72,13 +72,13 @@ test("richtig nach Lösung zählt als mitLoesung, erneutes Prüfen ändert nicht
   assert.strictEqual(L.pruefungErgebnis(s, ids[0], false), s);
 });
 
-test("Angebot erscheint nach Aufgabe 4, nicht vorher", () => {
+test("Angebot erscheint nach Aufgabe 3, nicht vorher", () => {
   let s = L.neuerStand();
-  for (let i = 0; i < 3; i++) s = L.pruefungErgebnis(s, ids[i], true);
+  for (let i = 0; i < 2; i++) s = L.pruefungErgebnis(s, ids[i], true);
   assert.strictEqual(L.hinweisSichtbar(daten, s), false);
-  s = L.pruefungErgebnis(s, ids[3], true);
+  s = L.pruefungErgebnis(s, ids[2], true);
   assert.strictEqual(L.hinweisSichtbar(daten, s), true);
-  assert.strictEqual(L.fortschrittText(daten, s), "Aufgabe 5 von 5");
+  assert.strictEqual(L.fortschrittText(daten, s), "Aufgabe 4 von 4");
   assert.strictEqual(L.abschluss(daten, s), null);
 });
 
@@ -86,20 +86,20 @@ test("Abschluss: alle selbst gelöst", () => {
   let s = L.neuerStand();
   ids.forEach((id) => { s = L.pruefungErgebnis(s, id, true); });
   const a = L.abschluss(daten, s);
-  assert.strictEqual(a.ergebnis, "Du hast 5 von 5 Aufgaben selbst gelöst.");
+  assert.strictEqual(a.ergebnis, "Du hast 4 von 4 Aufgaben selbst gelöst.");
   assert.strictEqual(a.zusatz, null);
-  assert.strictEqual(L.fortschrittText(daten, s), "Aufgabe 5 von 5");
+  assert.strictEqual(L.fortschrittText(daten, s), "Aufgabe 4 von 4");
 });
 
 test("Abschluss: zwei Lösungen angesehen (eine davon danach gelöst)", () => {
   let s = L.neuerStand();
-  ids.forEach((id) => { s = L.pruefungErgebnis(s, id, id === ids[1] || id === ids[4] ? false : true); });
+  ids.forEach((id) => { s = L.pruefungErgebnis(s, id, id === ids[1] || id === ids[3] ? false : true); });
   s = L.loesungAnzeigen(s, ids[1]);
-  s = L.loesungAnzeigen(s, ids[4]);
-  s = L.pruefungErgebnis(s, ids[4], true);
+  s = L.loesungAnzeigen(s, ids[3]);
+  s = L.pruefungErgebnis(s, ids[3], true);
   const a = L.abschluss(daten, s);
-  assert.strictEqual(a.selbst, 3);
-  assert.strictEqual(a.ergebnis, "Du hast 3 von 5 Aufgaben selbst gelöst.");
+  assert.strictEqual(a.selbst, 2);
+  assert.strictEqual(a.ergebnis, "Du hast 2 von 4 Aufgaben selbst gelöst.");
   assert.strictEqual(a.zusatz, "Bei 2 hast du dir die Lösung angesehen.");
 });
 
@@ -110,7 +110,7 @@ test("Speichern und Laden (Wiederkehrer)", () => {
   L.speichereStand(st, s);
   const geladen = L.ladeStand(st, daten);
   assert.deepStrictEqual(geladen, s);
-  assert.strictEqual(L.fortschrittText(daten, geladen), "Aufgabe 2 von 5");
+  assert.strictEqual(L.fortschrittText(daten, geladen), "Aufgabe 2 von 4");
 });
 
 test("Laden: kaputter, alter oder fremder Stand ergibt neuen Stand", () => {

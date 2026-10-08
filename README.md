@@ -1,8 +1,8 @@
 # Excel.Flo – kostenlose Übungen
 
-Öffentliche Seite mit fünf frei nutzbaren Excel-Übungen für Interessenten des
+Öffentliche Seite mit vier frei nutzbaren Excel-Übungen für Interessenten des
 Excel Master Kurses. Einziges Angebot der Seite: die kostenlosen Bonus-Übungen
-([Excel-Uebungsportal-Light](https://github.com/FlorianBeil/Excel-Uebungsportal-Light)) – nach Aufgabe 5
+([Excel-Uebungsportal-Light](https://github.com/FlorianBeil/Excel-Uebungsportal-Light)) – nach Aufgabe 3, am Ende
 (und aufklappbar im Handy-Hinweis) per Klick-Tipp-Formular (Vorname + E-Mail, Double-Opt-in),
 Klick-Tipp schickt danach den Link. Webinar und Kurs werden hier bewusst nicht beworben.
 
@@ -15,7 +15,7 @@ eigenes Deployment. Das Portal verlinkt nie hierher, diese Seite enthält alle W
 | Pfad | Inhalt |
 |---|---|
 | `index.html` | Einstiegsseite (Titel, Meta-/Vorschau-Angaben fest im HTML) |
-| `daten/aufgaben.json` | Die fünf Aufgaben, alle Texte und die Konfiguration (Impressum-, Datenschutz- und Seitenadresse, Klick-Tipp-Formular) |
+| `daten/aufgaben.json` | Die vier Aufgaben, alle Texte und die Konfiguration (Impressum-, Datenschutz- und Seitenadresse, Klick-Tipp-Formular) |
 | `danke.html` | Bestätigungsseite nach dem Formular („bitte E-Mail bestätigen“) – in Klick-Tipp als Weiterleitung eintragen |
 | `assets/seite/` | `logik.js` (Ablauf ohne Bildschirm, getestet), `seite.js` (Anzeige, Tracking), `seite.css` |
 | `pivot.html` | Pivot-Nachbau, per iframe eingebunden – **erzeugt**, nicht von Hand ändern |

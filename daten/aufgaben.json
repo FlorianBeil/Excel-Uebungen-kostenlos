@@ -3,7 +3,7 @@
     "impressumUrl": "https://go.excel-flo.de/impressum/",
     "datenschutzUrl": "https://go.excel-flo.de/datenschutz/",
     "seitenUrl": "https://florianbeil.github.io/Excel-Uebungen-kostenlos/",
-    "hinweisNachAufgabe": 4,
+    "hinweisNachAufgabe": 3,
 
     "_klicktipp": "Werte aus dem HTML-Code des Klick-Tipp-Formulars (Listbuilding → Einbettungscode): action = Formular-Adresse, feldVorname/feldEmail = name-Attribute der Eingabefelder, versteckteFelder = alle <input type=hidden> (name → value), schutzSkript = das <script> aus dem Einbettungscode (Spamschutz; wird erst geladen, wenn die Formulare stehen).",
     "klicktipp": {
@@ -27,29 +27,29 @@
   },
 
   "texte": {
-    "seitenTitel": "Kannst du Excel wirklich? – 5 kostenlose Excel-Übungen | Excel.Flo",
-    "metaBeschreibung": "Fünf interaktive Excel-Aufgaben direkt im Browser: SUMME, ZÄHLENWENN, SUMMEWENN, SVERWEIS und Pivot-Tabellen. Kein Download, keine Anmeldung.",
-    "ogTitel": "Kannst du Excel wirklich? 5 Aufgaben zum Ausprobieren",
+    "seitenTitel": "Kannst du Excel wirklich? – 4 kostenlose Excel-Übungen | Excel.Flo",
+    "metaBeschreibung": "Vier interaktive Excel-Aufgaben direkt im Browser: SUMME, MITTELWERT, ANZAHL und Pivot-Tabellen. Kein Download, keine Anmeldung.",
+    "ogTitel": "Kannst du Excel wirklich? 4 Aufgaben zum Ausprobieren",
     "ogBeschreibung": "Interaktive Excel-Übungen direkt im Browser – von SUMME bis Pivot-Tabelle. Kein Download, keine Anmeldung.",
-    "ogBildAlt": "Excel.Flo: Kannst du Excel wirklich? Fünf Excel-Aufgaben direkt im Browser, kein Download, keine Anmeldung.",
+    "ogBildAlt": "Excel.Flo: Kannst du Excel wirklich? Vier Excel-Aufgaben direkt im Browser, kein Download, keine Anmeldung.",
     "ueberschrift": "Kannst du Excel wirklich?",
-    "einleitung": "Fünf Aufgaben, direkt im Browser. Kein Download, keine Anmeldung.",
+    "einleitung": "Vier Aufgaben, direkt im Browser. Kein Download, keine Anmeldung.",
 
     "mobilHinweis": "Diese Übungen lassen sich am Computer deutlich angenehmer lösen.",
     "mobilFormularOeffnen": "Bonus-Übungen per E-Mail freischalten",
-    "mobilFormularText": "6 neue interaktive Aufgaben zu Excel-Funktionen und Pivot-Tabellen, kostenlos. Den Link bekommst du per E-Mail – ideal, um später am Computer weiterzuüben.",
+    "mobilFormularText": "5 neue interaktive Aufgaben zu Excel-Funktionen und Pivot-Tabellen, kostenlos. Den Link bekommst du per E-Mail – ideal, um später am Computer weiterzuüben.",
 
     "fortschritt": "Aufgabe {nr} von {gesamt}",
 
-    "hinweisTitel": "Du hast 4 von 5 Aufgaben geschafft.",
-    "hinweisText": "Schalte dir jetzt kostenlos deine Bonus-Übungen frei: 6 neue Aufgaben, alle anders als die fünf von eben – inklusive einer echten Pivot-Tabelle. Den Link bekommst du per E-Mail – die letzte Aufgabe kannst du in Ruhe danach machen.",
+    "hinweisTitel": "Du hast 3 von 4 Aufgaben geschafft.",
+    "hinweisText": "Schalte dir jetzt kostenlos deine Bonus-Übungen frei: 5 neue Aufgaben, alle anders als die vier von eben – inklusive einer echten Pivot-Tabelle. Den Link bekommst du per E-Mail – die letzte Aufgabe kannst du in Ruhe danach machen.",
 
-    "abschlussTitel": "Alle fünf Aufgaben bearbeitet.",
-    "abschlussErgebnis": "Du hast {selbst} von 5 Aufgaben selbst gelöst.",
+    "abschlussTitel": "Alle vier Aufgaben bearbeitet.",
+    "abschlussErgebnis": "Du hast {selbst} von 4 Aufgaben selbst gelöst.",
     "abschlussMitLoesung": "Bei {mitLoesung} hast du dir die Lösung angesehen.",
 
     "formularTitel": "Schalte dir jetzt deine Bonus-Übungen frei",
-    "formularText": "6 neue Aufgaben – von WENN über XVERWEIS bis zur echten Pivot-Tabelle. Kostenlos, den Link bekommst du per E-Mail.",
+    "formularText": "5 neue Aufgaben – von ZÄHLENWENN über SVERWEIS bis zur echten Pivot-Tabelle. Kostenlos, den Link bekommst du per E-Mail.",
     "formularVorname": "Vorname",
     "formularEmail": "E-Mail-Adresse",
     "formularButton": "Kostenlos freischalten",
@@ -106,149 +106,97 @@
     },
 
     {
-      "id": "zaehlenwenn-verkaeufe",
+      "id": "mittelwert-noten",
       "typ": "formel",
-      "title": "Verkäufe über einem Schwellenwert zählen",
+      "title": "Notendurchschnitt berechnen",
       "task": {
-        "intro": "Ermittle mit ZÄHLENWENN, wie viele Verkäufe einen Betrag von mehr als 500 € haben.",
+        "intro": "Berechne den Notendurchschnitt mithilfe der MITTELWERT-Funktion.",
         "steps": [
-          "Trage in Zelle B9 eine ZÄHLENWENN-Formel ein, die die Anzahl ermittelt."
+          "Trage in Zelle B7 eine Formel ein, die den Durchschnitt der Noten berechnet."
         ]
       },
       "grid": {
         "cols": ["A", "B"],
-        "rowCount": 9,
+        "rowCount": 7,
         "cells": {
-          "A1": { "value": "Verkauf", "type": "header" },
-          "B1": { "value": "Betrag (€)", "type": "header" },
-          "A2": { "value": 1 },
-          "B2": { "value": 320, "format": "currency0" },
-          "A3": { "value": 2 },
-          "B3": { "value": 610, "format": "currency0" },
-          "A4": { "value": 3 },
-          "B4": { "value": 480, "format": "currency0" },
-          "A5": { "value": 4 },
-          "B5": { "value": 750, "format": "currency0" },
-          "A6": { "value": 5 },
-          "B6": { "value": 290, "format": "currency0" },
-          "A7": { "value": 6 },
-          "B7": { "value": 505, "format": "currency0" },
-          "A8": { "value": 7 },
-          "B8": { "value": 640, "format": "currency0" },
-          "A9": { "value": "Anzahl > 500 €" },
-          "B9": {
+          "A1": { "value": "Schüler", "type": "header" },
+          "B1": { "value": "Note", "type": "header" },
+          "A2": { "value": "Anna" },
+          "B2": { "value": 2 },
+          "A3": { "value": "Ben" },
+          "B3": { "value": 3 },
+          "A4": { "value": "Clara" },
+          "B4": { "value": 1 },
+          "A5": { "value": "David" },
+          "B5": { "value": 4 },
+          "A6": { "value": "Emma" },
+          "B6": { "value": 2 },
+          "A7": { "value": "Durchschnitt" },
+          "B7": {
+            "type": "input",
+            "answer": {
+              "value": 2.4,
+              "tolerance": 0.005,
+              "acceptedFormulas": ["=MITTELWERT(B2:B6)"]
+            }
+          }
+        }
+      },
+      "hints": [
+        "MITTELWERT berechnet den Durchschnitt mehrerer Zahlen – du kannst dafür sowohl einzelne Zellen als auch einen ganzen Zellbereich angeben.",
+        "Der Aufbau ist ähnlich wie bei SUMME: Du gibst einfach die Zellen an, die berücksichtigt werden sollen.",
+        "Der Durchschnitt entspricht der Summe aller Werte geteilt durch ihre Anzahl – MITTELWERT() erledigt das automatisch in einem Schritt.",
+        "Achte darauf, dass du wirklich alle Noten in der Formel erfasst – fehlt eine Zelle, stimmt das Ergebnis nicht."
+      ],
+      "explanation": "MITTELWERT(B2:B6) addiert alle Werte im Bereich und teilt die Summe automatisch durch die Anzahl der Zellen – hier 5 Noten. Das Ergebnis ist der Notendurchschnitt (2,4), ohne dass du SUMME und ANZAHL manuell kombinieren musst.",
+      "solution": "=MITTELWERT(B2:B6)"
+    },
+
+    {
+      "id": "anzahl-teilnehmer",
+      "typ": "formel",
+      "title": "Anzahl der Teilnehmer mit Punkten",
+      "task": {
+        "intro": "Berechne die Anzahl der Teilnehmer mit Punkten.",
+        "steps": [
+          "Trage in Zelle B8 eine Formel ein, die zählt, wie viele Teilnehmer eine Punktzahl eingetragen haben."
+        ]
+      },
+      "grid": {
+        "cols": ["A", "B"],
+        "rowCount": 8,
+        "cells": {
+          "A1": { "value": "Teilnehmer", "type": "header" },
+          "B1": { "value": "Punkte", "type": "header" },
+          "A2": { "value": "Tom" },
+          "B2": { "value": 85 },
+          "A3": { "value": "Lea" },
+          "A4": { "value": "Nico" },
+          "B4": { "value": 92 },
+          "A5": { "value": "Mia" },
+          "A6": { "value": "Paul" },
+          "B6": { "value": 78 },
+          "A7": { "value": "Sara" },
+          "B7": { "value": 64 },
+          "A8": { "value": "Anzahl mit Punktzahl" },
+          "B8": {
             "type": "input",
             "answer": {
               "value": 4,
-              "tolerance": 0.001,
-              "acceptedFormulas": ["=ZÄHLENWENN(B2:B8;\">500\")"]
+              "tolerance": 0.005,
+              "acceptedFormulas": ["=ANZAHL(B2:B7)"]
             }
           }
         }
       },
       "hints": [
-        "ZÄHLENWENN-Aufbau: =ZÄHLENWENN(Bereich; Kriterium)",
-        "Bereich ist der Zellbereich mit den Beträgen.",
-        "Das Kriterium gibst du als Text in Anführungszeichen an, z. B. \">500\".",
+        "ANZAHL zählt, wie viele Zellen in einem Bereich eine Zahl enthalten – Text und leere Zellen werden dabei nicht mitgezählt.",
+        "Der Aufbau ist wie bei SUMME und MITTELWERT: Du gibst einfach den Bereich an, der geprüft werden soll.",
+        "Nicht jeder Teilnehmer hat eine Punktzahl eingetragen – schau genau hin, welche Zellen wirklich eine Zahl enthalten.",
         "Du kannst statt der Formel auch direkt die berechnete Anzahl eintragen."
       ],
-      "explanation": "ZÄHLENWENN(B2:B8;\">500\") zählt, wie viele Zellen im Bereich B2:B8 einen Wert größer als 500 haben. Von den 7 Verkäufen liegen 4 über 500 € (610 €, 750 €, 505 € und 640 €).",
-      "solution": "=ZÄHLENWENN(B2:B8;\">500\")"
-    },
-
-    {
-      "id": "summewenn-umsatz-region",
-      "typ": "formel",
-      "title": "Umsatz je Region summieren",
-      "task": {
-        "intro": "Ermittle mit SUMMEWENN den gesamten Umsatz der Region „Nord“.",
-        "steps": [
-          "Trage in Zelle B8 eine SUMMEWENN-Formel ein, die den Umsatz der Region „Nord“ summiert."
-        ]
-      },
-      "grid": {
-        "cols": ["A", "B"],
-        "rowCount": 8,
-        "cells": {
-          "A1": { "value": "Region", "type": "header" },
-          "B1": { "value": "Umsatz (€)", "type": "header" },
-          "A2": { "value": "Nord" },
-          "B2": { "value": 1200, "format": "currency0" },
-          "A3": { "value": "Süd" },
-          "B3": { "value": 900, "format": "currency0" },
-          "A4": { "value": "Nord" },
-          "B4": { "value": 1500, "format": "currency0" },
-          "A5": { "value": "West" },
-          "B5": { "value": 700, "format": "currency0" },
-          "A6": { "value": "Nord" },
-          "B6": { "value": 800, "format": "currency0" },
-          "A8": { "value": "Summe Nord" },
-          "B8": {
-            "type": "input",
-            "answer": {
-              "value": 3500,
-              "tolerance": 0.005,
-              "acceptedFormulas": ["=SUMMEWENN(A2:A6;\"Nord\";B2:B6)"]
-            }
-          }
-        }
-      },
-      "hints": [
-        "SUMMEWENN-Aufbau: =SUMMEWENN(Bereich; Kriterium; Summe_Bereich)",
-        "Bereich ist der Zellbereich mit den Regionen.",
-        "Kriterium ist der gesuchte Regionsname als Text in Anführungszeichen, z. B. \"Nord\".",
-        "Summe_Bereich ist der Zellbereich mit den Umsätzen, die addiert werden sollen.",
-        "Du kannst statt der Formel auch direkt die berechnete Summe eintragen."
-      ],
-      "explanation": "SUMMEWENN(A2:A6;\"Nord\";B2:B6) durchsucht den Bereich A2:A6 nach dem Kriterium „Nord“ und addiert für jede Übereinstimmung den zugehörigen Wert aus B2:B6. Von den drei Nord-Einträgen (1.200 €, 1.500 € und 800 €) ergibt sich eine Summe von 3.500 €.",
-      "solution": "=SUMMEWENN(A2:A6;\"Nord\";B2:B6)"
-    },
-
-    {
-      "id": "sverweis-basis",
-      "typ": "formel",
-      "title": "Preis nachschlagen",
-      "task": {
-        "intro": "Ermittle mit SVERWEIS den Preis für das gesuchte Produkt.",
-        "steps": [
-          "Trage in Zelle B8 eine SVERWEIS-Formel ein, die den Preis für das gesuchte Produkt ermittelt."
-        ]
-      },
-      "grid": {
-        "cols": ["A", "B"],
-        "rowCount": 8,
-        "cells": {
-          "A1": { "value": "Produkt", "type": "header" },
-          "B1": { "value": "Preis", "type": "header" },
-          "A2": { "value": "Maus" },
-          "B2": { "value": 19.99, "format": "currency" },
-          "A3": { "value": "Tastatur" },
-          "B3": { "value": 34.99, "format": "currency" },
-          "A4": { "value": "Monitor" },
-          "B4": { "value": 189, "format": "currency" },
-          "A5": { "value": "Headset" },
-          "B5": { "value": 49.99, "format": "currency" },
-          "A7": { "value": "Suchwert:" },
-          "B7": { "value": "Tastatur" },
-          "A8": { "value": "Preis:" },
-          "B8": {
-            "type": "input",
-            "answer": {
-              "value": 34.99,
-              "tolerance": 0.005,
-              "acceptedFormulas": ["=SVERWEIS(B7;A2:B5;2;FALSCH)"]
-            }
-          }
-        }
-      },
-      "hints": [
-        "SVERWEIS-Aufbau: =SVERWEIS(Suchkriterium; Matrix; Spaltenindex; [Bereich_Verweis])",
-        "Suchkriterium ist die Zelle mit dem gesuchten Produktnamen.",
-        "FALSCH (oder 0) als letztes Argument sorgt für eine exakte statt ungefähre Suche.",
-        "Du kannst statt der Formel auch direkt den berechneten Preis eintragen."
-      ],
-      "explanation": "SVERWEIS(B7;A2:B5;2;FALSCH) sucht den Wert aus B7 in der ersten Spalte des Bereichs A2:B5 und gibt den Wert aus der 2. Spalte derselben Zeile zurück – den Preis. FALSCH sorgt für eine exakte statt ungefähre Suche.",
-      "solution": "=SVERWEIS(B7;A2:B5;2;FALSCH)"
+      "explanation": "ANZAHL(B2:B7) zählt, wie viele der Zellen im Bereich eine Zahl enthalten – hier 4 von 6 Teilnehmern, da Lea und Mia keine Punktzahl eingetragen haben. Leere Zellen und Text werden von ANZAHL nicht mitgezählt.",
+      "solution": "=ANZAHL(B2:B7)"
     },
 
     {

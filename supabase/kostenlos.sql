@@ -7,13 +7,13 @@
 --
 -- Ereignisse der kostenlosen Seite (portal = 'kostenlos'), jedes mit detail.geraet = 'desktop' | 'mobil':
 --   page_view        Seite aufgerufen                  detail: breite, wiederkehrer, bearbeitet, utm_source/medium/campaign, herkunft
---   exercise_view    Aufgabe ins Bild gescrollt        exercise_id = Aufgabe, detail.nr = 1–5
+--   exercise_view    Aufgabe ins Bild gescrollt        exercise_id = Aufgabe, detail.nr = 1–4
 --   exercise_start   Aufgabe erstmals bedient          exercise_id, nr
 --   check            Prüfen                            exercise_id, nr, richtig, leer, versuch
 --   exercise_solved  Aufgabe gelöst                    exercise_id, nr, mit_loesung
 --   solution_show    Lösung angezeigt                  exercise_id, nr
 --   hints_open       Tipps aufgeklappt                 exercise_id, nr
---   teaser_view      Hinweis auf das Übungsportal Light nach Aufgabe 4 gesehen
+--   teaser_view      Hinweis auf die Bonus-Übungen vor der letzten Aufgabe gesehen
 --   form_view        Anmeldeformular gesehen           detail.ort = abschluss | mobil (mobil = aufgeklappt)
 --   form_submit      Anmeldeformular abgesendet        detail.ort = abschluss | mobil
 --   form_thankyou_view  Bestätigungsseite danke.html aufgerufen (Klick-Tipp hat die Anmeldung angenommen)
@@ -21,6 +21,10 @@
 -- Seit 2026-09 wirbt die Seite nicht mehr für Webinar und Kurs, sondern nur noch für das
 -- Übungsportal Light (Anmeldung über Klick-Tipp). Ältere Ereignisse (offer_view, webinar_click,
 -- course_click, mail_link_click) bleiben in der Tabelle, tauchen in den Auswertungen aber nicht mehr auf.
+--
+-- Seit 2026-10-08 hat die Seite nur noch vier Aufgaben (SUMME, MITTELWERT, ANZAHL, Pivot) statt
+-- fünf (SUMME, ZÄHLENWENN, SUMMEWENN, SVERWEIS, Pivot). Die Auswertungen trennen deshalb nach
+-- Aufgabe, nicht nur nach Nummer – alte und neue Besuche landen in getrennten Zeilen.
 --
 -- Hinweis: Die bestehenden Übersichten „Auswertung Übungsportal“ und „Auswertung Einzelklicks“
 -- zeigen alle Bereiche – Zeilen dieser Seite erkennst du dort an Portal = kostenlos.
@@ -48,7 +52,8 @@ with sitzungen as (
     bool_or(event = 'page_view')                                                           as besuch,
     bool_or(event = 'page_view' and detail->>'wiederkehrer' = 'true')                      as wiederkehrer,
     bool_or(event = 'exercise_start')                                                      as irgendeine_gestartet,
-    count(distinct detail->>'nr') filter (where event in ('exercise_solved', 'solution_show')) as bearbeitet,
+    count(distinct exercise_id) filter (where event in ('exercise_solved', 'solution_show')
+      and exercise_id in ('summe-umsatz', 'mittelwert-noten', 'anzahl-teilnehmer', 'umsatz-je-region')) as bearbeitet,
     bool_or(event = 'teaser_view')                                                         as hinweis,
     bool_or(event = 'form_view')                                                           as formular,
     bool_or(event = 'form_submit')                                                         as abgesendet,
@@ -66,7 +71,7 @@ select
   count(*) filter (where besuch and not irgendeine_gestartet)                              as "Keine Aufgabe angefangen",
   round(100.0 * count(*) filter (where besuch and not irgendeine_gestartet)
         / nullif(count(*) filter (where besuch), 0), 1)                                    as "Keine Aufgabe angefangen in %",
-  count(*) filter (where bearbeitet >= 5)                                                  as "Alle 5 bearbeitet",
+  count(*) filter (where bearbeitet >= 4)                                                  as "Alle 4 bearbeitet",
   count(*) filter (where hinweis)                                                          as "Light-Hinweis gesehen",
   count(*) filter (where formular)                                                         as "Formular gesehen",
   count(*) filter (where abgesendet)                                                       as "Formular abgesendet",
@@ -74,7 +79,7 @@ select
         / nullif(count(*) filter (where besuch), 0), 1)                                    as "Abgesendet in % der Besuche",
   round(100.0 * count(*) filter (where abgesendet)
         / nullif(count(*) filter (where formular), 0), 1)                                  as "Abgesendet in % Formular gesehen",
-  count(*) filter (where abgesendet_abschluss)                                             as "Abgesendet nach Aufgabe 5",
+  count(*) filter (where abgesendet_abschluss)                                             as "Abgesendet im Abschluss",
   count(*) filter (where abgesendet_mobil)                                                 as "Abgesendet im Handy-Hinweis",
   max(zuletzt) at time zone 'Europe/Berlin'                                                as "Zuletzt"
 from sitzungen
@@ -88,7 +93,7 @@ revoke all on public."Auswertung Kostenlos Übersicht" from anon, authenticated;
 --    Gestartet      = Aufgabe mindestens einmal bedient
 --    Bearbeitet     = gelöst oder Lösung angesehen
 --    Ausgestiegen   = das war die letzte Aufgabe, die in dieser Sitzung angefangen wurde
---                     (bei Aufgabe 5: angefangen, aber nicht bearbeitet)
+--                     (bei der letzten Aufgabe, der Pivot: angefangen, aber nicht bearbeitet)
 create view public."Auswertung Kostenlos Absprung"
 with (security_invoker = true) as
 with ereignisse as (
@@ -116,7 +121,7 @@ pro_aufgabe as (
   select
     session_id,
     nr,
-    min(exercise_id)                                                                       as aufgabe,
+    exercise_id                                                                            as aufgabe,
     bool_or(event = 'exercise_view')                                                       as gesehen,
     bool_or(event = 'exercise_start')                                                      as gestartet,
     bool_or(event = 'exercise_solved')                                                     as geloest,
@@ -125,7 +130,7 @@ pro_aufgabe as (
     count(*) filter (where event = 'check' and coalesce(detail->>'leer', 'false') <> 'true') as pruefungen
   from ereignisse
   where nr is not null
-  group by session_id, nr
+  group by session_id, nr, exercise_id
 ),
 letzte as (
   select session_id, max(nr) as letzte_nr
@@ -136,24 +141,24 @@ letzte as (
 select
   g.geraet                                                                                 as "Gerät",
   p.nr                                                                                     as "Nr.",
-  min(p.aufgabe)                                                                           as "Aufgabe",
+  p.aufgabe                                                                                as "Aufgabe",
   count(*) filter (where p.gesehen)                                                        as "Gesehen",
   count(*) filter (where p.gestartet)                                                      as "Gestartet",
   count(*) filter (where p.gestartet and (p.geloest or p.loesung))                         as "Bearbeitet",
   count(*) filter (where p.selbst_geloest)                                                 as "Selbst gelöst",
   count(*) filter (where p.loesung)                                                        as "Lösung angesehen",
   count(*) filter (where p.gestartet and l.letzte_nr = p.nr
-                   and (p.nr < 5 or not (p.geloest or p.loesung)))                         as "Ausgestiegen",
+                   and (p.aufgabe <> 'umsatz-je-region' or not (p.geloest or p.loesung)))  as "Ausgestiegen",
   round(100.0 * count(*) filter (where p.gestartet and l.letzte_nr = p.nr
-                                 and (p.nr < 5 or not (p.geloest or p.loesung)))
+                                 and (p.aufgabe <> 'umsatz-je-region' or not (p.geloest or p.loesung)))
         / nullif(count(*) filter (where p.gestartet), 0), 1)                               as "Ausstieg in %",
   round(avg(p.pruefungen) filter (where p.gestartet), 1)                                   as "Ø Prüfungen"
 from pro_aufgabe p
 join geraete g using (session_id)
 left join letzte l using (session_id)
 where g.geraet in ('desktop', 'mobil')
-group by g.geraet, p.nr
-order by g.geraet, p.nr;
+group by g.geraet, p.nr, p.aufgabe
+order by g.geraet, p.nr, p.aufgabe;
 
 revoke all on public."Auswertung Kostenlos Absprung" from anon, authenticated;
 
@@ -173,7 +178,7 @@ zeilen as (
 )
 select
   nr                                                                                       as "Nr.",
-  min(schritt)                                                                             as "Schritt",
+  schritt                                                                                  as "Schritt",
   sum(basis) filter (where geraet = 'desktop')                                             as "Desktop: Sitzungen",
   sum(basis) filter (where geraet = 'mobil')                                               as "Mobil: Sitzungen",
   round(100.0 * sum(aus) filter (where geraet = 'desktop')
@@ -185,7 +190,7 @@ select
   - round(100.0 * sum(aus) filter (where geraet = 'desktop')
         / nullif(sum(basis) filter (where geraet = 'desktop'), 0), 1)                      as "Mobil minus Desktop (Prozentpunkte)"
 from zeilen
-group by nr
-order by nr;
+group by nr, schritt
+order by nr, schritt;
 
 revoke all on public."Auswertung Kostenlos Desktop vs Mobil" from anon, authenticated;

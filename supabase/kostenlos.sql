@@ -29,10 +29,11 @@
 -- Hinweis: Die bestehenden Übersichten „Auswertung Übungsportal“ und „Auswertung Einzelklicks“
 -- zeigen alle Bereiche – Zeilen dieser Seite erkennst du dort an Portal = kostenlos.
 
--- 1. Neuen Bereich erlauben (bisher: funktionen, pivot, powerquery, einstufungstest)
+-- 1. Erlaubte Bereiche – vollständige Liste aller Seiten, die in events schreiben.
+--    Wichtig: 'light' (Bonus-Übungen) muss drinbleiben, sonst wird deren Tracking still verworfen.
 alter table public.events drop constraint if exists events_portal_check;
 alter table public.events add constraint events_portal_check
-  check (portal in ('funktionen', 'pivot', 'powerquery', 'einstufungstest', 'kostenlos'));
+  check (portal in ('funktionen', 'pivot', 'powerquery', 'einstufungstest', 'kostenlos', 'light'));
 
 -- Alte Fassungen entfernen (Spaltennamen können sich ändern; abhängige View zuerst)
 drop view if exists public."Auswertung Kostenlos Desktop vs Mobil";

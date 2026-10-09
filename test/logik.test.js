@@ -36,10 +36,10 @@ test("pruefeDaten findet Fehler", () => {
   assert.ok(p.some((x) => x.includes("datenschutzUrl")));
 });
 
-test("neuer Besucher: Aufgabe 1 von 4, kein Angebot, kein Abschluss", () => {
+test("neuer Besucher: 0 von 4 gelöst, kein Angebot, kein Abschluss", () => {
   const s = L.neuerStand();
   assert.strictEqual(L.aktuelleAufgabe(daten, s), 0);
-  assert.strictEqual(L.fortschrittText(daten, s), "Aufgabe 1 von 4");
+  assert.strictEqual(L.fortschrittText(daten, s), "0 von 4 gelöst");
   assert.strictEqual(L.hinweisSichtbar(daten, s), false);
   assert.strictEqual(L.abschluss(daten, s), null);
 });
@@ -53,7 +53,7 @@ test("Lösung erst nach einem Fehlversuch", () => {
   s = L.loesungAnzeigen(s, ids[0]);
   assert.strictEqual(L.aufgabeStatus(s, ids[0]).loesungAngezeigt, true);
   assert.strictEqual(L.istBearbeitet(s, ids[0]), true);
-  assert.strictEqual(L.fortschrittText(daten, s), "Aufgabe 2 von 4");
+  assert.strictEqual(L.fortschrittText(daten, s), "1 von 4 gelöst");
 });
 
 test("Stand wird nie verändert", () => {
@@ -78,7 +78,7 @@ test("Angebot erscheint nach Aufgabe 3, nicht vorher", () => {
   assert.strictEqual(L.hinweisSichtbar(daten, s), false);
   s = L.pruefungErgebnis(s, ids[2], true);
   assert.strictEqual(L.hinweisSichtbar(daten, s), true);
-  assert.strictEqual(L.fortschrittText(daten, s), "Aufgabe 4 von 4");
+  assert.strictEqual(L.fortschrittText(daten, s), "3 von 4 gelöst");
   assert.strictEqual(L.abschluss(daten, s), null);
 });
 
@@ -88,7 +88,7 @@ test("Abschluss: alle selbst gelöst", () => {
   const a = L.abschluss(daten, s);
   assert.strictEqual(a.ergebnis, "Du hast 4 von 4 Aufgaben selbst gelöst.");
   assert.strictEqual(a.zusatz, null);
-  assert.strictEqual(L.fortschrittText(daten, s), "Aufgabe 4 von 4");
+  assert.strictEqual(L.fortschrittText(daten, s), "4 von 4 gelöst");
 });
 
 test("Abschluss: zwei Lösungen angesehen (eine davon danach gelöst)", () => {
@@ -110,7 +110,7 @@ test("Speichern und Laden (Wiederkehrer)", () => {
   L.speichereStand(st, s);
   const geladen = L.ladeStand(st, daten);
   assert.deepStrictEqual(geladen, s);
-  assert.strictEqual(L.fortschrittText(daten, geladen), "Aufgabe 2 von 4");
+  assert.strictEqual(L.fortschrittText(daten, geladen), "1 von 4 gelöst");
 });
 
 test("Laden: kaputter, alter oder fremder Stand ergibt neuen Stand", () => {
@@ -160,6 +160,27 @@ test("Kampagnenfelder: Adresse schlaegt gemerkten Wert, fehlende Parameter bleib
   });
   assert.deepStrictEqual(L.kampagnenFelder(null, "?utm_source=x", null), {});
   assert.strictEqual(L.kampagnenFelder({ f: "utm_source" }, "?utm_source=" + "a".repeat(300), null).f.length, 200);
+});
+
+test("Freischaltung der Reihe nach, Aufgabe 4 erst nach der Anmeldung", () => {
+  let s = L.neuerStand();
+  assert.deepStrictEqual(ids.map((_, i) => L.freigeschaltet(daten, s, i, false)), [true, false, false, false]);
+  assert.strictEqual(L.offeneAufgabe(daten, s, false), 0);
+  s = L.pruefungErgebnis(s, ids[0], true);
+  assert.deepStrictEqual(ids.map((_, i) => L.freigeschaltet(daten, s, i, false)), [true, true, false, false]);
+  // Lösung angesehen zählt wie gelöst (bearbeitet)
+  s = L.pruefungErgebnis(s, ids[1], false);
+  s = L.loesungAnzeigen(s, ids[1]);
+  s = L.pruefungErgebnis(s, ids[2], true);
+  assert.strictEqual(L.freigeschaltet(daten, s, 3, false), false, "ohne Anmeldung bleibt Aufgabe 4 zu");
+  assert.strictEqual(L.offeneAufgabe(daten, s, false), null);
+  assert.strictEqual(L.freigeschaltet(daten, s, 3, true), true, "nach der Anmeldung offen");
+  assert.strictEqual(L.offeneAufgabe(daten, s, true), 3);
+});
+
+test("Aufgabe 4 bleibt trotz Anmeldung zu, solange Aufgabe 3 offen ist", () => {
+  const s = L.pruefungErgebnis(L.neuerStand(), ids[0], true);
+  assert.strictEqual(L.freigeschaltet(daten, s, 3, true), false);
 });
 
 console.log("\n" + tests + " Tests bestanden");

@@ -1,10 +1,12 @@
 /* Excel.Flo – kostenlose Übungen
- * Baut auf assets/geteilt/engine.css auf (Farben, Schriften, Tabellenblatt, Buttons).
- * Desktop zuerst; unter 640px schlankere Abstände.
+ * Baut auf assets/geteilt/engine.css (Farben, Schriften, Tabellenblatt) und
+ * assets/seite/portal.css (Übersicht/Übungsseite wie in den Bonus-Übungen) auf.
+ * Hier nur, was es nur auf dieser Seite gibt: Handy-Hinweis, Klick-Tipp-Formular,
+ * Freischalt-Karte, Bestätigungsseite (danke.html). Desktop zuerst; unter 640px schlanker.
  * Texte direkt auf dem grünen Hintergrundbild immer in --text-primary
  * (--text-muted erreicht dort nur ~3,1:1). */
 
-.frei-seite main {
+.frei-seite main:not(.bonus-main) {
   max-width: 1080px;
   padding: 1.5rem 1.5rem 3rem;
 }
@@ -35,16 +37,14 @@
 .frei-seite button:focus-visible,
 .frei-seite summary:focus-visible,
 .frei-seite iframe:focus-visible,
-.frei-aufgabe:focus-visible,
-.frei-loesung:focus-visible,
 .frei-abschluss:focus-visible {
   outline: 3px solid var(--excel-green);
   outline-offset: 2px;
 }
 
-.frei-aufgabe:focus,
-.frei-loesung:focus,
-.frei-abschluss:focus {
+.frei-hinweis:focus,
+.frei-abschluss:focus,
+#uebersicht:focus {
   outline: none;
 }
 
@@ -74,35 +74,6 @@
   white-space: nowrap;
 }
 
-/* ---------- Start ---------- */
-
-.frei-start {
-  margin-bottom: 1.25rem;
-}
-
-.frei-start h1 {
-  font-size: 2rem;
-  line-height: 1.15;
-  margin-bottom: 0.35rem;
-}
-
-.frei-start__text {
-  margin: 0;
-  font-size: 1.05rem;
-  color: var(--text-primary);
-}
-
-.frei-start__fortschritt {
-  margin: 0.5rem 0 0;
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.frei-start__fortschritt:empty {
-  display: none;
-}
-
 .frei-laden {
   color: var(--text-primary);
 }
@@ -123,6 +94,11 @@
   .frei-mobil {
     display: block;
   }
+}
+
+/* Unter der Kopfkarte der Übersicht etwas Luft */
+.bonus-kopfkarte + .frei-mobil {
+  margin-top: 1.25rem;
 }
 
 .frei-mobil p {
@@ -160,160 +136,311 @@
   margin-bottom: 0.8rem;
 }
 
-/* ---------- Aufgaben ---------- */
+/* ---------- Startseite: Kopfkarte ohne Button, Aufgaben-Liste ---------- */
 
-.frei-aufgaben {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+/* Kein Button rechts – die Karte wird schmaler; im Abschluss steht dort die Zeit */
+.frei-kopf {
+  padding: 1.35rem 1.6rem;
 }
 
-.frei-aufgabe {
-  background: var(--surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-card);
-  padding: 1.25rem 1.5rem 1.5rem;
-  scroll-margin-top: 1rem;
+.frei-kopf .bonus-kopfkarte__text {
+  max-width: none;
 }
 
-.frei-aufgabe__kopf {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.3rem 0.75rem;
-  margin-bottom: 0.75rem;
-}
-
-.frei-aufgabe__nr {
-  margin: 0;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.frei-aufgabe__kopf h2 {
-  flex-basis: 100%;
-  font-size: 1.3rem;
-  line-height: 1.25;
-}
-
-.frei-status {
-  font-size: 0.78rem;
-  font-weight: 600;
-  padding: 0.1rem 0.6rem;
-  border-radius: 999px;
-  background: var(--excel-green-tint);
-  color: var(--excel-green-dark);
-}
-
-.frei-status.is-loesung {
-  background: var(--header-gray);
-  color: var(--text-muted);
-}
-
-.frei-aufgabe .exercise-task {
-  margin-bottom: 1rem;
-}
-
-.frei-aufgabe .exercise-actions {
-  margin: 1rem 0 0;
-}
-
-.frei-aufgabe .exercise-feedback {
-  margin: 1rem 0 0;
-}
-
-.frei-weiter {
-  font-weight: 600;
-  color: var(--excel-green-dark);
-}
-
-.frei-loesung {
-  margin-top: 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius);
-  background: #FAFBFA;
-  padding: 0.85rem 1.1rem;
-}
-
-.frei-loesung__titel {
-  margin: 0 0 0.35rem;
-  font-family: var(--font-heading);
-  font-weight: 600;
-}
-
-.frei-loesung__formel {
-  margin: 0;
-  font-family: var(--font-mono);
-  font-variant-ligatures: none;
-  background: var(--header-gray);
-  padding: 0.5rem 0.7rem;
-  border-radius: 6px;
-  overflow-wrap: anywhere;
-}
-
-.frei-loesung__text {
-  margin: 0;
-  font-weight: 500;
-}
-
-.frei-loesung__erklaerung {
-  margin: 0.6rem 0 0;
-  color: var(--text-muted);
-  font-size: 0.9rem;
-}
-
-.frei-tipps {
-  margin-top: 1rem;
-}
-
-/* Pivot-Nachbau: Höhe setzt seite.js passend zum Inhalt, das hier ist nur der Startwert */
-.frei-pivot {
-  display: block;
-  width: 100%;
-  height: 820px;
-  border: 0;
-}
-
-.frei-pivot__aktionen:has(button[hidden]) {
+#kopf-aktion:empty {
   display: none;
 }
 
-/* ---------- Hinweis auf das Übungsportal Light (nach Aufgabe 4) ---------- */
+.frei-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.frei-karte {
+  background: var(--surface);
+  border: 1px solid var(--bonus-rand);
+  border-radius: var(--bonus-radius);
+  scroll-margin-top: 1rem;
+}
+
+.frei-karte:focus {
+  outline: none;
+}
+
+/* Die offene Aufgabe: grüner Rahmen wie die aktive Karte in den Bonus-Übungen */
+.frei-karte.is-aktiv {
+  border: 2px solid var(--excel-green);
+  box-shadow: var(--bonus-schatten);
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+/* Bearbeitete Aufgabe zum Nachlesen aufgeklappt: Inhalt unter der Zeile */
+.frei-karte.is-offen:not(.is-aktiv) .frei-aufgabe__inhalt {
+  padding: 0.25rem 1.25rem 1.25rem;
+}
+
+.frei-karte.is-erledigt:not(.is-offen) {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+/* Noch nicht erreichbar: leicht ausgegraut, nicht klickbar */
+.frei-karte.is-gesperrt {
+  background: rgba(255, 255, 255, 0.5);
+  border-style: dashed;
+}
+
+.frei-zeile {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.8rem 1rem;
+  font: inherit;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-primary);
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: var(--bonus-radius);
+  cursor: pointer;
+}
+
+/* display:flex würde sonst das hidden-Attribut überstimmen */
+.frei-zeile[hidden] {
+  display: none;
+}
+
+.frei-zeile:hover:not(:disabled) {
+  background: var(--excel-green-tint);
+}
+
+.frei-zeile:focus-visible {
+  outline: 3px solid rgba(16, 124, 65, 0.4);
+  outline-offset: 2px;
+}
+
+.frei-zeile:disabled {
+  cursor: default;
+  color: var(--text-muted);
+}
+
+/* Häkchen-Kreis wie bei geschafften Übungen in den Bonus-Übungen */
+.frei-karte.is-erledigt .bonus-nr {
+  background: var(--excel-green);
+  border-color: var(--excel-green);
+  color: #fff;
+}
+
+.frei-karte.is-gesperrt .bonus-nr {
+  border-color: #B9C9BF;
+  color: var(--text-muted);
+}
+
+.frei-zeile__titel {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.frei-zeile__nr {
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.frei-zeile__status {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--excel-green-dark);
+}
+
+.frei-zeile__status:empty {
+  display: none;
+}
+
+.frei-karte.is-gesperrt .frei-zeile__status {
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.frei-karte.is-offen:not(.is-aktiv) .frei-zeile {
+  border-bottom: 1px solid var(--border-color);
+  border-radius: var(--bonus-radius) var(--bonus-radius) 0 0;
+}
+
+.frei-aufgabe__titel {
+  margin: 0.3rem 0 0;
+  font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+}
+
+/* Weiter-Bereich erst mit Inhalt (nach dem Lösen) – sonst bliebe unten ein leerer Abstand */
+.frei-karte .bonus-weiter:empty {
+  display: none;
+}
+
+/* Zugeklappt bleibt zugeklappt – auch wenn das Zwei-Spalten-Layout display:grid setzt */
+.frei-aufgabe__inhalt[hidden] {
+  display: none !important;
+}
+
+/* Buttons stehen jetzt außerhalb des Tabellen-Blocks (für das Zwei-Spalten-Layout) */
+.frei-teil-aktionen {
+  margin-top: 0.9rem;
+}
+
+/* Gelöst: nur noch Erklärung + „Weiter“ – Prüfen, Zurücksetzen, Tipps (und Handy-Formelfeld) weg */
+.frei-aufgabe__inhalt.is-geloest .frei-teil-aktionen,
+.frei-aufgabe__inhalt.is-geloest .bonus-tipps,
+.frei-aufgabe__inhalt.is-geloest .frei-loesung-knopf,
+.frei-aufgabe__inhalt.is-geloest .bonus-formelfeld {
+  display: none;
+}
+
+/* Handy/Tablet hochkant: Text → Tabelle → Prüfen/Zurücksetzen → Tipps → Erklärung/Weiter */
+@media (max-width: 767px) {
+  .frei-teil-unten {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .frei-teil-unten > .bonus-tipps { order: 1; }
+  .frei-teil-unten > .bonus-feedback { order: 2; }
+  .frei-teil-unten > .frei-loesung-knopf { order: 3; align-self: flex-start; }
+  .frei-teil-unten > .bonus-loesung { order: 4; }
+  .frei-teil-unten > .bonus-weiter { order: 5; }
+}
+
+/* ---------- Breite Bildschirme: Seite breiter, Aufgabe in zwei Spalten ----------
+   Ziel: Aufgabe, Tabelle und Buttons auf einen Blick, ohne zu scrollen. Links Kopf, Buttons,
+   Rückmeldung und Tipps, rechts die Tabelle. Die Pivot-Aufgabe bleibt einspaltig (braucht Breite). */
+@media (min-width: 900px) {
+  .frei-seite .bonus-main {
+    max-width: 1120px;
+  }
+
+  /* Kopfkarte als eine Zeile: Überschrift links, Fortschritt rechts */
+  .frei-kopf .bonus-kopfkarte__text {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 380px);
+    column-gap: 2.5rem;
+    align-items: center;
+  }
+
+  .frei-kopf .bonus-kopfkarte__text > h1,
+  .frei-kopf .bonus-kopfkarte__text > p {
+    grid-column: 1;
+  }
+
+  .frei-kopf #kopf-fortschritt {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .frei-kopf .bonus-fortschritt {
+    margin-top: 0;
+  }
+
+  .frei-seite #uebersicht > .bonus-abschnitt {
+    margin-top: 1.4rem;
+  }
+
+  .frei-aufgabe__inhalt.is-formel {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    grid-template-areas:
+      "kopf     tabelle"
+      "aktionen tabelle"
+      "unten    tabelle";
+    grid-template-rows: auto auto 1fr;
+    column-gap: 2rem;
+    align-items: start;
+  }
+
+  .is-formel > .frei-teil-kopf { grid-area: kopf; }
+  .is-formel > .frei-teil-tabelle { grid-area: tabelle; }
+  .is-formel > .frei-teil-aktionen { grid-area: aktionen; margin-top: 0.2rem; }
+  .is-formel > .frei-teil-unten { grid-area: unten; }
+
+  .is-formel .frei-teil-kopf .bonus-aufgabe {
+    margin-bottom: 0.9rem;
+  }
+
+  .is-formel .bonus-weiter .bonus-btn--voll {
+    max-width: none;
+  }
+}
+
+.frei-liste__cta {
+  margin: 0.4rem 0;
+}
+
+/* ---------- Freischalt-Karte für die Bonus-Übungen ----------
+   Nach Aufgabe 3 (Übungsseite) und im Abschluss (Übersicht): weiß mit grünem Rahmen wie die
+   aktive Aufgabe in der Liste. */
 
 .frei-hinweis {
-  background: linear-gradient(135deg, var(--excel-green) 0%, var(--excel-green-dark) 100%);
-  color: #fff;
-  border-radius: var(--radius);
-  padding: 1.5rem 2rem;
-  box-shadow: var(--shadow-card);
+  width: 100%;
+  text-align: left;
+  background: var(--surface);
+  border: 2px solid var(--excel-green);
+  border-radius: 14px;
+  padding: 1.5rem 1.75rem;
+  box-shadow: var(--bonus-schatten);
+  scroll-margin-top: 1rem;
+}
+
+.frei-hinweis--abschluss {
+  margin-top: 1.25rem;
+}
+
+.frei-hinweis__zaehler {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--excel-green-dark);
 }
 
 .frei-hinweis h2 {
-  color: #fff;
-  font-size: 1.4rem;
-  margin-bottom: 0.5rem;
+  color: var(--bonus-dunkel);
+  font-size: 1.45rem;
+  line-height: 1.25;
+  margin-bottom: 0.45rem;
 }
 
-.frei-hinweis p {
+.frei-hinweis__text {
   margin: 0;
-  max-width: 680px;
+  max-width: 640px;
 }
 
-.frei-cta {
-  display: inline-block;
-  text-decoration: none;
-  font-size: 1rem;
-  padding: 0.8rem 1.5rem;
-  background: var(--excel-green);
-  color: #fff;
+.frei-hinweis .frei-formular {
+  margin-top: 1.1rem;
 }
 
-.frei-cta:hover {
-  background: var(--excel-green-dark);
+/* „Lösung anzeigen“ erscheint erst nach einem Fehlversuch – .bonus-btn (display) würde hidden überstimmen */
+.frei-loesung-knopf[hidden] {
+  display: none;
+}
+
+.frei-loesung-knopf {
+  margin-top: 0.9rem;
+}
+
+/* Auf der Übungsseite: Karte volle Breite, „Erst Aufgabe 4 machen“ darunter mittig */
+.bonus-weiter--hinweis {
+  justify-items: stretch;
+  text-align: center;
 }
 
 /* ---------- Anmeldeformular (Klick-Tipp) ---------- */
@@ -358,6 +485,10 @@
   min-height: 46px;
 }
 
+.frei-formular__felder .frei-formular__button {
+  white-space: nowrap;
+}
+
 .frei-formular__rechtstext {
   margin: 0.8rem 0 0 !important;
   font-size: 0.82rem;
@@ -396,22 +527,6 @@
   margin: 0 0 0.4rem;
 }
 
-.frei-abschluss__freischalten {
-  margin-top: 1.25rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--border-color);
-}
-
-.frei-abschluss__freischalten h3 {
-  font-size: 1.25rem;
-  margin: 0 0 0.35rem;
-  color: var(--excel-green-dark);
-}
-
-.frei-abschluss__formulartext {
-  margin-bottom: 1rem !important;
-}
-
 /* ---------- Fußzeile ---------- */
 
 .frei-footer {
@@ -433,11 +548,6 @@
     min-height: 44px;
   }
 
-  .frei-tipps summary {
-    padding-block: 0.8rem;
-  }
-
-  .frei-weiter,
   .frei-footer a {
     display: inline-block;
     padding-block: 0.6rem;
@@ -447,16 +557,8 @@
 /* ---------- Schmale Bildschirme ---------- */
 
 @media (max-width: 640px) {
-  .frei-seite main {
+  .frei-seite main:not(.bonus-main) {
     padding: 1rem 1rem 2.5rem;
-  }
-
-  .frei-start h1 {
-    font-size: 1.6rem;
-  }
-
-  .frei-aufgabe {
-    padding: 1rem;
   }
 
   .frei-hinweis,
@@ -464,9 +566,23 @@
     padding: 1.25rem;
   }
 
-  .frei-cta {
-    display: block;
-    text-align: center;
+  .frei-kopf,
+  .frei-karte.is-aktiv {
+    padding: 1.1rem 1rem 1.25rem;
+  }
+
+  .frei-zeile {
+    padding: 0.75rem 0.85rem;
+    gap: 0.7rem;
+  }
+
+  /* Sperrtext darf unter den Titel rutschen */
+  .frei-karte.is-gesperrt .frei-zeile {
+    flex-wrap: wrap;
+  }
+
+  .frei-karte.is-gesperrt .frei-zeile__status {
+    margin-left: calc(32px + 0.7rem);
   }
 
   .frei-formular__button {
@@ -492,42 +608,17 @@
   line-height: 1.7;
 }
 
+.frei-danke__weiter {
+  margin-top: 1.4rem;
+  padding-top: 1.3rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.frei-danke__weiter p {
+  margin: 0 0 1rem;
+}
+
 .frei-danke__tipp {
   font-size: 0.9rem;
   color: var(--text-muted);
-}
-
-/* ---------- Anmeldeformular im grünen Hinweis (nach Aufgabe 4) ---------- */
-
-.frei-hinweis .frei-formular {
-  margin-top: 1.1rem;
-}
-
-.frei-hinweis .frei-formular label {
-  color: #fff;
-}
-
-.frei-hinweis .frei-formular__button {
-  background: #fff;
-  color: var(--excel-green-dark);
-}
-
-.frei-hinweis .frei-formular__button:hover {
-  background: var(--excel-green-tint);
-}
-
-.frei-hinweis .frei-formular__rechtstext {
-  color: rgba(255, 255, 255, 0.88);
-}
-
-.frei-hinweis .frei-formular__rechtstext a {
-  color: #fff;
-}
-
-.frei-hinweis .frei-formular__meldung {
-  color: #FFE0DC;
-}
-
-.frei-hinweis .frei-formular input:focus-visible {
-  outline-color: #fff;
 }

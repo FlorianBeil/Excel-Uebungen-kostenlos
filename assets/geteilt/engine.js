@@ -1024,6 +1024,38 @@
       wrap.focus({ preventScroll: true });
     }
 
+    // Strg+Pfeiltaste wie in Excel: Ziel ist das Ende des gefüllten Bereichs in dieser Richtung.
+    // Ist die Nachbarzelle gefüllt, läuft es bis zur letzten gefüllten Zelle davor; sonst bis zur
+    // nächsten gefüllten Zelle – gibt es keine mehr, bis zum Rand des Blatts.
+    function cellHasContent(ref) {
+      const v = getCellValue(ref);
+      return v !== undefined && v !== null && v !== "";
+    }
+
+    function ctrlArrowTarget(fromRef, dRow, dCol) {
+      const start = refRowCol(fromRef);
+      let colIdx = cols.indexOf(start.col);
+      let row = start.row;
+      const inside = (c, r) => c >= 0 && c < cols.length && r >= 1 && r <= rowCount;
+      const filled = (c, r) => cellHasContent(cols[c] + r);
+      if (!inside(colIdx + dCol, row + dRow)) return fromRef;
+
+      if (filled(colIdx, row) && filled(colIdx + dCol, row + dRow)) {
+        // im gefüllten Block: bis zu seiner letzten Zelle
+        while (inside(colIdx + dCol, row + dRow) && filled(colIdx + dCol, row + dRow)) {
+          colIdx += dCol;
+          row += dRow;
+        }
+      } else {
+        // über Leerzellen hinweg bis zur nächsten gefüllten Zelle (oder zum Rand)
+        do {
+          colIdx += dCol;
+          row += dRow;
+        } while (inside(colIdx + dCol, row + dRow) && !filled(colIdx, row));
+      }
+      return cols[colIdx] + row;
+    }
+
     // Shift+Pfeiltaste: Auswahl wie in Excel zu einem Zellbereich erweitern statt zu verschieben.
     function extendSelection(dRow, dCol) {
       const base = selectedRef || cols[0] + "1";
@@ -1262,7 +1294,16 @@
         // Shift einen Zellbereich) als Bezug an.
         e.preventDefault();
         if (!keyPoint) {
-          keyPoint = { before: entry.el.textContent, after: "", anchor: ref, current: ref };
+          // Steht am Formelende schon ein getippter Bezug (=SUMME(B2), ist er bei Strg+Pfeil der
+          // Startpunkt – sonst die Formelzelle selbst
+          const text = entry.el.textContent;
+          const getippt = (e.ctrlKey || e.metaKey) && text.match(/(^=|[(;,:+\-*\/&^<>= ])(\$?[A-Za-z]{1,3}\$?\d{1,7})$/);
+          const startRef = getippt ? getippt[2].replace(/\$/g, "").toUpperCase() : null;
+          if (startRef && cellEls[startRef]) {
+            keyPoint = { before: text.slice(0, text.length - getippt[2].length), after: "", anchor: startRef, current: startRef };
+          } else {
+            keyPoint = { before: text, after: "", anchor: ref, current: ref };
+          }
         }
         const base = refRowCol(keyPoint.current);
         const baseColIdx = cols.indexOf(base.col);
@@ -1272,7 +1313,12 @@
         else if (e.key === "ArrowDown") newRow = Math.min(rowCount, base.row + 1);
         else if (e.key === "ArrowLeft") newColIdx = Math.max(0, baseColIdx - 1);
         else if (e.key === "ArrowRight") newColIdx = Math.min(cols.length - 1, baseColIdx + 1);
-        const newCurrent = cols[newColIdx] + newRow;
+        let newCurrent = cols[newColIdx] + newRow;
+        // Strg (+Shift): bis zum Ende des gefüllten Bereichs, z. B. =SUMME(B2 + Strg+Shift+↓ → B2:B4
+        if (e.ctrlKey || e.metaKey) {
+          const [dRow, dCol] = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1] }[e.key];
+          newCurrent = ctrlArrowTarget(keyPoint.current, dRow, dCol);
+        }
 
         keyPoint.current = newCurrent;
         if (!e.shiftKey) keyPoint.anchor = newCurrent;
@@ -1392,8 +1438,17 @@
       if (!selectedRef) return;
 
       const ctrlOrCmd = e.ctrlKey || e.metaKey;
+      const pfeil = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1] }[e.key];
 
-      if (e.key === "ArrowUp") {
+      if (pfeil && ctrlOrCmd) {
+        // Strg+Pfeil springt, Strg+Shift+Pfeil markiert bis zum Ende des gefüllten Bereichs
+        e.preventDefault();
+        const ziel = refRowCol(ctrlArrowTarget(selectedRef, pfeil[0], pfeil[1]));
+        const von = refRowCol(selectedRef);
+        const dRow = ziel.row - von.row;
+        const dCol = cols.indexOf(ziel.col) - cols.indexOf(von.col);
+        e.shiftKey ? extendSelection(dRow, dCol) : moveSelection(dRow, dCol);
+      } else if (e.key === "ArrowUp") {
         e.preventDefault();
         e.shiftKey ? extendSelection(-1, 0) : moveSelection(-1, 0);
       } else if (e.key === "ArrowDown") {
@@ -1475,7 +1530,7 @@
 
     function onPointDrop() {
       if (!pointDrag) return;
-      const { editRef, before, anchorRef, currentHover } = pointDrag;
+      const { editRef, before, after, anchorRef, currentHover } = pointDrag;
       const refText = rangeRefText(anchorRef, currentHover || anchorRef);
       const entry = inputEntries[editRef];
       const newCaret = before.length + refText.length;
@@ -1484,6 +1539,9 @@
       suppressNextClick = true;
       document.removeEventListener("mousemove", onPointMove);
       document.removeEventListener("mouseup", onPointDrop);
+      // Angeklickter Bezug ist Startpunkt für folgende (Strg+)Shift+Pfeiltasten – wie in Excel:
+      // B2 anklicken, dann Strg+Shift+↓ → B2:B4
+      keyPoint = { before, after: after || "", anchor: anchorRef, current: currentHover || anchorRef };
 
       entry.el.contentEditable = "true";
       editingRef = editRef;

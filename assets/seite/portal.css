@@ -1,0 +1,1090 @@
+/* KOPIE von Excel-Uebungsportal-Light/assets/seite/seite.css (Bonus-Übungen, Stand 2026-10-09) – damit
+ * Übersicht und Übungsseiten genauso aussehen wie in den Bonus-Übungen. Änderungen am Design
+ * dort machen und hierher kopieren (oder bewusst hier abweichen).
+ *
+ * Excel.Flo Bonus-Übungen – Seitenlayout (ergänzt assets/geteilt/engine.css)
+ *
+ * Übersicht, Übungsseite und Abschluss im Stil der Entwürfe vom 2026-10-08:
+ * helle Karten auf Grün, Mono-Labels, runde grüne Knöpfe. Die Tabelle selbst
+ * (Zellen, Bearbeitungsleiste, Popups) kommt unverändert aus engine.css.
+ */
+
+.bonus {
+  --bonus-dunkel: #0B3D22;
+  --bonus-rand: #CFE3D6;
+  --bonus-hell: #EEF6F0;
+  --bonus-gesperrt: #E3EEE6;
+  --bonus-radius: 14px;
+  --bonus-schatten: 0 1px 2px rgba(11, 61, 34, 0.05), 0 6px 20px rgba(11, 61, 34, 0.06);
+}
+
+
+/* ---------- Kopf ---------- */
+
+.bonus-kopf {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 1.6rem 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.bonus-kopf__marke {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--bonus-dunkel);
+  text-decoration: none;
+}
+
+/* Grüner Kopfbalken (engine.css .site-header) wie auf der kostenlosen Seite; Badge darin hell */
+.bonus .site-header {
+  padding: 0.75rem 1.5rem;
+}
+
+.bonus .site-header .brand {
+  text-decoration: none;
+}
+
+.bonus .site-header .bonus-pille {
+  background: #fff;
+  color: var(--excel-green-dark);
+}
+
+.bonus-pille {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--excel-green);
+  border-radius: 999px;
+  padding: 0.3rem 0.75rem;
+  white-space: nowrap;
+}
+
+.bonus-main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2.5rem;
+}
+
+.bonus-main--uebung {
+  max-width: 900px;
+}
+
+.bonus-laden,
+.bonus-fehler {
+  color: var(--text-muted);
+}
+
+/* ---------- Gemeinsame Bausteine ---------- */
+
+.bonus-label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.bonus-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.92rem;
+  line-height: 1.2;
+  color: #fff;
+  background: var(--excel-green);
+  border: 1.5px solid var(--excel-green);
+  border-radius: 999px;
+  padding: 0.6rem 1.1rem;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.bonus-btn:hover {
+  background: var(--excel-green-dark);
+  border-color: var(--excel-green-dark);
+}
+
+.bonus-btn:focus-visible,
+.bonus-link:focus-visible,
+.bonus-tab:focus-visible,
+.bonus-chips a:focus-visible {
+  outline: 3px solid rgba(16, 124, 65, 0.35);
+  outline-offset: 2px;
+}
+
+.bonus-btn--rand {
+  background: #fff;
+  color: var(--excel-green-dark);
+}
+
+.bonus-btn--rand:hover {
+  background: var(--bonus-hell);
+  color: var(--excel-green-dark);
+}
+
+.bonus-btn--klein {
+  font-size: 0.8rem;
+  padding: 0.4rem 0.85rem;
+}
+
+.bonus-btn--gross {
+  font-size: 1.1rem;
+  padding: 1.05rem 1.6rem;
+}
+
+.bonus-btn--voll {
+  display: flex;
+  width: 100%;
+}
+
+.bonus-btn--hell {
+  background: #fff;
+  border-color: #fff;
+  color: var(--bonus-dunkel);
+}
+
+.bonus-btn--hell:hover {
+  background: var(--bonus-hell);
+  border-color: var(--bonus-hell);
+}
+
+.bonus-link {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--bonus-dunkel);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.bonus-abschnitt {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 2rem 0 0.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--bonus-dunkel);
+}
+
+.bonus-abschnitt svg {
+  flex: none;
+  color: var(--excel-green);
+}
+
+.bonus-abschnitt--grau svg {
+  color: var(--text-primary);
+}
+
+/* ---------- Kopfkarte (Übersicht und Abschluss) ---------- */
+
+.bonus-kopfkarte {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  background: #fff;
+  border: 1.5px solid var(--excel-green);
+  border-radius: 18px;
+  padding: 1.6rem 1.75rem;
+  box-shadow: var(--bonus-schatten);
+}
+
+.bonus-kopfkarte__text {
+  flex: 1;
+  min-width: 0;
+  max-width: 470px;
+}
+
+.bonus-kopfkarte h1 {
+  font-size: clamp(1.6rem, 4.5vw, 2.1rem);
+  line-height: 1.15;
+  color: var(--bonus-dunkel);
+}
+
+.bonus-kopfkarte p {
+  margin: 0.55rem 0 0;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.bonus-fortschritt {
+  margin-top: 1.1rem;
+}
+
+.bonus-fortschritt__zeile {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+}
+
+.bonus-balken {
+  height: 8px;
+  background: #D3E6DA; /* auf Weiß gut sichtbar, aber deutlich heller als die Füllung */
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+/* min-width: bei 0 % bleibt ein kleiner grüner Startpunkt sichtbar */
+.bonus-balken__fuellung {
+  display: block;
+  height: 100%;
+  min-width: 8px;
+  background: var(--excel-green);
+  border-radius: inherit;
+  transition: width 0.6s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bonus-balken__fuellung {
+    transition: none;
+  }
+}
+
+.bonus-segmente {
+  display: flex;
+  gap: 6px;
+  margin: 0.9rem 0 1.4rem;
+}
+
+.bonus-segmente span {
+  flex: 1;
+  height: 7px;
+  border-radius: 999px;
+  background: #BFDDC9;
+}
+
+.bonus-segmente span.is-voll,
+.bonus-segmente--fertig span {
+  background: var(--excel-green);
+}
+
+.bonus-segmente--fertig {
+  max-width: 160px;
+  margin: 1rem 0 0;
+}
+
+.bonus-segmente--fertig span {
+  height: 6px;
+}
+
+.bonus-zeit {
+  flex: none;
+  min-width: 170px;
+  background: var(--bonus-hell);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+}
+
+.bonus-zeit__wert {
+  margin: 0.35rem 0 0.3rem !important;
+  font-family: var(--font-heading);
+  font-size: 1.7rem !important;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--bonus-dunkel);
+}
+
+.bonus-zeit__unter {
+  margin: 0 !important;
+  font-size: 0.78rem !important;
+  color: var(--text-muted) !important;
+}
+
+/* ---------- Liste der freien Übungen ---------- */
+
+.bonus-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.bonus-zeile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #fff;
+  border: 1px solid var(--bonus-rand);
+  border-radius: var(--bonus-radius);
+  padding: 0.85rem 1rem;
+}
+
+.bonus-zeile.is-done {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.bonus-zeile.is-next {
+  border: 2px solid var(--excel-green);
+  padding: 1rem;
+  box-shadow: var(--bonus-schatten);
+}
+
+/* Aktive Übung: die ganze Karte ist ein Link */
+a.bonus-zeile.is-next {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+a.bonus-zeile.is-next:hover {
+  border-color: var(--excel-green-dark);
+  box-shadow: 0 2px 4px rgba(11, 61, 34, 0.08), 0 10px 28px rgba(11, 61, 34, 0.14);
+}
+
+a.bonus-zeile.is-next:focus-visible {
+  outline: 3px solid rgba(16, 124, 65, 0.4);
+  outline-offset: 3px;
+}
+
+.bonus-nr {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--excel-green-dark);
+  border: 1.5px solid var(--excel-green);
+  background: #fff;
+}
+
+.is-done .bonus-nr {
+  background: var(--excel-green);
+  color: #fff;
+}
+
+.is-next .bonus-nr {
+  background: var(--bonus-dunkel);
+  border-color: var(--bonus-dunkel);
+  color: #fff;
+}
+
+.bonus-zeile__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.bonus-zeile h3 {
+  margin-top: 0.15rem;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.is-next h3 {
+  font-size: 1.12rem;
+}
+
+.bonus-zeile__kurz {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.bonus-zeile__aktion {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: none;
+}
+
+.bonus-geschafft {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--excel-green-dark);
+}
+
+/* ---------- Chips „Das hast du geschafft“ ---------- */
+
+.bonus-chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.bonus-chips a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #fff;
+  border: 1px solid var(--bonus-rand);
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--bonus-dunkel);
+  text-decoration: none;
+}
+
+.bonus-chips a:hover {
+  border-color: var(--excel-green);
+}
+
+.bonus-chips svg {
+  width: 13px;
+  height: 13px;
+  color: var(--excel-green);
+}
+
+/* ---------- Angebot Shortcut-Turbo (Abschluss) ---------- */
+
+.bonus-angebot {
+  --angebot-akzent: #A8E0BC;
+  margin-top: 1.25rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.75rem;
+  background: var(--bonus-dunkel);
+  color: #fff;
+  border-radius: 18px;
+  padding: 1.75rem;
+}
+
+.bonus-angebot--video {
+  grid-template-columns: 250px minmax(0, 1fr);
+}
+
+.bonus-angebot h2 {
+  color: #fff;
+  font-size: clamp(1.35rem, 3.6vw, 1.75rem);
+  line-height: 1.25;
+  margin: 0.85rem 0 0.6rem;
+}
+
+.bonus-angebot__marke {
+  display: inline-block;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bonus-dunkel);
+  background: #fff;
+  border-radius: 999px;
+  padding: 0.3rem 0.8rem;
+}
+
+.bonus-angebot__zeit {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.9rem;
+  font-size: 0.98rem;
+  color: var(--angebot-akzent);
+}
+
+.bonus-angebot__zeit svg {
+  flex: none;
+}
+
+.bonus-angebot__zeit strong {
+  color: #fff;
+}
+
+.bonus-angebot__text {
+  margin: 0 0 0.9rem;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.bonus-angebot__merkmale {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.bonus-angebot__merkmale li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  padding: 0.32rem 0.75rem;
+}
+
+.bonus-angebot__tasten {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 0 0 1.35rem;
+}
+
+.bonus-angebot__tasten kbd {
+  font-family: var(--font-heading);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--bonus-dunkel);
+  background: #fff;
+  border-radius: 6px;
+  padding: 0.28rem 0.6rem;
+  min-width: 2rem;
+  text-align: center;
+  box-shadow: 0 3px 0 var(--angebot-akzent);
+}
+
+.bonus-angebot__plus {
+  color: var(--angebot-akzent);
+}
+
+.bonus-angebot__tastentext {
+  margin-left: 0.35rem;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.bonus-angebot__aktion {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+}
+
+.bonus-angebot__aktion p {
+  margin: 0;
+  max-width: 240px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--angebot-akzent);
+}
+
+.bonus-angebot__btn {
+  font-size: 1.02rem;
+  padding: 0.85rem 1.45rem;
+}
+
+/* Videokachel (Trailer zum Excel-Krimi) */
+.bonus-video {
+  position: relative;
+  min-height: 300px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 35%, #12442A 0%, #082717 70%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bonus-video__bild {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.55;
+}
+
+.bonus-video__play {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  border: 0;
+  background: #fff;
+  color: var(--bonus-dunkel);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 4px;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  transition: transform 0.15s;
+}
+
+.bonus-video__play:hover {
+  transform: scale(1.07);
+}
+
+.bonus-video__play:focus-visible {
+  outline: 3px solid var(--angebot-akzent);
+  outline-offset: 3px;
+}
+
+.bonus-video__text {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+}
+
+.bonus-video__label {
+  margin: 0 0 0.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--angebot-akzent);
+}
+
+.bonus-video__titel {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 1.3;
+  color: #fff;
+}
+
+.bonus-video.is-playing iframe,
+.bonus-video.is-playing video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #000;
+}
+
+/* ---------- Gesperrte Kurs-Übungen ---------- */
+
+.bonus-gesperrt {
+  margin-top: 2.2rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(11, 61, 34, 0.15);
+}
+
+.bonus-gesperrt__kopf {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.bonus-gesperrt__kopf > div:first-child {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.bonus-gesperrt__kopf > .bonus-btn {
+  flex: none;
+}
+
+.bonus-gesperrt__kopf .bonus-abschnitt {
+  margin: 1.4rem 0 0.2rem;
+}
+
+.bonus-gesperrt__kopf p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.bonus-tabs {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.bonus-tab {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--bonus-dunkel);
+  background: #fff;
+  border: 1px solid var(--bonus-rand);
+  border-radius: 999px;
+  padding: 0.45rem 0.95rem;
+  cursor: pointer;
+}
+
+.bonus-tab:hover {
+  border-color: var(--excel-green);
+}
+
+.bonus-tab.is-active {
+  background: var(--excel-green);
+  border-color: var(--excel-green);
+  color: #fff;
+}
+
+.bonus-gesperrt__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 0.75rem;
+}
+
+.bonus-karte {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  background: var(--bonus-gesperrt);
+  border: 1px solid rgba(11, 61, 34, 0.06);
+  border-radius: var(--bonus-radius);
+  padding: 0.9rem 1rem 1rem;
+}
+
+.bonus-karte h3 {
+  font-size: 0.98rem;
+  line-height: 1.3;
+  color: #34433B;
+}
+
+.bonus-karte p {
+  margin: 0;
+  flex: 1;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.bonus-karte .bonus-btn {
+  align-self: flex-start;
+  margin-top: 0.3rem;
+}
+
+.bonus-karte__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.bonus-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+}
+
+.bonus-badge svg {
+  width: 11px;
+  height: 11px;
+}
+
+.bonus-zuruecksetzen__zeile {
+  margin: 2rem 0 0;
+  text-align: center;
+}
+
+.bonus-zuruecksetzen {
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.bonus-zuruecksetzen:hover {
+  color: var(--error-red);
+}
+
+/* ---------- Übungsseite ---------- */
+
+.bonus-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.bonus-nav__zurueck {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--bonus-dunkel);
+  text-decoration: none;
+}
+
+.bonus-nav__zurueck:hover {
+  text-decoration: underline;
+}
+
+.bonus-nav .bonus-label {
+  color: var(--bonus-dunkel);
+}
+
+.bonus-badge--kategorie {
+  margin: 0 0 0.6rem;
+  background: #fff;
+  color: var(--bonus-dunkel);
+}
+
+.bonus-titel {
+  font-size: clamp(1.45rem, 5vw, 1.9rem);
+  line-height: 1.2;
+  color: var(--bonus-dunkel);
+}
+
+.bonus-aufgabe {
+  margin: 0.5rem 0 1.1rem;
+  font-size: 1rem;
+}
+
+.bonus-aufgabe p {
+  margin: 0 0 0.35rem;
+}
+
+.bonus-arbeitsbereich {
+  display: grid;
+  /* minmax(0, …): sonst wächst die Spalte auf die Mindestbreite der Tabelle und die
+     ganze Seite scrollt seitwärts – die Tabelle soll in sich scrollen */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.9rem;
+}
+
+.bonus-arbeitsbereich .sheet-wrap {
+  border-radius: var(--bonus-radius);
+  box-shadow: var(--bonus-schatten);
+}
+
+/* Innere Rundungen passend zum äußeren Radius (14px − 1px Rahmen) – mit den 9px aus engine.css
+   überdeckten Bearbeitungsleiste und Tabelle an den Ecken den Rahmen, er wirkte unterbrochen */
+.bonus-arbeitsbereich .sheet-toolbar {
+  border-radius: calc(var(--bonus-radius) - 1px) calc(var(--bonus-radius) - 1px) 0 0;
+}
+
+.bonus-arbeitsbereich .sheet-scroll {
+  border-radius: 0 0 calc(var(--bonus-radius) - 1px) calc(var(--bonus-radius) - 1px);
+}
+
+.bonus-formelfeld label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--bonus-dunkel);
+}
+
+.bonus-formelfeld__eingabe {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 16px; /* unter 16px zoomt iOS beim Tippen heran */
+  color: var(--text-primary);
+  background: #fff;
+  border: 1.5px solid var(--excel-green);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+}
+
+.bonus-formelfeld__eingabe:focus {
+  outline: 3px solid rgba(16, 124, 65, 0.25);
+  outline-offset: 1px;
+}
+
+.bonus-aktionen {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.bonus-pivot {
+  display: block;
+  width: 100%;
+  height: 820px;
+  border: 0;
+  border-radius: var(--bonus-radius);
+}
+
+.bonus-feedback:empty {
+  display: none;
+}
+
+.bonus-feedback {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  background: #fff;
+  border-radius: var(--bonus-radius);
+  padding: 1rem 1.15rem;
+}
+
+.bonus-feedback p {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.bonus-feedback.is-error {
+  border: 1.5px solid #E7B4AE;
+  color: #8A1C12;
+}
+
+.bonus-feedback.is-success {
+  border: 1.5px solid var(--excel-green);
+}
+
+.bonus-feedback__haken {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--excel-green);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bonus-feedback__titel {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.1rem !important;
+  color: var(--bonus-dunkel);
+  margin-bottom: 0.2rem !important;
+}
+
+.bonus-tipps {
+  margin-top: 1rem;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--bonus-rand);
+  border-radius: var(--bonus-radius);
+  padding: 0.8rem 1.1rem;
+}
+
+.bonus-tipps summary {
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--bonus-dunkel);
+}
+
+.bonus-tipps ol {
+  margin: 0.7rem 0 0.9rem;
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+}
+
+.bonus-tipps li + li {
+  margin-top: 0.35rem;
+}
+
+.bonus-loesung {
+  margin-top: 0.8rem;
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  font-size: 0.9rem;
+}
+
+.bonus-loesung p {
+  margin: 0 0 0.45rem;
+}
+
+.bonus-loesung__formel {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--bonus-dunkel);
+}
+
+.bonus-weiter {
+  margin-top: 1.6rem;
+  display: grid;
+  justify-items: center;
+  gap: 0.9rem;
+}
+
+.bonus-weiter .bonus-btn--voll {
+  max-width: 460px;
+}
+
+/* ---------- Fußzeile ---------- */
+
+.site-footer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+}
+
+.site-footer a {
+  color: inherit;
+}
+
+/* ---------- Schmal (Handy) ---------- */
+
+@media (max-width: 640px) {
+  /* Spaltenüberschriften dürfen umbrechen, seit die Tabelle auf Bildschirmbreite schrumpft (uebung.js) */
+  .bonus-arbeitsbereich table.sheet td.cell--header {
+    white-space: normal;
+    line-height: 1.25;
+  }
+
+  /* Zeile über dem Titel bliebe sonst zweizeilig: „Als nächstes ·“ entfällt am Handy */
+  .bonus-label__extra {
+    display: none;
+  }
+
+  .bonus-kopfkarte {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.3rem 1.2rem;
+  }
+
+  .bonus-angebot,
+  .bonus-angebot--video {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 1.3rem 1.2rem;
+    gap: 1.25rem;
+  }
+
+  .bonus-video {
+    min-height: 210px;
+  }
+
+  .bonus-kopfkarte .bonus-btn--gross {
+    width: 100%;
+  }
+
+  .bonus-zeit {
+    min-width: 0;
+  }
+
+  .bonus-zeile {
+    flex-wrap: wrap;
+  }
+
+  .bonus-zeile__text {
+    flex-basis: calc(100% - 48px);
+  }
+
+  .bonus-zeile > .bonus-btn,
+  .bonus-zeile__aktion {
+    margin-left: 48px;
+  }
+
+  .bonus-angebot__aktion .bonus-btn {
+    width: 100%;
+  }
+}

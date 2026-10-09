@@ -27,22 +27,28 @@
   },
 
   "texte": {
-    "seitenTitel": "Kannst du Excel wirklich? – 4 kostenlose Excel-Übungen | Excel.Flo",
+    "seitenTitel": "Wie fit bist du in Excel? – 4 kostenlose Excel-Übungen | Excel.Flo",
     "metaBeschreibung": "Vier interaktive Excel-Aufgaben direkt im Browser: SUMME, MITTELWERT, ANZAHL und Pivot-Tabellen. Kein Download, keine Anmeldung.",
-    "ogTitel": "Kannst du Excel wirklich? 4 Aufgaben zum Ausprobieren",
+    "ogTitel": "Wie fit bist du in Excel? 4 Aufgaben zum Ausprobieren",
     "ogBeschreibung": "Interaktive Excel-Übungen direkt im Browser – von SUMME bis Pivot-Tabelle. Kein Download, keine Anmeldung.",
-    "ogBildAlt": "Excel.Flo: Kannst du Excel wirklich? Vier Excel-Aufgaben direkt im Browser, kein Download, keine Anmeldung.",
-    "ueberschrift": "Kannst du Excel wirklich?",
+    "ogBildAlt": "Excel.Flo: Wie fit bist du in Excel? Vier Excel-Aufgaben direkt im Browser, kein Download, keine Anmeldung.",
+    "ueberschrift": "Wie fit bist du in Excel?",
     "einleitung": "Vier Aufgaben, direkt im Browser. Kein Download, keine Anmeldung.",
 
     "mobilHinweis": "Diese Übungen lassen sich am Computer deutlich angenehmer lösen.",
     "mobilFormularOeffnen": "Bonus-Übungen per E-Mail freischalten",
     "mobilFormularText": "5 neue interaktive Aufgaben zu Excel-Funktionen und Pivot-Tabellen, kostenlos. Den Link bekommst du per E-Mail – ideal, um später am Computer weiterzuüben.",
 
-    "fortschritt": "Aufgabe {nr} von {gesamt}",
+    "fortschritt": "{bearbeitet} von {gesamt} gelöst",
 
-    "hinweisTitel": "Du hast 3 von 4 Aufgaben geschafft.",
-    "hinweisText": "Schalte dir jetzt kostenlos deine Bonus-Übungen frei: 5 neue Aufgaben, alle anders als die vier von eben – inklusive einer echten Pivot-Tabelle. Den Link bekommst du per E-Mail – die letzte Aufgabe kannst du in Ruhe danach machen.",
+    "_uebersicht": "Kopfkarte der Übersicht; {gesamt}, {erste}, {letzte} werden ersetzt",
+    "fertigTitel": "{gesamt} von {gesamt} geschafft",
+    "fertigText": "Du hast alle Aufgaben gelöst, von {erste} bis zur {letzte}.",
+
+    "gesperrtAnmeldung": "Wird mit Stufe 2 freigeschaltet",
+    "hinweisZaehler": "{bearbeitet} von {gesamt} gelöst ✓",
+    "hinweisTitel": "Stark! Du bist bereit für Stufe 2.",
+    "hinweisText": "Schalte 5 weitere Übungen frei – mit MAX, ZÄHLENWENN, WENN, SVERWEIS und Pivot-Tabellen. Kostenlos.",
 
     "abschlussTitel": "Alle vier Aufgaben bearbeitet.",
     "abschlussErgebnis": "Du hast {selbst} von 4 Aufgaben selbst gelöst.",
@@ -66,6 +72,8 @@
       "id": "summe-umsatz",
       "typ": "formel",
       "title": "Summe der Umsätze berechnen",
+      "funktion": "SUMME",
+      "kurz": "Addiere mehrere Werte mit einer einzigen Formel.",
       "task": {
         "intro": "Berechne die Summe der Umsätze von Januar bis März.",
         "steps": [
@@ -96,6 +104,7 @@
         }
       },
       "hints": [
+        "Diese Funktion hilft dir: SUMME",
         "SUMME-Aufbau: =SUMME(Zahl1; [Zahl2]; …) – addiert alle angegebenen Zahlen oder Zellbereiche.",
         "Du kannst der Funktion einen ganzen Zellbereich übergeben, um alle Werte darin auf einmal zu addieren, statt jede Zelle einzeln aufzuzählen.",
         "Alternativ kannst du die passenden Zellen auch einzeln mit + addieren – bei wenigen Zellen funktioniert beides, bei größeren Bereichen ist SUMME() aber deutlich schneller geschrieben.",
@@ -109,8 +118,10 @@
       "id": "mittelwert-noten",
       "typ": "formel",
       "title": "Notendurchschnitt berechnen",
+      "funktion": "MITTELWERT",
+      "kurz": "Berechne mit einer Formel den Durchschnitt mehrerer Werte.",
       "task": {
-        "intro": "Berechne den Notendurchschnitt mithilfe der MITTELWERT-Funktion.",
+        "intro": "Berechne den Notendurchschnitt der Klasse.",
         "steps": [
           "Trage in Zelle B7 eine Formel ein, die den Durchschnitt der Noten berechnet."
         ]
@@ -143,6 +154,7 @@
         }
       },
       "hints": [
+        "Diese Funktion hilft dir: MITTELWERT",
         "MITTELWERT berechnet den Durchschnitt mehrerer Zahlen – du kannst dafür sowohl einzelne Zellen als auch einen ganzen Zellbereich angeben.",
         "Der Aufbau ist ähnlich wie bei SUMME: Du gibst einfach die Zellen an, die berücksichtigt werden sollen.",
         "Der Durchschnitt entspricht der Summe aller Werte geteilt durch ihre Anzahl – MITTELWERT() erledigt das automatisch in einem Schritt.",
@@ -156,6 +168,8 @@
       "id": "anzahl-teilnehmer",
       "typ": "formel",
       "title": "Anzahl der Teilnehmer mit Punkten",
+      "funktion": "ANZAHL",
+      "kurz": "Zähle mit einer Formel, wie viele Zellen eine Zahl enthalten.",
       "task": {
         "intro": "Berechne die Anzahl der Teilnehmer mit Punkten.",
         "steps": [
@@ -190,6 +204,7 @@
         }
       },
       "hints": [
+        "Diese Funktion hilft dir: ANZAHL",
         "ANZAHL zählt, wie viele Zellen in einem Bereich eine Zahl enthalten – Text und leere Zellen werden dabei nicht mitgezählt.",
         "Der Aufbau ist wie bei SUMME und MITTELWERT: Du gibst einfach den Bereich an, der geprüft werden soll.",
         "Nicht jeder Teilnehmer hat eine Punktzahl eingetragen – schau genau hin, welche Zellen wirklich eine Zahl enthalten.",
@@ -203,6 +218,8 @@
       "id": "umsatz-je-region",
       "typ": "pivot",
       "title": "Umsatz je Region auswerten",
+      "funktion": "Pivot-Tabelle",
+      "kurz": "Fasse hunderte Zeilen mit wenigen Klicks zu einer Übersicht zusammen.",
       "task": {
         "intro": "Du hast eine Tabelle mit Tagesumsätzen aus 2025 und 2026 (Spalten: Datum, Region, Land, Kunde, Umsatz). Erstelle daraus eine Pivot-Tabelle, die den Umsatz je Region zusammenfasst.",
         "steps": [

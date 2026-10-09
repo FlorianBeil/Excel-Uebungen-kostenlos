@@ -11,9 +11,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/geteilt/engine.css?v=2">
-<link rel="stylesheet" href="assets/seite/seite.css?v=5">
+<link rel="stylesheet" href="assets/seite/portal.css?v=2">
+<link rel="stylesheet" href="assets/seite/seite.css?v=18">
 </head>
-<body class="frei-seite">
+<body class="bonus frei-seite">
 
 <header class="site-header">
   <div class="site-header__inner">
@@ -34,6 +35,15 @@
       <li>Du erhältst sofort eine zweite E-Mail mit dem Link zu den Bonus-Übungen.</li>
     </ol>
     <p class="frei-danke__tipp">Keine E-Mail da? Schau nach ein paar Minuten auch im Spam- oder Werbung-Ordner nach.</p>
+
+    <!-- Mit dem Absenden des Formulars ist Aufgabe 4 auf der Übungsseite freigeschaltet (gemeinsam.js
+         merkt sich die Anmeldung im Browser). Relativer Link: Diese Seite muss deshalb auf derselben
+         Adresse liegen wie die Übungsseite – in Klick-Tipp als Bestätigungsseite
+         https://uebungen.excel-flo.de/danke.html eintragen. -->
+    <div class="frei-danke__weiter">
+      <p><strong>Deine letzte Aufgabe ist jetzt freigeschaltet.</strong> Du kannst sie direkt lösen – die E-Mail mit den Bonus-Übungen wartet so lange in deinem Postfach.</p>
+      <a class="bonus-btn bonus-btn--gross" href="./">Zurück zu Aufgabe 4 →</a>
+    </div>
   </section>
 </main>
 

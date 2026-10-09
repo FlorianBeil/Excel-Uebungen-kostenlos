@@ -17,7 +17,8 @@ eigenes Deployment. Das Portal verlinkt nie hierher, diese Seite enthält alle W
 | `index.html` | Einstiegsseite (Titel, Meta-/Vorschau-Angaben fest im HTML) |
 | `daten/aufgaben.json` | Die vier Aufgaben, alle Texte und die Konfiguration (Impressum-, Datenschutz- und Seitenadresse, Klick-Tipp-Formular) |
 | `danke.html` | Bestätigungsseite nach dem Formular („bitte E-Mail bestätigen“) – in Klick-Tipp als Weiterleitung eintragen |
-| `assets/seite/` | `logik.js` (Ablauf ohne Bildschirm, getestet), `seite.js` (Anzeige, Tracking), `seite.css` |
+| `index.html` | Direkter Einstieg: Kopfkarte mit Fortschritt, darunter die Aufgaben – die aktuelle aufgeklappt, die übrigen der Reihe nach freigeschaltet (Aufgabe 4 erst nach dem Absenden des Anmeldeformulars). `uebung.html` leitet nur noch hierher um |
+| `assets/seite/` | `logik.js` (Ablauf ohne Bildschirm, getestet), `gemeinsam.js` (Daten, Tracking, Formular, Anmeldestatus, Zeit), `aufgabe.js` (Inhalt einer Aufgabe), `uebersicht.js` (Startseite), `seite.css`; `portal.css` = **Kopie** der seite.css der Bonus-Übungen |
 | `pivot.html` | Pivot-Nachbau, per iframe eingebunden – **erzeugt**, nicht von Hand ändern |
 | `assets/pivot/datensatz.js` | Erzeugt die 730 Beispielzeilen der Pivot-Aufgabe aus dem Bauplan in der Datendatei |
 | `assets/geteilt/` | **Kopie** der geteilten Logik aus dem Portal – nicht von Hand ändern |
@@ -44,7 +45,7 @@ eigenes Deployment. Das Portal verlinkt nie hierher, diese Seite enthält alle W
 ## Tracking
 
 Ereignisse gehen (ohne Cookies, ohne Nutzer-ID) in die Supabase-Tabelle `events` des Portals,
-Bereich `portal = 'kostenlos'`. Liste der Ereignisse: Kopf von `assets/seite/seite.js`.
+Bereich `portal = 'kostenlos'`. Liste der Ereignisse: Kopf von `assets/seite/gemeinsam.js`.
 `supabase/kostenlos.sql` einmal im Supabase SQL Editor ausführen – danach im Table Editor:
 
 - **Auswertung Kostenlos Übersicht** – Besuche, Light-Hinweis gesehen, Formular gesehen/abgesendet je Gerät

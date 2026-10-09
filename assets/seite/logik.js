@@ -112,16 +112,32 @@
     return idx === -1 ? null : idx;
   }
 
+  // „1 von 4 gelöst“ – gezählt werden bearbeitete Aufgaben (gelöst oder Lösung angesehen),
+  // dieselbe Zählung, nach der die nächste Aufgabe und der Hinweis freigegeben werden.
   function fortschrittText(daten, stand) {
-    const idx = aktuelleAufgabe(daten, stand);
-    const gesamt = daten.aufgaben.length;
-    return platzhalter(daten.texte.fortschritt, { nr: idx === null ? gesamt : idx + 1, gesamt });
+    return platzhalter(daten.texte.fortschritt, { bearbeitet: anzahlBearbeitet(daten, stand), gesamt: daten.aufgaben.length });
   }
 
   // Hinweis auf die Bonus-Übungen erscheint, sobald die ersten N Aufgaben (konfiguration.hinweisNachAufgabe) bearbeitet sind.
   function hinweisSichtbar(daten, stand) {
     const n = daten.konfiguration.hinweisNachAufgabe;
     return daten.aufgaben.slice(0, n).every((a) => istBearbeitet(stand, a.id));
+  }
+
+  // Aufgaben werden der Reihe nach freigeschaltet: die erste immer, jede weitere, sobald die
+  // vorherige bearbeitet ist. Aufgaben NACH dem Hinweis (konfiguration.hinweisNachAufgabe)
+  // zusätzlich erst nach der Anmeldung (Formular abgesendet, siehe gemeinsam.js).
+  function freigeschaltet(daten, stand, index, angemeldet) {
+    if (index <= 0) return true;
+    if (!istBearbeitet(stand, daten.aufgaben[index - 1].id)) return false;
+    return index < daten.konfiguration.hinweisNachAufgabe || !!angemeldet;
+  }
+
+  // Index der ersten nicht bearbeiteten UND freigeschalteten Aufgabe – die, die offen dasteht.
+  // null, wenn es keine gibt (alle bearbeitet, oder die nächste wartet auf die Anmeldung).
+  function offeneAufgabe(daten, stand, angemeldet) {
+    const idx = daten.aufgaben.findIndex((a, i) => !istBearbeitet(stand, a.id) && freigeschaltet(daten, stand, i, angemeldet));
+    return idx === -1 ? null : idx;
   }
 
   // null, solange nicht alle Aufgaben bearbeitet sind.
@@ -248,6 +264,8 @@
     aktuelleAufgabe,
     fortschrittText,
     hinweisSichtbar,
+    freigeschaltet,
+    offeneAufgabe,
     abschluss,
     platzhalter,
     formularVerbunden,

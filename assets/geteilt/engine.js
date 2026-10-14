@@ -745,7 +745,10 @@
     const table = el("table", { class: "sheet", style: "min-width:" + minTableWidth + "px" }, [colgroup, thead, tbody]);
     const scrollArea = el("div", { class: "sheet-scroll" }, [table]);
     const argHint = el("div", { class: "formula-hint" });
-    const wrap = el("div", { class: "sheet-wrap" }, [toolbar, scrollArea, argHint]);
+    // Funktionsvorschläge beim Tippen (=SU → SUMME, SUMMEWENN …), wie Excels AutoVervollständigen
+    const fnList = el("ul", { class: "formula-fnlist", role: "listbox" });
+    let fnState = null; // { ref, start, end, items, idx } solange die Liste offen ist
+    const wrap = el("div", { class: "sheet-wrap" }, [toolbar, scrollArea, argHint, fnList]);
     wrap.tabIndex = 0;
 
     // Spaltenbreite wie Excels „Optimale Breite“: längster angezeigter Inhalt der Spalte (Überschriften
@@ -1096,6 +1099,7 @@
       if (selectedRef === ref) contentPreview.textContent = text;
 
       updateArgHint(ref, text, offset);
+      updateFnList(ref, text, offset);
       updateSpill(ref, text);
     }
 
@@ -1163,6 +1167,78 @@
         const maxLeft = wrapRect.width - hintWidth - 4;
         if (left > maxLeft) argHint.style.left = Math.max(4, maxLeft) + "px";
       }
+    }
+
+    // Steht direkt vor dem Cursor ein angefangener Funktionsname (nach „=“, „(“, „;“, Rechenzeichen …),
+    // zeigt die Liste alle Funktionen, die so beginnen – mit ihrer Syntax.
+    function updateFnList(ref, text, caret) {
+      const m = text.startsWith("=") && text.slice(0, caret).match(/(?:^=|[(;,:+\-*\/&^<>= ])([A-Za-zÄÖÜäöü][A-Za-zÄÖÜäöü.\d]*)$/);
+      const wort = m && !/\d/.test(m[1]) ? m[1].toUpperCase() : "";
+      // Direkt dahinter geht der Name weiter (Cursor mitten im Wort) → keine Liste
+      const items = wort && !/^[A-Za-zÄÖÜäöü.(]/.test(text.slice(caret))
+        ? Object.keys(FUNCTION_SIGNATURES).filter((n) => n.startsWith(wort)).sort().slice(0, 8)
+        : [];
+      if (!items.length) {
+        hideFnList();
+        return;
+      }
+      const vorher = fnState && fnState.ref === ref ? fnState.items[fnState.idx] : null;
+      fnState = { ref, start: caret - wort.length, end: caret, items, idx: Math.max(0, items.indexOf(vorher)) };
+      renderFnList();
+
+      // Unter der Zelle; die Argument-QuickInfo macht so lange Platz
+      argHint.classList.remove("is-visible");
+      const td = cellEls[ref];
+      if (td) {
+        const wrapRect = wrap.getBoundingClientRect();
+        const tdRect = td.getBoundingClientRect();
+        const left = tdRect.left - wrapRect.left;
+        fnList.style.left = left + "px";
+        fnList.style.top = tdRect.bottom - wrapRect.top + 4 + "px";
+        const maxLeft = wrapRect.width - fnList.getBoundingClientRect().width - 4;
+        if (left > maxLeft) fnList.style.left = Math.max(4, maxLeft) + "px";
+      }
+    }
+
+    function renderFnList() {
+      fnList.innerHTML = "";
+      fnState.items.forEach((name, i) => {
+        const li = el("li", { class: "formula-fnlist__item" + (i === fnState.idx ? " is-active" : ""), role: "option" }, [
+          el("span", { class: "formula-fnlist__name", text: name }),
+          el("span", { class: "formula-fnlist__syntax", text: name + "(" + FUNCTION_SIGNATURES[name].join("; ") + ")" }),
+        ]);
+        li.setAttribute("aria-selected", i === fnState.idx ? "true" : "false");
+        // mousedown statt click: die Zelle behält den Fokus (sonst würde die Eingabe übernommen)
+        li.addEventListener("mousedown", (e) => {
+          e.preventDefault();
+          fnState.idx = i;
+          applyFnSuggestion();
+        });
+        fnList.appendChild(li);
+      });
+      fnList.classList.add("is-visible");
+    }
+
+    function hideFnList() {
+      fnState = null;
+      fnList.classList.remove("is-visible");
+    }
+
+    // Übernimmt den markierten Vorschlag: „=SU“ → „=SUMME(“, danach zeigt die QuickInfo die Argumente
+    function applyFnSuggestion() {
+      if (!fnState) return;
+      const entry = inputEntries[fnState.ref];
+      if (!entry) return hideFnList();
+      const text = entry.el.textContent;
+      const name = fnState.items[fnState.idx];
+      const ref = fnState.ref;
+      const neu = text.slice(0, fnState.start) + name + "(" + text.slice(fnState.end);
+      const caret = fnState.start + name.length + 1;
+      hideFnList();
+      entry.el.textContent = neu;
+      setCaretOffset(entry.el, caret);
+      handleContentChanged(ref);
+      setCaretOffset(entry.el, caret);
     }
 
     function clearRefHighlights() {
@@ -1252,6 +1328,7 @@
       keyPoint = null;
       clearRefHighlights();
       argHint.classList.remove("is-visible");
+      hideFnList();
       // Wie in Excel: nach dem Bestätigen steht das Ergebnis in der Zelle, die Formel in der Leiste.
       renderAllInputDisplays();
       if (entry && selectedRef === committedRef) contentPreview.textContent = entry.raw;
@@ -1272,6 +1349,16 @@
       // Verhindert, dass Tab/Enter/Escape/F4 etc. zum Container hochblubbern und dort
       // (mit inzwischen geändertem editingRef/selectedRef) ein zweites Mal ausgelöst werden.
       e.stopPropagation();
+
+      if (fnState && fnState.ref === ref && ["ArrowUp", "ArrowDown", "Tab", "Enter", "Escape"].includes(e.key) && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        if (e.key === "ArrowDown") fnState.idx = (fnState.idx + 1) % fnState.items.length;
+        else if (e.key === "ArrowUp") fnState.idx = (fnState.idx - 1 + fnState.items.length) % fnState.items.length;
+        if (e.key === "ArrowDown" || e.key === "ArrowUp") renderFnList();
+        else if (e.key === "Escape") hideFnList();
+        else applyFnSuggestion();
+        return;
+      }
 
       if (e.key === "Tab") {
         e.preventDefault();
@@ -1690,6 +1777,7 @@
       clearRefHighlights();
       clearCopiedVisual();
       argHint.classList.remove("is-visible");
+      hideFnList();
       Object.values(inputEntries).forEach((entry) => {
         entry.raw = "";
         entry.el.textContent = "";
@@ -1864,12 +1952,16 @@
     function close() {
       overlay.removeEventListener("click", close);
       document.removeEventListener("keydown", close);
+      document.removeEventListener("pointerdown", close, true);
       overlay.remove();
       if (activePopupOverlay === overlay) activePopupOverlay = null;
     }
     overlay.addEventListener("click", close);
     // Tastatur: jeder Tastendruck schließt das Popup (sonst verdeckt es die Tabelle für Tastaturnutzer)
     document.addEventListener("keydown", close);
+    // Klick/Tipp irgendwo (z. B. auf „Weiter zur nächsten Übung“) schließt es sofort –
+    // sonst bliebe es bis zu 3 Sekunden über der nächsten Übung stehen
+    document.addEventListener("pointerdown", close, true);
     setTimeout(close, 3200);
   }
 

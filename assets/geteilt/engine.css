@@ -1037,3 +1037,59 @@ td.cell--input.is-wrong .cell-editable {
   color: var(--text-muted);
   font-size: 0.9rem;
 }
+
+/* Funktionsvorschläge beim Tippen (=SU → SUMME …), Aussehen wie Excels AutoVervollständigen */
+.formula-fnlist {
+  display: none;
+  position: absolute;
+  z-index: 11;
+  margin: 0;
+  padding: 2px 0;
+  list-style: none;
+  min-width: 220px;
+  max-width: min(420px, calc(100% - 8px));
+  background: #FFFFFF;
+  border: 1px solid #C8C8C8;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+  font-family: var(--font-excel-ui);
+  font-size: 12.5px;
+  color: #262626;
+}
+
+.formula-fnlist.is-visible {
+  display: block;
+}
+
+.formula-fnlist__item {
+  display: flex;
+  flex-direction: column;
+  padding: 3px 9px;
+  cursor: pointer;
+}
+
+.formula-fnlist__item:hover {
+  background: #F0F0F0;
+}
+
+.formula-fnlist__item.is-active {
+  background: #DCEBF9;
+}
+
+.formula-fnlist__name {
+  font-weight: 600;
+}
+
+/* Syntax nur beim markierten Eintrag – wie Excels QuickInfo neben der Liste */
+.formula-fnlist__syntax {
+  display: none;
+  font-size: 11.5px;
+  color: #555;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.formula-fnlist__item.is-active .formula-fnlist__syntax {
+  display: block;
+}

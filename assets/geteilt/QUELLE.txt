@@ -6,3 +6,5 @@ Nicht von Hand aendern - wird beim naechsten Update ueberschrieben.
 Aenderungen an diesen Dateien immer im Portal-Repo machen.
 engine.js enthaelt zusaetzlich die Strg/Strg+Shift+Pfeiltasten-Funktion (2026-10-09),
 im Portal-Repo seit Commit f5bd5d1 veroeffentlicht - ein Update ist wieder gefahrlos.
+
+2026-10-14: engine.js/engine.css auf Stand 770ffae (Funktionsvorschlaege beim Tippen, Erfolgs-Popup schliesst bei Klick) – von Hand kopiert.

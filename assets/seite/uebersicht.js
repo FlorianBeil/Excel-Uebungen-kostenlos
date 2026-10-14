@@ -36,6 +36,7 @@
   let ctaEl = null;
   let ctaGemeldet = false;
   let zuruecksetzenEl = null;
+  let popup = null; // Freischalt-Popup nach Aufgabe 3 (siehe popupBauen)
 
   function start() {
     const root = document.getElementById("uebersicht");
@@ -47,6 +48,7 @@
         F.footerLinks(daten);
         F.gemerkteKampagne(daten); // utm-Parameter für das Formular merken
         mobilFormularBauen();
+        popupBauen();
         const herkunft = L.kampagne(location.search, document.referrer, location.host);
         F.track("page_view", Object.assign({
           breite: window.innerWidth,
@@ -102,6 +104,8 @@
       bearbeitet: (x, warBearbeitet) => {
         if (!warBearbeitet) zeit.bearbeitet(i);
         aktualisieren();
+        // Gerade die letzte Aufgabe vor der Anmeldung geschafft → Freischalt-Popup (kurz „Richtig!“ wirken lassen)
+        if (!warBearbeitet && nr === daten.konfiguration.hinweisNachAufgabe && !angemeldet) setTimeout(popupZeigen, 900);
       },
     });
 
@@ -328,6 +332,42 @@
   }
 
   /* ---------------- Hinweis für Smartphones ---------------- */
+
+  /* ---------------- Freischalt-Popup (einmal, direkt nach Aufgabe 3) ---------------- */
+
+  // Gleiche Freischalt-Karte wie in der Liste, nur als Fenster über der Seite. Die Karte in der
+  // Liste bleibt – wer das Popup schließt, findet das Formular dort wieder.
+  function popupBauen() {
+    if (angemeldet || typeof HTMLDialogElement === "undefined") return;
+    const zu = el("button", { type: "button", class: "frei-popup__zu", "aria-label": "Schließen", text: "×" });
+    const spaeter = el("button", { type: "button", class: "frei-popup__spaeter", text: daten.texte.popupSpaeter || "Vielleicht später" });
+    popup = el("dialog", { class: "frei-popup", "aria-labelledby": "hinweis-popup-titel" }, [
+      zu,
+      F.freischaltKarte(daten, stand, "popup"),
+      spaeter,
+    ]);
+    const schliessen = () => popup.close();
+    zu.addEventListener("click", schliessen);
+    spaeter.addEventListener("click", schliessen);
+    // Klick auf den abgedunkelten Hintergrund schließt ebenfalls
+    popup.addEventListener("click", (e) => {
+      if (e.target === popup) schliessen();
+    });
+    popup.addEventListener("close", () => F.track("popup_close"));
+    document.body.appendChild(popup);
+  }
+
+  function popupZeigen() {
+    if (!popup || popup.open || angemeldet) return;
+    popup.querySelector(".frei-hinweis__zaehler").textContent = L.platzhalter(daten.texte.hinweisZaehler, {
+      bearbeitet: L.anzahlBearbeitet(daten, stand),
+      gesamt: daten.aufgaben.length,
+    });
+    popup.showModal();
+    popup.querySelector("input").focus();
+    F.track("popup_view");
+    F.track("form_view", { ort: "popup" });
+  }
 
   function mobilFormularBauen() {
     const t = daten.texte;

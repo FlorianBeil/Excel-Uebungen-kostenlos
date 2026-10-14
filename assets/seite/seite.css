@@ -622,3 +622,97 @@
   font-size: 0.9rem;
   color: var(--text-muted);
 }
+
+/* ==========================================================================
+   Freischalt-Popup – erscheint einmal direkt nach Aufgabe 3 (Aufbau wie das
+   Shortcut-Turbo-Popup der Bonus-Übungen)
+   ========================================================================== */
+
+.frei-popup {
+  width: min(600px, calc(100% - 2rem));
+  max-height: calc(100% - 2rem);
+  overflow: auto;
+  padding: 2rem 2.2rem 1.6rem;
+  border: 0;
+  border-top: 8px solid var(--excel-green);
+  border-radius: 22px;
+  background: #fff;
+  color: var(--text-primary);
+  box-shadow: 0 24px 60px rgba(11, 61, 34, 0.28);
+}
+
+.frei-popup::backdrop {
+  background: rgba(20, 40, 28, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.frei-popup[open] {
+  animation: frei-popup-rein 0.25s ease-out;
+}
+
+@keyframes frei-popup-rein {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frei-popup[open] { animation: none; }
+}
+
+/* Die Karte steht im Fenster ohne eigenen Rahmen */
+.frei-popup .frei-hinweis {
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background: none;
+}
+
+.frei-popup .frei-hinweis__zaehler {
+  margin-right: 3rem;
+}
+
+.frei-popup .frei-hinweis h2 {
+  font-size: clamp(1.4rem, 4.5vw, 1.8rem);
+}
+
+.frei-popup__zu {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--bonus-rand);
+  background: #fff;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.frei-popup__zu:hover {
+  background: var(--bonus-hell);
+  color: var(--text-primary);
+}
+
+.frei-popup__spaeter {
+  display: block;
+  margin-top: 1rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.frei-popup__spaeter:hover {
+  color: var(--text-primary);
+}
+
+@media (max-width: 480px) {
+  .frei-popup {
+    padding: 1.6rem 1.3rem 1.3rem;
+  }
+}

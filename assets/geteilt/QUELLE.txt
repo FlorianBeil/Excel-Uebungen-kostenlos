@@ -8,3 +8,5 @@ engine.js enthaelt zusaetzlich die Strg/Strg+Shift+Pfeiltasten-Funktion (2026-10
 im Portal-Repo seit Commit f5bd5d1 veroeffentlicht - ein Update ist wieder gefahrlos.
 
 2026-10-14: engine.js/engine.css auf Stand 770ffae (Funktionsvorschlaege beim Tippen, Erfolgs-Popup schliesst bei Klick) – von Hand kopiert.
+
+2026-10-27: engine.js auf Stand 154ee9a (Antippen am Handy → Bereich B2:B4) – von Hand kopiert.

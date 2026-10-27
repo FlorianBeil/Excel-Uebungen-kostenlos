@@ -230,12 +230,22 @@
       id, type: "text", class: "bonus-formelfeld__eingabe", placeholder: "=",
       autocomplete: "off", autocapitalize: "off", autocorrect: "off", spellcheck: "false", enterkeyhint: "done",
     });
-    bereich.appendChild(el("div", { class: "bonus-formelfeld" }, [el("label", { for: id, text: "Deine Formel in " + ref }), feld]));
+    bereich.appendChild(el("div", { class: "bonus-formelfeld" }, [
+      el("label", { for: id, text: "Deine Formel in " + ref }),
+      feld,
+      el("p", { class: "bonus-formelfeld__tipp", text: "Tipp: Nach der Klammer, z. B. =SUMME(, einfach mit dem Finger über die Zellen ziehen – der Bereich wird eingetragen." }),
+    ]));
+    let zeigen = null; // eingefügter Bezug { start, ende }, solange er durch Weiterziehen ersetzt werden darf
     feld.addEventListener("input", () => {
       gestartet();
       entry.raw = feld.value.trim();
       entry.td.classList.remove("is-correct", "is-wrong");
       ergebnisAnzeigen(a, sheet, entry);
+    });
+    let intern = false; // Eingabe kam vom Fingerzug, nicht von der Tastatur
+    feld.addEventListener("input", () => {
+      if (!intern) zeigen = null; // getippt – ein neuer Fingerzug fügt wieder an der Schreibmarke ein
+      intern = false;
     });
     feld.addEventListener("keydown", (ev) => {
       if (ev.key === "Enter") feld.blur();
@@ -243,6 +253,106 @@
     sheet.node.addEventListener("focusout", () => setTimeout(() => {
       if (document.activeElement !== feld) feld.value = entry.raw;
     }, 0));
+
+    /* Bezug per Finger (wie in Excel mit der Maus): Steht im Formelfeld z. B. „=SUMME(“, trägt
+       ein Fingerzug über die Zellen den Bereich ein („B2:B4“). Die Tastatur bleibt offen, die
+       Seite scrollt währenddessen nicht. */
+    const tabelle = sheet.node.querySelector("table.sheet") || sheet.node;
+    const bezugErlaubt = () => {
+      if (document.activeElement !== feld || !feld.value.startsWith("=")) return false;
+      if (zeigen) return true;
+      const vor = feld.value.slice(0, feld.selectionStart);
+      return /[=(;,:+\-*\/&^<>]\s*$/.test(vor);
+    };
+    const modusAnzeigen = () => sheet.node.classList.toggle("is-zeigen", document.activeElement === feld && feld.value.startsWith("="));
+    feld.addEventListener("focus", modusAnzeigen);
+    feld.addEventListener("input", modusAnzeigen);
+    feld.addEventListener("blur", () => {
+      zeigen = null;
+      markieren(null, null);
+      sheet.node.classList.remove("is-zeigen");
+    });
+
+    const zelleBei = (x, y) => {
+      const td = document.elementFromPoint(x, y);
+      const zelle = td && td.closest("td[data-ref]");
+      return zelle && tabelle.contains(zelle) ? zelle.dataset.ref : null;
+    };
+    const teile = (r) => {
+      const m = r.match(/^([A-Z]+)(\d+)$/);
+      return { s: m[1], z: parseInt(m[2], 10) };
+    };
+    const bereichText = (von, bis) => {
+      if (von === bis) return von;
+      const p = teile(von);
+      const q = teile(bis);
+      const [s1, s2] = p.s <= q.s ? [p.s, q.s] : [q.s, p.s];
+      return s1 + Math.min(p.z, q.z) + ":" + s2 + Math.max(p.z, q.z);
+    };
+    let markiert = [];
+    function markieren(von, bis) {
+      markiert.forEach((td) => td.classList.remove("is-zeigbereich"));
+      markiert = [];
+      if (!von) return;
+      const p = teile(von);
+      const q = teile(bis);
+      tabelle.querySelectorAll("td[data-ref]").forEach((td) => {
+        const t = teile(td.dataset.ref);
+        const sIn = t.s >= (p.s <= q.s ? p.s : q.s) && t.s <= (p.s <= q.s ? q.s : p.s) && t.s.length === p.s.length;
+        if (sIn && t.z >= Math.min(p.z, q.z) && t.z <= Math.max(p.z, q.z)) {
+          td.classList.add("is-zeigbereich");
+          markiert.push(td);
+        }
+      });
+    }
+    function einsetzen(von, bis) {
+      const text = bereichText(von, bis);
+      const start = zeigen ? zeigen.start : feld.selectionStart;
+      const ende = zeigen ? zeigen.ende : feld.selectionEnd;
+      feld.value = feld.value.slice(0, start) + text + feld.value.slice(ende);
+      zeigen = { start, ende: start + text.length };
+      feld.setSelectionRange(zeigen.ende, zeigen.ende);
+      intern = true;
+      feld.dispatchEvent(new Event("input"));
+      markieren(von, bis);
+    }
+
+    let zug = null; // laufender Fingerzug { anker, aktuell, pointerId }
+    tabelle.addEventListener("pointerdown", (ev) => {
+      if (!bezugErlaubt()) return;
+      const r = zelleBei(ev.clientX, ev.clientY);
+      if (!r) return;
+      ev.preventDefault();
+      ev.stopPropagation(); // die Tabelle selbst soll dabei nichts auswählen oder bearbeiten
+      zug = { anker: r, aktuell: r, pointerId: ev.pointerId };
+      try { tabelle.setPointerCapture(ev.pointerId); } catch (e) { /* egal */ }
+      einsetzen(r, r);
+    }, true);
+    tabelle.addEventListener("pointermove", (ev) => {
+      if (!zug || ev.pointerId !== zug.pointerId) return;
+      ev.preventDefault();
+      const r = zelleBei(ev.clientX, ev.clientY);
+      if (r && r !== zug.aktuell) {
+        zug.aktuell = r;
+        einsetzen(zug.anker, r);
+      }
+    }, true);
+    const zugEnde = (ev) => {
+      if (!zug || ev.pointerId !== zug.pointerId) return;
+      zug = null;
+      feld.focus();
+    };
+    tabelle.addEventListener("pointerup", zugEnde, true);
+    tabelle.addEventListener("pointercancel", zugEnde, true);
+    // Ohne das gäbe es nach dem Fingerzug noch Klick/Mausereignisse, die die Tabelle auswerten würde
+    ["touchstart", "mousedown", "click", "dblclick"].forEach((typ) =>
+      tabelle.addEventListener(typ, (ev) => {
+        if (sheet.node.classList.contains("is-zeigen") && bezugErlaubt()) {
+          ev.preventDefault();
+          ev.stopPropagation();
+        }
+      }, { capture: true, passive: false })
+    );
     return feld;
   }
 

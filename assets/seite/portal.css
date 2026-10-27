@@ -1088,3 +1088,22 @@ a.bonus-zeile.is-next:focus-visible {
     width: 100%;
   }
 }
+
+/* Handy: Bezug per Finger ins Formelfeld ziehen (aufgabe.js → formelFeld) */
+.bonus-formelfeld__tipp {
+  margin: 0.4rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+/* Solange das Formelfeld aktiv ist, gehört ein Fingerzug auf der Tabelle dem Bezug, nicht dem Scrollen */
+.sheet-wrap.is-zeigen .sheet-scroll,
+.sheet-wrap.is-zeigen table.sheet {
+  touch-action: none;
+}
+
+table.sheet td.is-zeigbereich {
+  background: rgba(26, 115, 232, 0.12);
+  box-shadow: inset 0 0 0 2px #1a73e8;
+}

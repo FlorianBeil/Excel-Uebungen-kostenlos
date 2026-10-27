@@ -1643,6 +1643,25 @@
       if (!entry || !entry.el.textContent.startsWith("=")) return false;
       if (clickedRef === editingRef) return false;
 
+      // Wurde gerade schon ein Bezug angeklickt/angetippt (seitdem nichts getippt), ersetzt der
+      // nächste Klick ihn – wie in Excel – statt „B2B4“ anzuhängen. Am Handy wird daraus der
+      // Bereich vom ersten bis zum zweiten Antippen (B2 antippen, B4 antippen → B2:B4), weil
+      // Ziehen dort die Seite scrollt.
+      const text = entry.el.textContent;
+      if (keyPoint && text === keyPoint.before + rangeRefText(keyPoint.anchor, keyPoint.current) + keyPoint.after) {
+        pointDrag = {
+          editRef: editingRef,
+          before: keyPoint.before,
+          after: keyPoint.after,
+          anchorRef: lastPointerType === "touch" ? keyPoint.anchor : clickedRef,
+          currentHover: clickedRef,
+        };
+        updatePointDrag(clickedRef);
+        document.addEventListener("mousemove", onPointMove);
+        document.addEventListener("mouseup", onPointDrop);
+        return true;
+      }
+
       const caret = getCaretOffset(entry.el);
       const fullText = entry.el.textContent;
       pointDrag = {

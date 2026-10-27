@@ -233,19 +233,13 @@
     bereich.appendChild(el("div", { class: "bonus-formelfeld" }, [
       el("label", { for: id, text: "Deine Formel in " + ref }),
       feld,
-      el("p", { class: "bonus-formelfeld__tipp", text: "Tipp: Nach der Klammer, z. B. =SUMME(, einfach mit dem Finger über die Zellen ziehen – der Bereich wird eingetragen." }),
+      el("p", { class: "bonus-formelfeld__tipp", text: "Tipp: Nach der Klammer, z. B. =SUMME(, die erste und dann die letzte Zelle antippen – der Bereich (z. B. B2:B4) wird eingetragen." }),
     ]));
-    let zeigen = null; // eingefügter Bezug { start, ende }, solange er durch Weiterziehen ersetzt werden darf
     feld.addEventListener("input", () => {
       gestartet();
       entry.raw = feld.value.trim();
       entry.td.classList.remove("is-correct", "is-wrong");
       ergebnisAnzeigen(a, sheet, entry);
-    });
-    let intern = false; // Eingabe kam vom Fingerzug, nicht von der Tastatur
-    feld.addEventListener("input", () => {
-      if (!intern) zeigen = null; // getippt – ein neuer Fingerzug fügt wieder an der Schreibmarke ein
-      intern = false;
     });
     feld.addEventListener("keydown", (ev) => {
       if (ev.key === "Enter") feld.blur();
@@ -254,30 +248,24 @@
       if (document.activeElement !== feld) feld.value = entry.raw;
     }, 0));
 
-    /* Bezug per Finger (wie in Excel mit der Maus): Steht im Formelfeld z. B. „=SUMME(“, trägt
-       ein Fingerzug über die Zellen den Bereich ein („B2:B4“). Die Tastatur bleibt offen, die
-       Seite scrollt währenddessen nicht. */
+    /* Bezug per Antippen (Handy): Steht im Formelfeld z. B. „=SUMME(“, trägt das Antippen einer
+       Zelle sie ein („B2“). Tippt man danach eine zweite Zelle an, wird daraus der Bereich
+       („B2:B4“) – jede weitere Zelle verschiebt das Ende des Bereichs. Sobald man wieder tippt,
+       beginnt das nächste Antippen von vorn. Ausgelöst wird beim Antippen (click), nicht beim
+       Berühren – so kann man über die Tabelle weiter normal scrollen. */
     const tabelle = sheet.node.querySelector("table.sheet") || sheet.node;
-    const bezugErlaubt = () => {
-      if (document.activeElement !== feld || !feld.value.startsWith("=")) return false;
-      if (zeigen) return true;
-      const vor = feld.value.slice(0, feld.selectionStart);
-      return /[=(;,:+\-*\/&^<>]\s*$/.test(vor);
+    // Antippbare Zellen: alles mit Adresse außer der Eingabezelle selbst (sonst Zirkelbezug)
+    const zielZelle = (ev) => {
+      const td = ev.target.closest("td[data-ref]");
+      return td && !td.classList.contains("cell--input") ? td : null;
     };
-    const modusAnzeigen = () => sheet.node.classList.toggle("is-zeigen", document.activeElement === feld && feld.value.startsWith("="));
-    feld.addEventListener("focus", modusAnzeigen);
-    feld.addEventListener("input", modusAnzeigen);
-    feld.addEventListener("blur", () => {
-      zeigen = null;
-      markieren(null, null);
-      sheet.node.classList.remove("is-zeigen");
-    });
+    let bezug = null; // { anker, start, ende, wert } – zuletzt eingetragener Bezug
+    let marke = 0; // Schreibmarke im Feld, auch wenn es den Fokus kurz verliert
+    const markeMerken = () => {
+      if (document.activeElement === feld) marke = feld.selectionStart;
+    };
+    ["keyup", "click", "select", "input", "blur"].forEach((t) => feld.addEventListener(t, markeMerken));
 
-    const zelleBei = (x, y) => {
-      const td = document.elementFromPoint(x, y);
-      const zelle = td && td.closest("td[data-ref]");
-      return zelle && tabelle.contains(zelle) ? zelle.dataset.ref : null;
-    };
     const teile = (r) => {
       const m = r.match(/^([A-Z]+)(\d+)$/);
       return { s: m[1], z: parseInt(m[2], 10) };
@@ -296,63 +284,66 @@
       if (!von) return;
       const p = teile(von);
       const q = teile(bis);
+      const [s1, s2] = p.s <= q.s ? [p.s, q.s] : [q.s, p.s];
       tabelle.querySelectorAll("td[data-ref]").forEach((td) => {
         const t = teile(td.dataset.ref);
-        const sIn = t.s >= (p.s <= q.s ? p.s : q.s) && t.s <= (p.s <= q.s ? q.s : p.s) && t.s.length === p.s.length;
-        if (sIn && t.z >= Math.min(p.z, q.z) && t.z <= Math.max(p.z, q.z)) {
+        if (t.s.length === s1.length && t.s >= s1 && t.s <= s2 && t.z >= Math.min(p.z, q.z) && t.z <= Math.max(p.z, q.z)) {
           td.classList.add("is-zeigbereich");
           markiert.push(td);
         }
       });
     }
-    function einsetzen(von, bis) {
-      const text = bereichText(von, bis);
-      const start = zeigen ? zeigen.start : feld.selectionStart;
-      const ende = zeigen ? zeigen.ende : feld.selectionEnd;
+    // Darf gerade ein Bezug eingetragen werden? (Formel und Schreibmarke direkt nach „(“, „;“ …)
+    const aktiv = () => feld.value.startsWith("=") && (bezug && bezug.wert === feld.value
+      || /[=(;,:+\-*\/&^<>]\s*$/.test(feld.value.slice(0, marke)));
+
+    function eintragen(r) {
+      let start, ende, anker;
+      if (bezug && bezug.wert === feld.value) {
+        // zweite (dritte …) Zelle: Bereich vom ersten Antippen bis hier
+        ({ start, ende, anker } = bezug);
+      } else {
+        start = ende = marke;
+        anker = r;
+      }
+      const text = bereichText(anker, r);
       feld.value = feld.value.slice(0, start) + text + feld.value.slice(ende);
-      zeigen = { start, ende: start + text.length };
-      feld.setSelectionRange(zeigen.ende, zeigen.ende);
-      intern = true;
+      bezug = { anker, start, ende: start + text.length, wert: feld.value };
+      marke = bezug.ende;
+      feld.focus();
+      feld.setSelectionRange(marke, marke);
       feld.dispatchEvent(new Event("input"));
-      markieren(von, bis);
+      bezug.wert = feld.value;
+      markieren(anker, r);
     }
 
-    let zug = null; // laufender Fingerzug { anker, aktuell, pointerId }
-    tabelle.addEventListener("pointerdown", (ev) => {
-      if (!bezugErlaubt()) return;
-      const r = zelleBei(ev.clientX, ev.clientY);
-      if (!r) return;
-      ev.preventDefault();
-      ev.stopPropagation(); // die Tabelle selbst soll dabei nichts auswählen oder bearbeiten
-      zug = { anker: r, aktuell: r, pointerId: ev.pointerId };
-      try { tabelle.setPointerCapture(ev.pointerId); } catch (e) { /* egal */ }
-      einsetzen(r, r);
-    }, true);
-    tabelle.addEventListener("pointermove", (ev) => {
-      if (!zug || ev.pointerId !== zug.pointerId) return;
-      ev.preventDefault();
-      const r = zelleBei(ev.clientX, ev.clientY);
-      if (r && r !== zug.aktuell) {
-        zug.aktuell = r;
-        einsetzen(zug.anker, r);
+    feld.addEventListener("input", () => {
+      if (bezug && bezug.wert !== feld.value) {
+        bezug = null; // getippt – die Markierung passt nicht mehr
+        markieren(null, null);
       }
+    });
+
+    // Berühren: Fokus im Formelfeld lassen (Tastatur bleibt offen), Tabelle reagiert nicht
+    tabelle.addEventListener("pointerdown", (ev) => {
+      if (!aktiv() || !zielZelle(ev)) return;
+      ev.preventDefault();
+      ev.stopPropagation();
     }, true);
-    const zugEnde = (ev) => {
-      if (!zug || ev.pointerId !== zug.pointerId) return;
-      zug = null;
-      feld.focus();
-    };
-    tabelle.addEventListener("pointerup", zugEnde, true);
-    tabelle.addEventListener("pointercancel", zugEnde, true);
-    // Ohne das gäbe es nach dem Fingerzug noch Klick/Mausereignisse, die die Tabelle auswerten würde
-    ["touchstart", "mousedown", "click", "dblclick"].forEach((typ) =>
-      tabelle.addEventListener(typ, (ev) => {
-        if (sheet.node.classList.contains("is-zeigen") && bezugErlaubt()) {
-          ev.preventDefault();
-          ev.stopPropagation();
-        }
-      }, { capture: true, passive: false })
-    );
+    ["mousedown", "dblclick"].forEach((typ) => tabelle.addEventListener(typ, (ev) => {
+      if (aktiv() && zielZelle(ev)) {
+        ev.preventDefault();
+        ev.stopPropagation();
+      }
+    }, true));
+    // Antippen: Zelle bzw. Bereich eintragen
+    tabelle.addEventListener("click", (ev) => {
+      const td = zielZelle(ev);
+      if (!td || !aktiv()) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      eintragen(td.dataset.ref);
+    }, true);
     return feld;
   }
 
